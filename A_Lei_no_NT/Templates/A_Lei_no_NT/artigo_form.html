@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Editar Artigo{% else %}Novo Artigo{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>{% if form.instance.pk %}Editar Artigo{% else %}Novo Artigo{% endif %}</h1>
+        </header>
+        <section id="artigo-form">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Salvar</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

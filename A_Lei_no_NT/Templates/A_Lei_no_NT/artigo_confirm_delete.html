@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Exclusão</title>
+    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Confirmar Exclusão</h1>
+        </header>
+        <section id="artigo-confirm-delete">
+            <p>Tem certeza de que deseja excluir o artigo "{{ artigo.titulo }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Confirmar</button>
+                <a href="{% url 'artigo_list' %}">Cancelar</a>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
