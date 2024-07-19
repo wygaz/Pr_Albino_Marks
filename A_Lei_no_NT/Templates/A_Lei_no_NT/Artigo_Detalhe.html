@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ artigo.titulo }}</title>
+    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li>
+            <li><a href="{% url 'autor_list' %}">Autores</a></li>
+            <li><a href="{% url 'area_list' %}">Áreas</a></li>
+        </ul>
+    </nav>
+    <h1>{{ artigo.titulo }}</h1>
+    <p><strong>Autor:</strong> {{ artigo.autor }}</p>
+    <p><strong>Área:</strong> {{ artigo.area }}</p>
+    <p><strong>Data de Publicação:</strong> {{ artigo.data_publicacao }}</p>
+    <div>{{ artigo.conteudo_html|safe }}</div>
+</body>
+</html>
