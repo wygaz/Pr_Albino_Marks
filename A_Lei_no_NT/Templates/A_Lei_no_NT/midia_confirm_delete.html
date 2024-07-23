@@ -1,21 +1,13 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excluir Mídia</title>
-    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>Tem certeza que deseja excluir esta mídia?</h1>
-        <p>{{ midia.descricao }}</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit">Confirmar</button>
-        </form>
-        <a href="{% url 'midia_list' %}">Cancelar</a>
-    </div>
-</body>
-</html>
+
+{% block title %}Excluir Mídia{% endblock %}
+
+{% block content %}
+<h2>Tem certeza que deseja excluir a mídia "{{ midia.nome_midia }}"?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sim, excluir</button>
+    <a href="{% url 'midia_list' %}">Cancelar</a>
+</form>
+{% endblock %}

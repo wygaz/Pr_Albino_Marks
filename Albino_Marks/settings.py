@@ -9,6 +9,27 @@ SECRET_KEY = 'sua-chave-secreta-aqui'
 DEBUG = True
 ALLOWED_HOSTS = []
 
+# Templates
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'A_Lei_no_NT', 'templates', 'A_Lei_no_NT')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# Arquivos de mídia (uploads de usuário, etc.)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Aplicativos instalados
@@ -35,23 +56,6 @@ MIDDLEWARE = [
 
 # URL da aplicação
 ROOT_URLCONF = 'Albino_Marks.urls'
-
-# Templates
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 # Banco de dados
 DATABASES = {
@@ -93,10 +97,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "A_Lei_no_NT", "static"),
 ]
-
-# Arquivos de mídia (uploads de usuário, etc.)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configurações de segurança (adapte conforme necessário)
 SECURE_BROWSER_XSS_FILTER = True

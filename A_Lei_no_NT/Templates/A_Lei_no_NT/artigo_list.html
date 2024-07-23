@@ -1,36 +1,48 @@
+<!-- A_Lei_no_NT/artigo_list.html -->
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artigos</title>
+    <title>Lista de Artigos</title>
     <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Textos do Pr. Albino Marks</h1>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'index' %}">Página Inicial</a></li>
-                    <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li>
-                    <li><a href="{% url 'autor_list' %}">Autores</a></li>
-                    <li><a href="{% url 'area_list' %}">Áreas</a></li>
-                </ul>
-            </nav>
-        </header>
-        <section>
-            <h2>Artigos</h2>
+    <header>
+        <h1>Projeto Pr. Albino Marks</h1>
+        <nav>
             <ul>
-                {% for artigo in artigos %}
-                    <li><a href="{% url 'artigo_detalhe' artigo.id %}">{{ artigo.titulo }}</a> - {{ artigo.autor.nome_autor }}</li>
-                {% endfor %}
+                <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li>
+                <li><a href="{% url 'autor_list' %}">Autores</a></li>
+                <li><a href="{% url 'area_list' %}">Áreas</a></li>
             </ul>
-        </section>
-        <footer>
-            <p>&copy; 2024 Textos do Pr. Albino Marks</p>
-        </footer>
-    </div>
+        </nav>
+    </header>
+    <main>
+        <h2>Artigos</h2>
+        <select onchange="location = this.value;">
+            <option disabled selected>Ordenar por:</option>
+            <option value="?order=ordem">Ordem</option>
+            <option value="?order=titulo">Título</option>
+            <option value="?order=autor__nome_autor">Autor</option>
+        </select>
+        <table>
+            <tr>
+                <th>Ordem</th>
+                <th>Nome do Autor</th>
+                <th>Área</th>
+                <th>Título</th>
+            </tr>
+            {% for artigo in artigos %}
+            <tr>
+                <td>{{ artigo.ordem }}</td>
+                <td>{{ artigo.autor.nome_autor }}</td>
+                <td>{{ artigo.area.nome_area }}</td>
+                <td><a href="{% url 'artigo_detalhe' artigo.titulo %}">{{ artigo.titulo }}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </main>
 </body>
 </html>

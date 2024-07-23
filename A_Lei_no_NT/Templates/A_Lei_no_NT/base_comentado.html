@@ -1,0 +1,43 @@
+{% load static %} <!-- Carrega a tag 'static' do Django para usar arquivos estáticos -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres para UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura a visualização responsiva para dispositivos móveis -->
+    <title>{% block title %}Projeto Pr. Albino Marks{% endblock %}</title> <!-- Bloco 'title' que pode ser substituído por templates filhos -->
+    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}"> <!-- Inclui o arquivo CSS estático -->
+</head>
+<body>
+    <header> <!-- Cabeçalho do site -->
+        <h1>Projeto Pr. Albino Marks</h1> <!-- Título do projeto -->
+        <p>Comentários Diários sobre a Lição da Escola Sabatina</p> <!-- Descrição do projeto -->
+        <nav> <!-- Navegação principal -->
+            <ul>
+                <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li> <!-- Link para a lista de artigos -->
+                <li><a href="{% url 'autor_list' %}">Autores</a></li> <!-- Link para a lista de autores -->
+                <li><a href="{% url 'area_list' %}">Áreas</a></li> <!-- Link para a lista de áreas -->
+            </ul>
+        </nav>
+    </header>
+    <div class="container"> <!-- Container principal -->
+        <aside class="sidebar"> <!-- Barra lateral -->
+            <h2>Artigos</h2> <!-- Título da barra lateral -->
+            <select onchange="location = this.value;"> <!-- Menu suspenso para ordenar artigos -->
+                <option disabled selected>Ordenar por:</option> <!-- Opção padrão desativada -->
+                <option value="?order=titulo">Título</option> <!-- Ordenar por título -->
+                <option value="?order=autor">Autor</option> <!-- Ordenar por autor -->
+                <option value="?order=ordem">Ordem</option> <!-- Ordenar por ordem -->
+            </select>
+            <ul>
+                {% for artigo in artigos %} <!-- Loop através dos artigos -->
+                    <li><a href="{% url 'artigo_detalhe' artigo.titulo %}">{{ artigo.titulo }}</a></li> <!-- Link para o detalhe do artigo -->
+                {% endfor %}
+            </ul>
+        </aside>
+        <main class="main-content"> <!-- Conteúdo principal -->
+            {% block content %}{% endblock %} <!-- Bloco 'content' que pode ser substituído por templates filhos -->
+        </main>
+    </div>
+</body>
+</html>
