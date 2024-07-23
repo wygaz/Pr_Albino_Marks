@@ -8,39 +8,30 @@ from django.conf import settings
 import os
 import re
 from unidecode import unidecode
+from django.http import JsonResponse
 
 logger = logging.getLogger(__name__)
 
-def artigo_detalhe(request, titulo):
-    artigo = get_object_or_404(Artigo, titulo=titulo)
-    return render(request, 'A_Lei_no_NT/artigo_detalhe.html', {'artigo': artigo})
-
-'''
-def artigo_detalhe(request, nome_arquivo):
-    try:
-        print(f'Buscando artigo com nome_arquivo: {nome_arquivo}')
-        artigo = Artigo.objects.get(nome_arquivo=nome_arquivo)
-        print(f'Artigo encontrado: {artigo.titulo}')
-    except Artigo.DoesNotExist:
-        print(f'Artigo com nome_arquivo {nome_arquivo} não encontrado')
-        raise Http404("No Artigo matches the given query.")
-    
-    context = {
-        'artigo': artigo,
-    }
-    return render(request, 'A_Lei_no_NT/artigo_detalhe.html', context)
-'''
-    
 # View para a página inicial
 def index(request):
-    artigos = Artigo.objects.all()
-    return render(request, 'A_Lei_no_NT/index.html', {'artigos': artigos})
+    order = request.GET.get('order', 'ordem')
+    artigos = Artigo.objects.all().order_by(order)
+    return render(request, 'index.html', {'artigos': artigos})
 
 # Views para Artigo
+def artigo_detalhe(request, titulo):
+    artigo = get_object_or_404(Artigo, titulo=titulo)
+    order = request.GET.get('order', 'ordem')
+    artigos = Artigo.objects.all().order_by(order)
+    return render(request, 'A_Lei_no_NT/artigo_detalhe.html', {'artigo': artigo, 'artigos': artigos})
+
+
 def artigo_list(request):
-    print("View artigo_list chamada")
-    artigos = Artigo.objects.all()
-    print(f"Artigos recuperados: {artigos}")
+    order = request.GET.get('order', 'ordem')
+    artigos = Artigo.objects.all().order_by(order)
+    print("Ordenando por:", order)
+    for artigo in artigos:
+        print(artigo.titulo, artigo.autor.nome_autor, artigo.ordem)
     return render(request, 'A_Lei_no_NT/artigo_list.html', {'artigos': artigos})
 
 def artigo_create(request):

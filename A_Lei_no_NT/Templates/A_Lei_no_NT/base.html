@@ -1,21 +1,34 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Textos do Pr. Albino Marks{% endblock %}</title>
+    <title>{% block title %}Projeto Pr. Albino Marks{% endblock %}</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li>
-            <li><a href="{% url 'autor_list' %}">Autores</a></li>
-            <li><a href="{% url 'area_list' %}">Áreas</a></li>
-        </ul>
-    </nav>
+    <header>
+        <h1>Projeto Pr. Albino Marks</h1>
+        <p>Comentários Diários sobre a Lição da Escola Sabatina</p>
+        <nav>
+            <ul>
+                <li><a href="{% url 'artigo_list' %}">Todos os Artigos</a></li>
+                <li><a href="{% url 'autor_list' %}">Autores</a></li>
+                <li><a href="{% url 'area_list' %}">Áreas</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
-        {% block content %}{% endblock %}
+        {% include 'A_Lei_no_NT/sidebar.html' %}
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
     </div>
+    <script>
+        document.getElementById('orderSelect').addEventListener('change', function() {
+            window.location.href = this.value;
+        });
+    </script>
 </body>
 </html>

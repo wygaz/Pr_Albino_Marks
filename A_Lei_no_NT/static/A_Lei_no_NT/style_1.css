@@ -1,0 +1,105 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.article img {
+    max-width: 50%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sidebar {
+    width: 25%; /* Aumenta a largura da sidebar */
+    background-color: #f0f0f0;
+    vertical-align: top;
+    padding: 15px;
+}
+
+.content {
+    width: 75%;
+    padding: 10px;
+}
+
+header.main-header {
+    width: 100%;
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+}
+
+.main-content {
+    width: 75%;
+    padding: 15px;
+    vertical-align: top;
+}
+
+main {
+    width: 75%;
+    padding: 10px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around; /* Distribui os itens de forma uniforme */
+}
+
+nav ul li {
+    margin: 0 10px; /* Espaçamento entre os itens */
+    border: 1px solid #000; /* Adiciona borda aos itens */
+    padding: 5px; /* Espaçamento interno dos itens */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333;
+    text-align: center; /* Centraliza os títulos */
+}
+
+p {
+    margin: 10px 0;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}

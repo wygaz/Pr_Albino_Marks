@@ -1,20 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Autor</title>
-    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>{{ form.instance.id|yesno:"Editar Autor,Adicionar Novo Autor" }}</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Salvar</button>
-        </form>
-    </div>
-</body>
-</html>
+
+{% block title %}Adicionar/Editar Autor{% endblock %}
+
+{% block content %}
+<h2>{{ form.instance.pk|yesno:"Editar Autor,Adicionar Novo Autor" }}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+</form>
+<a href="{% url 'autor_list' %}">Cancelar</a>
+{% endblock %}

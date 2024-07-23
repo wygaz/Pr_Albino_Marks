@@ -1,0 +1,14 @@
+<aside class="sidebar">
+    <h2>Artigos</h2>
+    <select id="orderSelect">
+        <option disabled selected>Ordenar por:</option>
+        <option value="?order=titulo">Título</option>
+        <option value="?order=autor__nome_autor">Autor</option>
+        <option value="?order=ordem">Ordem</option>
+    </select>
+    <ul>
+        {% for artigo in artigos %}
+            <li><a href="{% url 'artigo_detalhe' artigo.titulo %}">{{ artigo.titulo }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>

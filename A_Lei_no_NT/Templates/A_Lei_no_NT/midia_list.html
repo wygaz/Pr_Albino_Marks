@@ -1,21 +1,18 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Mídias</title>
-    <link rel="stylesheet" href="{% static 'A_Lei_no_NT/style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h1>Lista de Mídias</h1>
-        <a href="{% url 'midia_create' %}">Adicionar Nova Mídia</a>
-        <ul>
-            {% for midia in midias %}
-                <li>{{ midia.descricao }} - <a href="{% url 'midia_update' midia.id %}">Editar</a> - <a href="{% url 'midia_delete' midia.id %}">Excluir</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-</body>
-</html>
+
+{% block title %}Lista de Mídias{% endblock %}
+
+{% block content %}
+<h2>Lista de Mídias</h2>
+<a href="{% url 'midia_create' %}">Adicionar Nova Mídia</a>
+<ul>
+    {% for midia in midias %}
+        <li>
+            {{ midia.nome_midia }} - 
+            <a href="{% url 'midia_update' midia.id %}">Editar</a> - 
+            <a href="{% url 'midia_delete' midia.id %}">Excluir</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
