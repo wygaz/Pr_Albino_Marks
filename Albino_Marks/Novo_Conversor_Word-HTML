@@ -1,0 +1,54 @@
+import os
+from docx import Document
+from html import escape
+
+def convert_run_to_html(run):
+    """Converte um run para HTML, preservando negrito, itálico e sublinhado."""
+    text = escape(run.text)
+
+    if run.bold:
+        text = f"<strong>{text}</strong>"
+    if run.italic:
+        text = f"<em>{text}</em>"
+    if run.underline:
+        text = f"<u>{text}</u>"
+
+    return text
+
+def docx_to_html(docx_file, html_file):
+    doc = Document(docx_file)
+    html_content = ""
+
+    for para in doc.paragraphs:
+        if para.style.name.startswith('Heading'):
+            level = int(para.style.name[-1])
+            html_content += f"<h{level}>{escape(para.text)}</h{level}>\n"
+        elif para.style.name == 'List Bullet':
+            html_content += f"<li>{''.join(convert_run_to_html(run) for run in para.runs)}</li>\n"
+        elif para.style.name == 'List Number':
+            html_content += f"<li>{''.join(convert_run_to_html(run) for run in para.runs)}</li>\n"
+        else:
+            html_para = "".join(convert_run_to_html(run) for run in para.runs)
+            html_content += f"<p>{html_para}</p>\n"
+
+    # Adicionar figuras
+    for rel in doc.part.rels.values():
+        if "image" in rel.target_ref:
+            img_name = os.path.basename(rel.target_ref)
+            html_content += f'<img src="{img_name}" alt="Figura" />\n'
+
+    with open(html_file, "w", encoding="utf-8") as f:
+        f.write(f"<!DOCTYPE html>\n<html>\n<head>\n<meta charset='UTF-8'>\n</head>\n<body>\n{html_content}\n</body>\n</html>")
+
+    print(f"Conversão completa. HTML salvo em {html_file}")
+
+def convert_directory_to_html(directory):
+    """Converte todos os arquivos .docx de um diretório para HTML."""
+    for filename in os.listdir(directory):
+        if filename.endswith(".docx"):
+            docx_file = os.path.join(directory, filename)
+            html_file = os.path.join(directory, f"{os.path.splitext(filename)[0]}.html")
+            docx_to_html(docx_file, html_file)
+
+# Exemplo de uso
+convert_directory_to_html("C:\\Users\\Wanderley\\\Apps\\Albino_Marks\\media\\Docs")
