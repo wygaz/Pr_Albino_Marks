@@ -1,0 +1,14 @@
+# Ignorar ambientes virtuais
+venv_pr_albino_marks/
+*.pyc
+__pycache__/
+.env
+
+# Ignorar arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos grandes ou temporários
+*.log
+*.xlsx
+*.docx

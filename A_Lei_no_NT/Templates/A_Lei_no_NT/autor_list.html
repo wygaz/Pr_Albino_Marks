@@ -5,13 +5,15 @@
 
 {% block content %}
 <h2>Lista de Autores</h2>
-<a href="{% url 'autor_add' %}">Adicionar Novo Autor</a>
+<a href="{% url 'autor_create' %}">Adicionar Novo Autor</a>
 <ul>
     {% for autor in autores %}
         <li>
             {{ autor.nome_autor }} - 
-            <a href="{% url 'autor_edit' autor.id %}">Editar</a> - 
+            <a href="{% url 'autor_update' autor.id %}">Editar</a> - 
             <a href="{% url 'autor_delete' autor.id %}">Excluir</a>
+            <a href="{% url 'autor_create' %}">Adicionar Novo Autor</a>
+
         </li>
     {% endfor %}
 </ul>
