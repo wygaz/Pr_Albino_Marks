@@ -1,13 +1,26 @@
 import os
 from pathlib import Path
+from decouple import config
+import dj_database_url
 
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Configurações básicas do Django
-SECRET_KEY = 'sua-chave-secreta-aqui'
-DEBUG = True
-ALLOWED_HOSTS = []
+# Ambiente de desenvolvimento
+# SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-dev')
+# DEBUG = config('DEBUG', default=True, cast=bool)
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+# Ambiente de produção
+
+# Para desenvolvimento, comente o bloco abaixo e descomente o de cimae)
+
+# Ambiente de Produção
+SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-postgreSQL')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = ['PR_ALBINO_MARKS.railway.app', '127.0.0.1', 'localhost']
+
+
+
 
 # Templates
 TEMPLATES = [
@@ -58,16 +71,34 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Albino_Marks.urls'
 
 # Banco de dados
+#remoto (senha em variável de ambiente)
+
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')  # Use a variável DATABASE_URL do ambiente Railway
+    )
+}
+
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'AlbinoMarks',
-        'USER': 'postgres',
-        'PASSWORD': 'Post16Wyg12#$',  # Use a nova senha que você definiu durante a instalação
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
     }
 }
+'''
+
+# Adicionar debug temporário
+print(f"DATABASE_NAME={config('DATABASE_NAME')}")
+print(f"DATABASE_USER={config('DATABASE_USER')}")
+print(f"DATABASE_PASSWORD={config('DATABASE_PASSWORD')}")
+print(f"DATABASE_HOST={config('DATABASE_HOST')}")
+print(f"DATABASE_PORT={config('DATABASE_PORT')}")
 
 # Validadores de senhas
 AUTH_PASSWORD_VALIDATORS = [
@@ -93,6 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Arquivos estáticos (CSS, JavaScript, Imagens)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "A_Lei_no_NT", "static"),

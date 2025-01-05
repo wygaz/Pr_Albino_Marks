@@ -5,12 +5,12 @@
 
 {% block content %}
 <h2>Lista de Áreas</h2>
-<a href="{% url 'area_add' %}">Adicionar Nova Área</a>
+<a href="{% url 'area_create' %}">Adicionar Nova Área</a>
 <ul>
     {% for area in areas %}
         <li>
             {{ area.nome_area }} - 
-            <a href="{% url 'area_edit' area.id %}">Editar</a> - 
+            <a href="{% url 'area_update' area.id %}">Editar</a> - 
             <a href="{% url 'area_delete' area.id %}">Excluir</a>
         </li>
     {% endfor %}
