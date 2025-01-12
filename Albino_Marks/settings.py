@@ -16,12 +16,14 @@ if ENV == 'production':
     # Configurações de produção
     SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-postgreSQL')
     DEBUG = config('DEBUG', default=False, cast=bool)
-    ALLOWED_HOSTS = ['PR_ALBINO_MARKS.railway.app', '127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['pr-albino-marks.up.railway.app', '127.0.0.1', 'localhost']
+
 else:
     # Configurações de desenvolvimento
     SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-dev')
     DEBUG = config('DEBUG', default=True, cast=bool)
     ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
+    
 
 
 
