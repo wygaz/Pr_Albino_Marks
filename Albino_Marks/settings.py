@@ -1,24 +1,27 @@
 import os
 from pathlib import Path
-from decouple import config
+from decouple import config, RepositoryEnv
 import dj_database_url
+
+print("Carregando .env do caminho:", os.getcwd())  # Mostra o diretório atual
+print("DATABASE_URL:", config('DATABASE_URL', default="Não encontrado"))
 
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Ambiente de desenvolvimento
-# SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-dev')
-# DEBUG = config('DEBUG', default=True, cast=bool)
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
-# Ambiente de produção
+# Carregar o ambiente
+ENV = config('DJANGO_ENV', default='development')
 
-# Para desenvolvimento, comente o bloco abaixo e descomente o de cimae)
-
-# Ambiente de Produção
-SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-postgreSQL')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = ['PR_ALBINO_MARKS.railway.app', '127.0.0.1', 'localhost']
-
+if ENV == 'production':
+    # Configurações de produção
+    SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-postgreSQL')
+    DEBUG = config('DEBUG', default=False, cast=bool)
+    ALLOWED_HOSTS = ['PR_ALBINO_MARKS.railway.app', '127.0.0.1', 'localhost']
+else:
+    # Configurações de desenvolvimento
+    SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-dev')
+    DEBUG = config('DEBUG', default=True, cast=bool)
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
 
 
 
@@ -75,8 +78,7 @@ ROOT_URLCONF = 'Albino_Marks.urls'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')  # Use a variável DATABASE_URL do ambiente Railway
+    'default': dj_database_url.config(default=config('DATABASE_URL')  # Use a variável DATABASE_URL do ambiente Railway
     )
 }
 
