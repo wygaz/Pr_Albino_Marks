@@ -3,8 +3,26 @@ from pathlib import Path
 from decouple import config, RepositoryEnv
 import dj_database_url
 
-print("Carregando .env do caminho:", os.getcwd())  # Mostra o diretório atual
-print("DATABASE_URL:", config('DATABASE_URL', default="Não encontrado"))
+import os
+from decouple import config
+
+# Verificar o valor diretamente do ambiente
+try:
+    print("Carregando variável DATABASE_URL...")
+    print(f"Valor inicial: {os.environ.get('DATABASE_URL')}")
+except Exception as e:
+    print(f"Erro ao acessar DATABASE_URL: {e}")
+
+# Verificar o valor processado via config
+db_url_via_config = config('DATABASE_URL', default='Fallback usado')
+print(f"Valor da DATABASE_URL via config: {db_url_via_config}")
+
+if config('DEBUG', default=True, cast=bool):  # Exibe informações apenas se DEBUG=True
+    raw_database_url = os.environ.get('DATABASE_URL', 'Não configurado')
+    print(f"Valor bruto da DATABASE_URL: {raw_database_url}")
+
+    print("Carregando .env do caminho:", os.getcwd())  # Mostra o diretório atual
+    print("DATABASE_URL:", config('DATABASE_URL', default="Não encontrado"))
 
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,11 +95,8 @@ ROOT_URLCONF = 'Albino_Marks.urls'
 
 # Banco de dados
 #remoto (senha em variável de ambiente)
-
-
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL')  # Use a variável DATABASE_URL do ambiente Railway
-    )
+    'default': dj_database_url.config(default=config('DATABASE_URL'))  # Use a variável DATABASE_URL do ambiente Railway
 }
 
 '''
