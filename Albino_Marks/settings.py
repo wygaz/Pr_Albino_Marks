@@ -13,6 +13,8 @@ try:
 except Exception as e:
     print(f"Erro ao acessar DATABASE_URL: {e}")
 
+print("Variáveis de ambiente disponíveis:", dict(os.environ))
+
 # Verificar o valor processado via config
 db_url_via_config = config('DATABASE_URL', default='Fallback usado')
 print(f"Valor da DATABASE_URL via config: {db_url_via_config}")
