@@ -94,6 +94,8 @@ ROOT_URLCONF = 'Albino_Marks.urls'
 
 # Banco de dados
 #remoto (senha em variável de ambiente)
+
+
 DATABASES = {
     'default': dj_database_url.config(default=config('DATABASE_URL'))  # Use a variável DATABASE_URL do ambiente Railway
 }
@@ -182,3 +184,5 @@ LOGGING = {
         },
     },
 }
+
+#forçando deploy completo
