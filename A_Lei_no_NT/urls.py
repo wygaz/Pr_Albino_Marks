@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from . import debug_views  # Importa o arquivo onde está a função `debug_env`
+
 from . import views
 
 urlpatterns = [
@@ -26,10 +26,7 @@ urlpatterns = [
     path('midias/create/', views.midia_create, name='midia_create'),
     path('midias/update/<int:id>/', views.midia_update, name='midia_update'),
     path('midias/delete/<int:id>/', views.midia_delete, name='midia_delete'),
-    path('debug/env/', debug_views.debug_env),  # Adiciona a rota temporária
 ]
 
-'''
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-'''
