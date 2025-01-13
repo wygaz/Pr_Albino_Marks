@@ -1,10 +1,7 @@
 import os
 from pathlib import Path
-from decouple import config, RepositoryEnv
-import dj_database_url
-
-import os
 from decouple import config
+import dj_database_url
 
 # Verificar o valor diretamente do ambiente
 try:
@@ -36,7 +33,7 @@ if ENV == 'production':
     # Configurações de produção
     SECRET_KEY = config('SECRET_KEY', default='sua-chave-padrao-secreta-para-postgreSQL')
     DEBUG = config('DEBUG', default=False, cast=bool)
-    ALLOWED_HOSTS = ['pr-albino-marks.up.railway.app', '127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['pr_albino_marks.up.railway.app', '127.0.0.1', 'localhost']
 
 else:
     # Configurações de desenvolvimento
