@@ -26,6 +26,9 @@ if config('DEBUG', default=True, cast=bool):  # Exibe informações apenas se DE
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#atribuindo nome à variável de ambiente DATABASE_NAME
+print(f"DATABASE_NAME={config('DATABASE_NAME', default='railway')}")
+
 # Carregar o ambiente
 ENV = config('DJANGO_ENV', default='development')
 
