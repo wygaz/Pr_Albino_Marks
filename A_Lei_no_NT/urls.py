@@ -27,6 +27,3 @@ urlpatterns = [
     path('midias/update/<int:id>/', views.midia_update, name='midia_update'),
     path('midias/delete/<int:id>/', views.midia_delete, name='midia_delete'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

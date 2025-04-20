@@ -3,6 +3,7 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 
+'''
 # Verificar o valor diretamente do ambiente
 try:
     print("Carregando variável DATABASE_URL...")
@@ -10,14 +11,22 @@ try:
 except Exception as e:
     print(f"Erro ao acessar DATABASE_URL: {e}")
 
-print("Variáveis de ambiente disponíveis:", dict(os.environ))
+# print("Variáveis de ambiente disponíveis:", dict(os.environ))
 
 # Verificar o valor processado via config
 db_url_via_config = config('DATABASE_URL', default='Fallback usado')
 print(f"Valor da DATABASE_URL via config: {db_url_via_config}")
+=======================================================================================
+Checklist para Produção
+Certifique-se de que DEBUG = False no arquivo settings.py.
+Execute python manage.py collectstatic para reunir todos os arquivos estáticos em STATIC_ROOT.
+Verifique se MEDIA_ROOT e MEDIA_URL estão configurados corretamente.
+Configure o servidor web (Nginx/Apache) para servir arquivos de STATIC_ROOT e MEDIA_ROOT.
+'''
 
 if config('DEBUG', default=True, cast=bool):  # Exibe informações apenas se DEBUG=True
     raw_database_url = os.environ.get('DATABASE_URL', 'Não configurado')
+  #  print(f"Valor bruto do DEBUG: {DEBUG}")
     print(f"Valor bruto da DATABASE_URL: {raw_database_url}")
 
     print("Carregando .env do caminho:", os.getcwd())  # Mostra o diretório atual
@@ -25,7 +34,7 @@ if config('DEBUG', default=True, cast=bool):  # Exibe informações apenas se DE
 
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+print(BASE_DIR)
 #atribuindo nome à variável de ambiente DATABASE_NAME
 print(f"DATABASE_NAME={config('DATABASE_NAME', default='railway')}")
 
@@ -44,8 +53,6 @@ else:
     DEBUG = config('DEBUG', default=True, cast=bool)
     ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
     
-
-
 
 # Templates
 TEMPLATES = [
@@ -147,10 +154,10 @@ USE_L10N = True
 USE_TZ = True
 
 # Arquivos estáticos (CSS, JavaScript, Imagens)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "A_Lei_no_NT", "static"),
+    os.path.join(BASE_DIR, 'A_Lei_no_NT', 'static'),
 ]
 
 # Configurações de segurança (adapte conforme necessário)
