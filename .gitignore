@@ -1,17 +1,29 @@
-# Ignorar ambientes virtuais
-venv_pr_albino_marks/
-*.pyc
+# Python
 __pycache__/
-.env
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
 
-# Ignorar arquivos do sistema
+# Environments
+env/
+venv/
+.venv/
+
+# VS Code
+.vscode/
+
+# Django static and media
+/staticfiles/
+/media/
+
+# OS-specific
 .DS_Store
 Thumbs.db
 
-# Ignorar arquivos grandes ou temporários
-*.log
-*.xlsx
-*.docx
-
-Deploy_Pr_Albino_Marks*.*
-
+# Local env config
+.env

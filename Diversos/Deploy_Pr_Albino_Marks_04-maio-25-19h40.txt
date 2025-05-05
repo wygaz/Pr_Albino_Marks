@@ -1,0 +1,337 @@
+lively-harmony
+
+
+production
+Architecture
+Observability
+Logs
+Settings
+
+Trial
+
+|
+
+$ 1.41
+
+
+Share
+
+
+
+
+
+
+
+
+Activity
+
+Pr_Albino_Marks
+
+Deployment crashed
+
+67 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+67 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+67 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+72 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+72 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+72 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+72 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+77 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+78 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+78 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+78 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+78 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+78 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+83 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+88 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+88 seconds ago
+
+Pr_Albino_Marks
+
+Deployment restarted
+
+88 seconds ago
+
+Pr_Albino_Marks
+
+Deployment successful
+
+2 mins ago
+
+
+2 changes in Pr_Albino_Marks
+
+wygaz
+
+·
+12 mins ago
+
+
+13 changes in Pr_Albino_Marks
+
+wygaz
+
+·
+28 mins ago
+
+Pr_Albino_Marks
+
+Deployment crashed
+
+14 days ago
+
+
+Fetch More
+
+Pr_Albino_Marks
+Deployments
+Variables
+Metrics
+Settings
+Unexposed service
+US West
+1 Replica
+
+
+
+History
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pr_Albino_Marks
+/
+ffdd708
+Apr 20, 2025 5:25 PM
+
+Crashed
+
+Get Help
+
+Details
+Build Logs
+Deploy Logs
+
+Filter
+Filter logs using "", (), AND, OR, -
+
+
+
+You reached the start of the range → Apr 20, 2025 5:25 PM
+
+[2025-05-04 22:38:10 +0000] [1] [INFO] Starting gunicorn 23.0.0
+
+[2025-05-04 22:38:10 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+
+[2025-05-04 22:38:10 +0000] [1] [INFO] Using worker: sync
+
+[2025-05-04 22:38:10 +0000] [4] [INFO] Booting worker with pid: 4
+
+Valor bruto da DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+Carregando .env do caminho: /app
+
+DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+/app
+
+DATABASE_NAME=railway
+
+Erro ao carregar WSGI: DATABASE_NAME not found. Declare it as envvar or define a default value.
+
+[2025-05-04 22:38:11 +0000] [4] [ERROR] Exception in worker process
+
+Traceback (most recent call last):
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+
+    worker.init_process()
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+
+    self.load_wsgi()
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+
+    self.wsgi = self.app.wsgi()
+
+                ^^^^^^^^^^^^^^^
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+
+    self.callable = self.load()
+
+[2025-05-04 22:38:11 +0000] [1] [ERROR] Shutting down: Master
+
+                    ^^^^^^^^^^^
+
+[2025-05-04 22:38:11 +0000] [1] [ERROR] Reason: Worker failed to boot.
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+
+[2025-05-04 22:38:13 +0000] [1] [INFO] Starting gunicorn 23.0.0
+
+    return self.load_wsgiapp()
+
+[2025-05-04 22:38:13 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+
+[2025-05-04 22:38:13 +0000] [1] [INFO] Using worker: sync
+
+           ^^^^^^^^^^^^^^^^^^^
+
+[2025-05-04 22:38:13 +0000] [4] [INFO] Booting worker with pid: 4
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+
+Valor bruto da DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+    return util.import_app(self.app_uri)
+
+Carregando .env do caminho: /app
+
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+/app
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/util.py", line 370, in import_app
+
+DATABASE_NAME=railway
+
+    mod = importlib.import_module(module)
+
+Erro ao carregar WSGI: DATABASE_NAME not found. Declare it as envvar or define a default value.
+
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[2025-05-04 22:38:13 +0000] [4] [ERROR] Exception in worker process
+
+  File "/root/.nix-profile/lib/python3.12/importlib/__init__.py", line 90, in import_module
+
+Traceback (most recent call last):
+
+    return _bootstrap._gcd_import(name[level:], package, level)
+
+
+Pr_Albino_Marks | Railway
