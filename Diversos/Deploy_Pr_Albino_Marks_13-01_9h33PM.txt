@@ -1,0 +1,65 @@
+You reached the start of the range → Jan 13, 2025 9:33 PM
+
+Starting Container
+
+[2025-01-14 00:35:13 +0000] [1] [INFO] Starting gunicorn 23.0.0
+
+[2025-01-14 00:35:13 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+
+[2025-01-14 00:35:13 +0000] [1] [INFO] Using worker: sync
+
+[2025-01-14 00:35:13 +0000] [4] [INFO] Booting worker with pid: 4
+
+Carregando variável DATABASE_URL...
+
+Valor inicial: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+Variáveis de ambiente disponíveis: {'RAILWAY_BETA_ENABLE_RUNTIME_V2': '1', 'RAILWAY_GIT_BRANCH': 'master', 'RAILWAY_SNAPSHOT_ID': '96605426-6a81-411f-a19b-79a90ca85052', 'PYTHONUNBUFFERED': '1', 'DATABASE_URL': 'postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway', 'NIXPKGS_ALLOW_UNFREE': '1', 'HOSTNAME': '282006f23c6b', 'POSTGRES_PASSWORD': 'novasenha123', 'ALLOWED_HOSTS': 'pr_albino_marks.up.railway.app', 'PGPORT': '5432', 'PYTHONHASHSEED': 'random', 'NIXPKGS_ALLOW_BROKEN': '1', 'RAILWAY_PROJECT_NAME': 'lively-harmony', 'DJANGO_ENV': 'production', 'NIXPACKS_PATH': '/opt/venv/bin:', 'ENV': '/etc/profile', 'PWD': '/app', 'NIX_PROFILES': '/nix/var/nix/profiles/default /root/.nix-profile', 'RAILWAY_REPLICA_ID': '011c02c3-f867-48c9-978a-af3dc4d54467', 'RAILWAY_GIT_COMMIT_SHA': '9b8e6c4c1245ba25ba555c1bd0409b86c7c23d86', 'PORT': '8080', 'NIX_PATH': '/nix/var/nix/profiles/per-user/root/channels', 'RAILWAY_GIT_COMMIT_MESSAGE': 'Forçando deploy completo', 'RAILWAY_ENVIRONMENT_NAME': 'production', 'container': 'podman', 'HOME': '/root', 'RAILWAY_GIT_REPO_OWNER': 'wygaz', 'GIT_SSL_CAINFO': '/etc/ssl/certs/ca-certificates.crt', 'NIX_SSL_CERT_FILE': '/etc/ssl/certs/ca-certificates.crt', 'SECRET_KEY': 'novasenha123', 'PGUSER': 'postgres', 'RAILWAY_GIT_REPO_NAME': 'Pr_Albino_Marks', 'RAILWAY_PRIVATE_DOMAIN': 'pr_albino_marks.railway.internal', 'RAILWAY_PROJECT_ID': '25d13fdd-22a9-44d5-842c-b9788026d572', 'PIP_DEFAULT_TIMEOUT': '100', 'NIXPACKS_METADATA': 'python,postgres', 'BUILDKIT_DOCKERFILE_CHECK': 'skip=all', 'RAILWAY_GIT_AUTHOR': 'wygaz', 'USER': 'root', 'PIP_DISABLE_PIP_VERSION_CHECK': '1', 'LIBRARY_PATH': '~/.nix-profile/lib:', 'RAILWAY_DEPLOYMENT_ID': 'aea3c25c-3cf0-42e6-b13a-c56669d6f2b1', 'PYTHONFAULTHANDLER': '1', 'RAILWAY_SERVICE_NAME': 'Pr_Albino_Marks', 'SHLVL': '0', 'NIXPKGS_ALLOW_INSECURE': '1', 'RAILWAY_ENVIRONMENT': 'production', 'PYTHONDONTWRITEBYTECODE': '1', 'RAILWAY_SERVICE_ID': 'a094b4d1-8de6-4fa9-9505-3a6772994322', 'LD_LIBRARY_PATH': '/nix/store/s94fwp43xhzkvw8l8nqslskib99yifzi-gcc-13.3.0-lib/lib:/nix/store/ncjma3lhr1sf6mqaczl9mfhjmp6ix58w-zlib-1.3.1/lib:/usr/lib', 'QTDIR': '~/.nix-profile:', 'PGHOST': 'postgres.railway.internal', 'RAILWAY_ENVIRONMENT_ID': 'd48e97d0-515e-4924-b991-dbd862ad3611', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/root/.nix-profile/share:/nix/var/nix/profiles/default/share:/root/.nix-profile/share:/nix/var/nix/profiles/default/share:/root/.nix-profile/share:/nix/var/nix/profiles/default/share', 'PATH': '/opt/venv/bin:/opt/venv/bin::/root/.nix-profile/bin:/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/root/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/bin:/sbin:/usr/bin:/usr/sbin', 'RAILWAY_REPLICA_REGION': 'us-west2', 'PIP_NO_CACHE_DIR': '1', 'CPATH': '~/.nix-profile/include:', '_': '/opt/venv/bin/gunicorn', 'LC_CTYPE': 'C.UTF-8', 'SERVER_SOFTWARE': 'gunicorn/23.0.0', 'DJANGO_SETTINGS_MODULE': 'Albino_Marks.settings'}
+
+Valor da DATABASE_URL via config: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+Valor bruto da DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+Carregando .env do caminho: /app
+
+DATABASE_URL: postgresql://postgres:novasenha123@autorack.proxy.rlwy.net:36680/railway
+
+[2025-01-14 00:35:14 +0000] [4] [ERROR] Exception in worker process
+
+Traceback (most recent call last):
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/arbiter.py", line 608, in spawn_worker
+
+    worker.init_process()
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 135, in init_process
+
+    self.load_wsgi()
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/workers/base.py", line 147, in load_wsgi
+
+    self.wsgi = self.app.wsgi()
+
+                ^^^^^^^^^^^^^^^
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/base.py", line 66, in wsgi
+
+    self.callable = self.load()
+
+                    ^^^^^^^^^^^
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 57, in load
+
+    return self.load_wsgiapp()
+
+           ^^^^^^^^^^^^^^^^^^^
+
+  File "/opt/venv/lib/python3.12/site-packages/gunicorn/app/wsgiapp.py", line 47, in load_wsgiapp
+
+    return util.import_app(self.app_uri)
+
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Pr_Albino_Marks | Railway
+500MB
