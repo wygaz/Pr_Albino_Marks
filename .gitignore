@@ -1,29 +1,53 @@
-# Python
-__pycache__/
+# ============================
+# Arquivos do Python
+# ============================
 *.py[cod]
-*.sqlite3
+__pycache__/
+*.so
+*.egg-info/
 *.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-*.db
 
-# Environments
-env/
+# ============================
+# Ambientes virtuais
+# ============================
 venv/
-.venv/
+.env
 
-# VS Code
+# ============================
+# Banco de dados Progress (e similares)
+# ============================
+*.db
+*.sqlite3
+*.bak
+*.sav
+*.dmp
+*.df
+*.st
+*.bi
+*.lg
+*.ai
+
+# ============================
+# Arquivos de migração Django (opcional limpar em reset)
+# ============================
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+
+# ============================
+# Node.js (caso use)
+# ============================
+node_modules/
+
+# ============================
+# VSCode e outros editores
+# ============================
 .vscode/
+.idea/
+*.swp
 
-# Django static and media
-/staticfiles/
-/media/
-
-# OS-specific
+# ============================
+# Sistema operacional
+# ============================
 .DS_Store
 Thumbs.db
-
-# Local env config
-.env
