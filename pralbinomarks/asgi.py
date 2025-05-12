@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Albino_Marks.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 
 application = get_asgi_application()

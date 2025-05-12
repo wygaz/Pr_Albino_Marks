@@ -3,7 +3,7 @@ import django
 from django.conf import settings
 
 # Configure o caminho do módulo de configurações do seu projeto Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Albino_Marks.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 
 # Configure o Django
 django.setup()
