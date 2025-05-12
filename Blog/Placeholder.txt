@@ -1,0 +1,1 @@
+Apenas para forçar o Git a reconhecer o Blog como parte da estrutura
