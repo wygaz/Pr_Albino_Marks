@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nome_autor', models.CharField(max_length=200)),
                 ('biografia', models.TextField()),
-                ('midia', models.FileField(blank=True, null=True, upload_to='A_Lei_no_NT/Imagens/Autores/')),
-                ('foto', models.ImageField(blank=True, null=True, upload_to='A_Lei_no_NT/Imagens/Autores/')),
+                ('midia', models.FileField(blank=True, null=True, upload_to=\1Blog/Imagens/Autores/')),
+                ('foto', models.ImageField(blank=True, null=True, upload_to=\1Blog/Imagens/Autores/')),
             ],
         ),
         migrations.CreateModel(

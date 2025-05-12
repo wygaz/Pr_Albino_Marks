@@ -37,8 +37,8 @@ class Artigo(models.Model):
 class Autor(models.Model):
     nome_autor = models.CharField(max_length=200)
     biografia = models.TextField()
-    midia = models.FileField(upload_to='A_Lei_no_NT/Imagens/Autores/', null=True, blank=True)
-    foto = models.ImageField(upload_to='A_Lei_no_NT/Imagens/Autores/', null=True, blank=True)
+    midia = models.FileField(upload_to=\1Blog/Imagens/Autores/', null=True, blank=True)
+    foto = models.ImageField(upload_to=\1Blog/Imagens/Autores/', null=True, blank=True)
 
     def __str__(self):
         return self.nome_autor

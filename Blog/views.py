@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def index(request):
     order = request.GET.get('order', 'ordem')
     artigos = Artigo.objects.all().order_by(order)
-    return render(request, 'index.html', {'artigos': artigos})
+    return render(request, 'A_Lei_no_NT/index.html', {'artigos': artigos})
 
 # Views para Artigo
 def artigo_detalhe(request, titulo):

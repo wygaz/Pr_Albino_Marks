@@ -1,5 +1,5 @@
 from django import template
-from A_Lei_no_NT.models import Artigo
+\l Blog.models import Artigo
 
 register = template.Library()
 

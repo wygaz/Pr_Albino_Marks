@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('A_Lei_no_NT.urls')),  # Inclui as URLs do aplicativo A_Lei_no_NT
+    path('', include('Blog.urls')),  # Inclui as URLs do aplicativo Blog
 ]
 
 if settings.DEBUG:

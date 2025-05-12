@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 # Configure o Django
 django.setup()
 
-from A_Lei_no_NT.models import Artigo, Autor, Area
+\l Blog.models import Artigo, Autor, Area
 
 def inserir_ou_atualizar_artigo(titulo, autor_nome, area_nome, caminho_arquivo_html):
     # Lê o conteúdo do arquivo HTML

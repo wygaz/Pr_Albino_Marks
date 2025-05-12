@@ -4,7 +4,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 django.setup()
 
-from A_Lei_no_NT.models import Artigo, Autor, Area
+\l Blog.models import Artigo, Autor, Area
 
 def atualizar_caminho_arquivo(titulo, autor_nome, area_nome, caminho_arquivo_docx):
     autor, created = Autor.objects.get_or_create(nome_autor=autor_nome)

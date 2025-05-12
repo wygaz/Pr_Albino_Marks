@@ -2,7 +2,7 @@
 
 import os
 from django.core.management.base import BaseCommand
-from A_Lei_no_NT.models import Artigo
+\l Blog.models import Artigo
 
 class Command(BaseCommand):
     help = 'Atualiza o campo nome_arquivo_txt e ordem dos artigos na base de dados'
