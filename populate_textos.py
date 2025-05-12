@@ -2,7 +2,7 @@ import os
 import django
 
 # Configurar o Django para usar as configurações do projeto
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Albino_Marks.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 django.setup()
 
 from A_Lei_no_NT.models import Texto

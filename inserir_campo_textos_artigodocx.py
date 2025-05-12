@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Albino_Marks.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 django.setup()
 
 from A_Lei_no_NT.models import Artigo, Autor, Area
