@@ -1,10 +1,9 @@
-import os
 from pathlib import Path
-import dj_database_url
+import os
 import environ
 
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env("C:/Users/Wanderley/Apps/Pr_Albino_Marks_restaurado/.env")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'A_Lei_no_NT',
     'pralbinomarks',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -55,8 +55,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pralbinomarks.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(default=env('DATABASE_URL'))
+    'default': env.db()
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
