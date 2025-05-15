@@ -12,11 +12,12 @@
     <h1>Artigos</h1>
     <table>
         <tr>
-            <th>Ordem</th>
-            <th>Nome do Autor</th>
-            <th>Área</th>
-            <th>Título</th>
+            <th><a href="?order=ordem">Ordem</a></th>
+            <th><a href="?order=autor__nome_autor">Nome do Autor</a></th>
+            <th><a href="?order=area__nome_area">Área</a></th>
+            <th><a href="?order=titulo">Título</a></th>
         </tr>
+
         {% for artigo in artigos %}
         <tr>
             <td>{{ artigo.ordem }}</td>
