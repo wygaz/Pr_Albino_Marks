@@ -1,23 +1,31 @@
-{% extends 'base.html' %}
-{% load static %}
+{# 
+  Este template exibe os detalhes de um artigo.
+  Ele é chamado pela view `detalhe_artigo`, quando acessamos a URL com um slug (por exemplo: /artigos/slug-do-artigo/)
+  A view passa um objeto 'artigo' com os dados que serão exibidos aqui.
+#}
 
-{% block title %}{{ artigo.titulo }}{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="article">
-    {% if artigo.titulo == "Biografia" %}
-        <h1>{{ artigo.titulo }}</h1>
-        {% if artigo.imagem %}
-            <img src="{{ artigo.imagem.url }}" alt="{{ artigo.titulo }}">
-        {% endif %}
-    {% else %}
-        {% if artigo.imagem %}
-            <img src="{{ artigo.imagem.url }}" alt="{{ artigo.titulo }}">
-        {% endif %}
-        <h1>{{ artigo.titulo }}</h1>
+  <div class="container">
+    {# Título do artigo #}
+    <h1>{{ artigo.titulo }}</h1>
+
+    {# Imagem de cabeçalho do artigo, se existir. Caso não exista, nada será exibido. #}
+    {% if artigo.imagem %}
+      <img src="{{ artigo.imagem.url }}" alt="Imagem do artigo" style="max-width: 100%; height: auto; margin-bottom: 20px;">
     {% endif %}
-    <div>
-        {{ artigo.conteudo_html|safe }}
+
+    {# Conteúdo HTML do artigo (já tratado com |safe para não escapar tags HTML) #}
+    <div class="conteudo">
+      {{ artigo.conteudo_html|safe }}
     </div>
-</div>
+
+    <hr>
+
+    {# Botão para voltar à lista de artigos.
+       Atenção: o nome 'lista_artigos' deve existir no seu urls.py como name='lista_artigos'.
+       Se estivesse 'artigo_list', o nome aqui deveria ser igual. #}
+    <a href="{% url 'lista_artigos' %}">← Voltar à lista de artigos</a>
+  </div>
 {% endblock %}

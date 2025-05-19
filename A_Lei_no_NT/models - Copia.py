@@ -22,7 +22,7 @@ class Midia(models.Model):
 
 class Artigo(models.Model):
     titulo = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)  # Novo campo
     conteudo_html = models.TextField()
     autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
@@ -33,7 +33,7 @@ class Artigo(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.titulo).replace('-', '_')
+            self.slug = slugify(self.titulo)
         super().save(*args, **kwargs)
 
     def __str__(self):

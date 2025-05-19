@@ -1,30 +1,13 @@
-<!-- index.html -->
-{% load static %}
-{% load custom_filters %}
-
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Artigos</title>
-</head>
-<body>
-    <h1>Artigos</h1>
-    <table>
-        <tr>
-            <th>Ordem</th>
-            <th>Nome do Autor</th>
-            <th>Área</th>
-            <th>Título</th>
-        </tr>
-        {% for artigo in artigos %}
-        <tr>
-            <td>{{ artigo.ordem }}</td>
-            <td>{{ artigo.autor.nome_autor }}</td>
-            <td>{{ artigo.area.nome_area }}</td>
-            <td><a href="{% url 'artigo_detalhe' artigo.titulo %}">{{ artigo.titulo }}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<h2>Lista de Artigos</h2>
+<ul>
+    {% for artigo in artigos %}
+        <!-- Corrigido: slug usado ao invés de titulo -->
+        <li><a href="{% url 'detalhe_artigo' slug=artigo.slug %}">{{ artigo.titulo }}</a> -
+            Autor: {{ artigo.autor.nome }} |
+            Área: {{ artigo.area.nome }}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

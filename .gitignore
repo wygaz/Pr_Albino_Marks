@@ -1,53 +1,44 @@
-# ============================
-# Arquivos do Python
-# ============================
-*.py[cod]
+# Python
+*.pyc
+*.pyo
+*.pyd
+*$py.class
 __pycache__/
-*.so
-*.egg-info/
-*.log
 
-# ============================
-# Ambientes virtuais
-# ============================
+# Ambientes Virtuais
+.env/
+.venv/
+env/
 venv/
-.env
+ENV/
+env.bak/
+venv.bak/
 
-# ============================
-# Banco de dados Progress (e similares)
-# ============================
-*.db
-*.sqlite3
-*.bak
-*.sav
-*.dmp
-*.df
-*.st
-*.bi
-*.lg
-*.ai
+# Migrações do Django
+**/migrations/**
+!**/migrations/
+!**/migrations/__init__.py
 
-# ============================
-# Arquivos de migração Django (opcional limpar em reset)
-# ============================
-*/migrations/__pycache__/
-*/migrations/*.pyc
-*/migrations/*.pyo
-
-# ============================
-# Node.js (caso use)
-# ============================
-node_modules/
-
-# ============================
-# VSCode e outros editores
-# ============================
+# Editores (IDE/Editor configs)
 .vscode/
 .idea/
 *.swp
 
-# ============================
-# Sistema operacional
-# ============================
+# Sistema Operacional
 .DS_Store
 Thumbs.db
+*~
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PostgreSQL
+*.sql
+*.dump
+*.backup
+pgdata/
+postgres-data/
+backups/
