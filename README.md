@@ -59,4 +59,4 @@ Ou entre em contato diretamente.
 🤖 Apoio fundamental: **ChatGPT**
 
 Rodar versão local para HTTPS:
-         python manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem
+        pip list

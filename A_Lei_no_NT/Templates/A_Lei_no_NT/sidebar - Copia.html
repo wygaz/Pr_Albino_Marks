@@ -3,13 +3,12 @@
     <select id="orderSelect">
         <option disabled selected>Ordenar por:</option>
         <option value="?order=titulo">Título</option>
-        <option value="?order=autor__nome">Autor</option>
+        <option value="?order=autor__nome_autor">Autor</option>
         <option value="?order=ordem">Ordem</option>
     </select>
     <ul>
         {% for artigo in artigos %}
-            <!-- Corrigido: slug no lugar de título -->
-            <li><a href="{% url 'detalhe_artigo' slug=artigo.slug %}">{{ artigo.titulo }}</a></li>
+            <li><a href="{% url 'artigo_detalhe' artigo.titulo %}">{{ artigo.titulo }}</a></li>
         {% endfor %}
     </ul>
 </aside>

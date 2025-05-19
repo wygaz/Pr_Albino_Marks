@@ -1,13 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
+from . import views
+
+app_name = 'A_Lei_no_NT'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('A_Lei_no_NT.urls')),  # Inclui as URLs do aplicativo A_Lei_no_NT
+    path('artigos/', views.artigo.list, name='artigo_lists'),
+    path('artigos/<slug:slug>/', views.detalhe_artigo, name='detalhe_artigo'),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
