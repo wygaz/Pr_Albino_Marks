@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ artigo.titulo }}{% endblock %}
+
+{% block content %}
+<article class="artigo">
+
+    {% if artigo.imagem_capa %}
+        <img src="{{ artigo.imagem_capa.url }}" alt="Imagem de capa" class="imagem-artigo-topo">
+    {% endif %}
+
+    <h2>{{ artigo.titulo }}</h2>
+
+    <p><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
+ 
+    {% if artigo.midia %}
+        <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>
+    {% endif %}
+
+    <div class="conteudo-artigo">
+        {{ artigo.conteudo_html|safe }}
+    </div>
+
+    <p><a href="{% url 'A_Lei_no_NT:lista_artigos' %}">← Voltar para a lista</a></p>
+
+</article>
+{% endblock %}

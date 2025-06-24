@@ -1,8 +1,0 @@
-<h1>Lista de Artigos</h1>
-<ul>
-{% for artigo in artigos %}
-    <li>
-        <a href="{% url 'A_Lei_no_NT:detalhe_artigo' artigo.slug %}">{{ artigo.titulo }}</a>
-    </li>
-{% endfor %}
-</ul>
