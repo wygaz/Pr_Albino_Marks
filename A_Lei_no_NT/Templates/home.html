@@ -1,0 +1,53 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial - Pr. Albino Marks</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #003366;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #0055aa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin: 10px 0;">Bem-vindo ao Projeto Pr. Albino Marks</h1>
+        <p style="margin: 5px 0 10px;">Explorando a Lei no Novo Testamento sob uma perspectiva bíblica profunda</p>
+    </header>
+    <main>
+        <h2>Início da jornada</h2>
+        <p>Este site reúne artigos selecionados do Pr. Albino Marks, com reflexões claras e fundamentadas.</p>
+        <a href="{% url 'A_Lei_no_NT:lista_artigos' %}" class="btn">Ver artigos</a>
+    </main>
+</body>
+</html>

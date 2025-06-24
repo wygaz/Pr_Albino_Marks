@@ -1,0 +1,59 @@
+📘 PROJETO PR. ALBINO MARKS — QUADRO DE PROGRESSO E GUIA GERAL
+
+──────────────────────────────────────────────
+🧩 1. SITE PRINCIPAL EM DJANGO
+──────────────────────────────────────────────
+
+✔️ Estrutura Django criada e funcionando
+✔️ Modelos: Artigo, Autor, Área, Mídia
+✔️ Templates padronizados e funcionais
+✔️ Imagens exibidas corretamente
+✔️ CSS refinado (style.css atualizado)
+✔️ GitHub sincronizado (repositório: Pr_Albino_Marks)
+✔️ Importação de artigos HTML e TXT
+✔️ Página de detalhe ajustada com imagem, título, autor e conteúdo
+✔️ Padronização de nomes de arquivos/templates concluída
+
+🔜 PENDÊNCIAS DO SITE:
+[ ] Responsividade mobile (ajustes no layout para celulares)
+[ ] Finalização da biografia do autor
+[ ] Página "Sobre o projeto" (opcional)
+[ ] Busca por palavra-chave ou título
+[ ] Deploy final (Railway ou GitHub Pages) + domínio pralbinomarks.com.br
+
+──────────────────────────────────────────────
+🛠️ 2. UTILITÁRIOS REUTILIZÁVEIS
+──────────────────────────────────────────────
+
+✔️ converter_docx_para_html.vba (Word → HTML estruturado)
+✔️ converter_para_txt_limpo.vba (remove imagem, título, autor)
+✔️ macro_unificada.vba (pergunta se deseja incluir cabeçalho)
+✔️ script substituir_referencias.py (substituição global)
+✔️ backup_automatico_por_extensao.py (backup organizado)
+✔️ HTML → PDF estilizado (script WeasyPrint)
+✔️ Guia de uso das macros
+
+🔜 PENDÊNCIAS DOS UTILITÁRIOS:
+[ ] Gerar PDF em lote para e-book
+[ ] Menu centralizador de execução (Python)
+[ ] Manual indexado com instruções por script
+[ ] Backup do banco (opcional)
+
+──────────────────────────────────────────────
+📚 3. PLANO DE FINALIZAÇÃO
+──────────────────────────────────────────────
+
+✔️ Testes com importação de HTML com tags funcionais
+✔️ Inclusão de imagens no banco e exibição no frontend
+✔️ Separação clara entre dados do banco e conteúdo HTML
+
+🔜 RECOMENDAÇÃO:
+[ ] Finalizar site com calma nos próximos dias
+[ ] Validar e publicar no domínio oficial
+[ ] Usar artigos já no banco como base para o e-book (HTML → PDF)
+[ ] Criar sumário e formato EPUB ou PDF final para publicação
+
+──────────────────────────────────────────────
+
+Este quadro pode ser atualizado a qualquer momento.
+Ele serve como um guia contínuo para o avanço seguro e organizado.
