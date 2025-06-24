@@ -1,11 +1,19 @@
-from pathlib import Path
 import os
+from pathlib import Path
 import environ
 
-env = environ.Env()
-environ.Env.read_env("C:/Users/Wanderley/Apps/Pr_Albino_Marks_restaurado/.env")
+# Inicializar as variáveis de ambiente
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
+# Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Ler o arquivo .env localizado na raiz do projeto
+env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# environ.Env.read_env("C:/Users/Wanderley/Apps/Pr_Albino_Marks_restaurado/.env")
 
 SECRET_KEY = env('SECRET_KEY', default='changeme')
 
