@@ -54,9 +54,49 @@ def docx_para_html(arquivo):
 
     return str(soup), titulo_extraido
 
-def gerar_slug(texto):
-    texto_base = slugify(texto)
-    return texto_base[:100]  # Trunca para no máximo 100 caracteres
+import re  # no topo, se ainda não estiver
+
+def gerar_titulo_numerado(titulo_base, ordem_por='id'):
+    from django.apps import apps
+    Artigo = apps.get_model('A_Lei_no_NT', 'Artigo')
+
+    # Padrão para identificar numeração no final
+    padrao_numerado = re.compile(r' - \d+ de \d+$')
+
+    # Buscar todos os artigos que compartilham o mesmo título base
+    artigos_com_titulo_base = Artigo.objects.filter(
+        titulo__startswith=titulo_base
+    ).order_by(ordem_por)
+
+    # Verifica se o novo artigo já existe (evita duplicação)
+    total = artigos_com_titulo_base.count() + 1
+
+    # Remove numeração dos anteriores antes de renumerar
+    artigos_limpos = []
+    for artigo in artigos_com_titulo_base:
+        titulo_sem_num = padrao_numerado.sub('', artigo.titulo).strip()
+        artigo.titulo = titulo_sem_num
+        artigos_limpos.append(artigo)
+
+    # Renumera os anteriores com base no novo total
+    for i, artigo in enumerate(artigos_limpos, start=1):
+        artigo.titulo = f"{titulo_base} - {i} de {total}"
+        artigo.save()
+
+    # Retorna o título numerado do novo artigo
+    return f"{titulo_base} - {total} de {total}"
+
+
+def gerar_slug(titulo):
+    from .models import Artigo  # ✅ Importação local para evitar ciclo
+
+    base_slug = slugify(titulo)
+    slug = base_slug
+    contador = 1
+    while Artigo.objects.filter(slug=slug).exists():
+        slug = f"{base_slug}-{contador}"
+        contador += 1
+    return slug
 
 def renomear_imagem_capa(instance, filename):
     base, ext = os.path.splitext(filename)
