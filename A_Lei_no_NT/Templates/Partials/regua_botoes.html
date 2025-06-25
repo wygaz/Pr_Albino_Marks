@@ -1,6 +1,10 @@
-<div class="d-flex flex-wrap gap-2 my-3">
-  <a href="{% url 'criar_artigo' %}" class="btn btn-outline-success">📝 Criar Artigo</a>
-  <a href="{% url 'home' %}" class="btn btn-outline-primary">🏠 Voltar para Home</a>
-  <a href="{% url 'artigo_lista' %}" class="btn btn-outline-info">📑 Listar Artigos</a>
-  <a href="/admin/" class="btn btn-outline-dark">🔧 Admin</a>
+<div class="bg-white border-bottom shadow-sm py-2 mb-3">
+  <div class="d-flex justify-content-between flex-wrap gap-2">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm flex-fill text-center">🏠 Início</a>
+    <a href="{% url 'lista_artigos' %}" class="btn btn-outline-secondary btn-sm flex-fill text-center">📄 Artigos</a>
+    <a href="{% url 'criar_artigo' %}" class="btn btn-outline-secondary btn-sm flex-fill text-center">➕ Novo Artigo</a>
+    <a href="{% url 'biografia' %}" class="btn btn-outline-secondary btn-sm">👤 Biografia</a>
+    <a href="{% url 'motivacao_publicacao' %}" class="btn btn-outline-secondary btn-sm">📘 Motivação</a>
+    <a href="/admin/" class="btn btn-outline-secondary btn-sm flex-fill text-center">⚙️ Admin</a>
+  </div>
 </div>

@@ -5,28 +5,18 @@ from .forms import ArtigoForm
 from django.core.paginator import Paginator
 
 def home(request):
-   return render(request, 'A_Lei_no_NT/home.html')
+    return render(request, 'home.html')
 
 def lista_artigos(request):
     artigos = Artigo.objects.order_by('-publicado_em')
     paginator = Paginator(artigos, 10)
     pagina = request.GET.get('page')
     artigos_paginados = paginator.get_page(pagina)
-    return render(request, 'A_Lei_no_NT/lista_artigos.html', {'artigos': artigos_paginados})
+    return render(request, 'A_Lei_no_NT/artigo_lista.html', {'artigos': artigos_paginados})
 
 def visualizar_artigo(request, slug):
     artigo = get_object_or_404(Artigo, slug=slug)
-    return render(request, 'A_Lei_no_NT/visualizar_artigo.html', {'artigo': artigo})
-
-def biografia(request):
-    artigos_sidebar = Artigo.objects.filter(visivel=True).order_by('-publicado_em')[:15]
-    return render(request, 'A_Lei_no_NT/biografia.html', {
-        'artigos_sidebar': artigos_sidebar
-    })
-
-def motivacao_publicacao(request):
-    return render(request, 'A_Lei_no_NT/motivacao_publicacao.html')
-
+    return render(request, 'A_Lei_no_NT/artigo_visualizar.html', {'artigo': artigo})
 
 def criar_artigo(request):
     if request.method == 'POST':
@@ -37,7 +27,7 @@ def criar_artigo(request):
             artigo = form.save()
             print(f"📝 Artigo criado: {artigo.titulo}")
             messages.success(request, "Artigo criado com sucesso!")
-            return redirect('A_Lei_no_NT/visualizar_artigo', slug=artigo.slug)
+            return redirect('A_Lei_no_NT:visualizar_artigo', slug=artigo.slug)
 
         else:
             print("❌ Formulário inválido")
@@ -46,4 +36,4 @@ def criar_artigo(request):
         print("📄 Requisição GET - exibindo formulário")
         form = ArtigoForm()
 
-    return render(request, 'A_Lei_no_NT/criar_artigo.html', {'form': form})
+    return render(request, 'A_Lei_no_NT/artigo_form.html', {'form': form})

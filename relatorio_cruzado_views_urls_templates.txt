@@ -1,0 +1,6 @@
+📊 RELATÓRIO DE VIEWS, URLs E TEMPLATES
+
+home                      | URL: ✔ | TEMPLATE: ✔ | Esperado: home.html                 | Encontrado: home.html | Tipo: home
+lista_artigos             | URL: ✔ | TEMPLATE: ✔ | Esperado: lista_artigos.html        | Encontrado: lista_artigos.html | Tipo: listar
+visualizar_artigo         | URL: ✔ | TEMPLATE: ✔ | Esperado: visualizar_artigo.html    | Encontrado: visualizar_artigo.html | Tipo: visualizar
+criar_artigo              | URL: ✔ | TEMPLATE: ✔ | Esperado: criar_artigo.html         | Encontrado: criar_artigo.html | Tipo: criar
