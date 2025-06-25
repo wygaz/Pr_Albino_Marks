@@ -7,12 +7,12 @@ from django.core.paginator import Paginator
 def home(request):
    return render(request, 'A_Lei_no_NT/home.html')
 
-def lista_artigos(request):
+def listar_artigos(request):
     artigos = Artigo.objects.order_by('-publicado_em')
     paginator = Paginator(artigos, 10)
     pagina = request.GET.get('page')
     artigos_paginados = paginator.get_page(pagina)
-    return render(request, 'A_Lei_no_NT/lista_artigos.html', {'artigos': artigos_paginados})
+    return render(request, 'A_Lei_no_NT/listar_artigos.html', {'artigos': artigos_paginados})
 
 def visualizar_artigo(request, slug):
     artigo = get_object_or_404(Artigo, slug=slug)
