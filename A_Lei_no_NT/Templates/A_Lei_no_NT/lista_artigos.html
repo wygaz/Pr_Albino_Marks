@@ -4,14 +4,12 @@
 
 {% block content %}
 
-{% include 'A_Lei_no_NT/sidebar.html' %}
-
 <div class="artigos-container">
     <h2 class="titulo-pagina">Todos os Artigos</h2>
 
     {% for artigo in artigos %}
         <div class="artigo-item">
-            <a href="{% url 'A_Lei_no_NT:visualizar_artigo' slug=artigo.slug %}">
+            <a href="visualizar_artigo' slug=artigo.slug %}">
                 {{ artigo.titulo }}
             </a>
         </div>
