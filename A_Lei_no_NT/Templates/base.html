@@ -1,4 +1,5 @@
 {% load static %}
+{% include 'partials/regua_botoes.html' %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -13,6 +14,13 @@
         <h1>Projeto Pr. Albino Marks</h1>
         <nav>
             <!-- Corrigido o nome da URL para 'lista_artigos' -->
+            <div class="d-flex gap-2 mb-4" style="margin-top: 20px;">
+                <a href="{% url 'artigo_criar' %}" class="btn btn-outline-success">📝 Criar Artigo</a>
+                <a href="{% url 'home' %}" class="btn btn-outline-primary">🏠 Voltar para Home</a>
+                <a href="{% url 'artigo_listar' %}" class="btn btn-outline-info">📑 Listar Artigos</a>
+                <a href="/admin/" class="btn btn-outline-dark">🔧 Admin</a>
+            </div>
+
              <a href="{% url 'A_Lei_no_NT:lista_artigos' %}" class="link-header">Todos os Artigos</a>
         </nav>
     </header>
