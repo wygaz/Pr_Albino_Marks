@@ -1,36 +1,35 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
 
 {% block content %}
-<h1>Cadastrar Artigo</h1>
+<div class="container mt-4">
+  <h2 class="mb-4">📄 Criar Novo Artigo</h2>
 
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-  <label for="id_autor">Autor:</label><br>
-  {{ form.autor }}<br><br>
+    <div class="form-group mb-3">
+      {{ form.titulo.label_tag }}
+      {{ form.titulo }}
+    </div>
 
-  <label for="id_area">Área:</label><br>
-  {{ form.area }}<br><br>
+    <div class="form-group mb-3">
+      {{ form.imagem_capa.label_tag }}
+      {{ form.imagem_capa }}
+    </div>
 
-  {% if form.midia %}
-    <label for="id_midia">Mídia:</label><br>
-    {{ form.midia }}<br><br>
-  {% endif %}
+    <div class="form-group mb-3">
+      {{ form.arquivo_word.label_tag }}
+      {{ form.arquivo_word }}
+    </div>
 
-  <label for="id_arquivo_word">Arquivo Word:</label><br>
-  {{ form.arquivo_word }}<br><br>
+    <div class="form-group mb-3">
+      {{ form.visivel.label_tag }}
+      {{ form.visivel }}
+    </div>
 
-  <label for="id_imagem_capa">Imagem de Capa:</label><br>
-  {{ form.imagem_capa }}<br><br>
-
-  <button type="submit">Salvar</button>
-  <a href="{% url 'home' %}" class="btn-voltar" style="margin-left: 20px;">Voltar à Home</a>
-</form>
-
-{% if messages %}
-  {% for message in messages %}
-      <p style="color: green; font-weight: bold;">{{ message }}</p>
-  {% endfor %}
-{% endif %}
+    <button type="submit" class="btn btn-success mt-3">
+      💾 Salvar Artigo
+    </button>
+  </form>
+</div>
 {% endblock %}
