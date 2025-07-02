@@ -13,7 +13,10 @@
 
     <h2>{{ artigo.titulo }}</h2>
 
-    <p><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
+    
+    {% if artigo.autor %}
+        <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
+    {% endif %}
  
     {% if artigo.midia %}
         <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>

@@ -30,20 +30,21 @@ def motivacao_publicacao(request):
 
 def criar_artigo(request):
     if request.method == 'POST':
-        print("🚀 Formulário enviado via POST")
         form = ArtigoForm(request.POST, request.FILES)
         if form.is_valid():
-            print("✅ Formulário é válido")
-            artigo = form.save()
-            print(f"📝 Artigo criado: {artigo.titulo}")
-            messages.success(request, "Artigo criado com sucesso!")
-            return redirect('A_Lei_no_NT/visualizar_artigo', slug=artigo.slug)
-
+            try:
+                artigo = form.save()
+                print(f"✅ Artigo salvo: {artigo.titulo} | slug: {artigo.slug}")
+                messages.success(request, 'Artigo criado com sucesso.')
+                return redirect('A_Lei_no_NT:visualizar_artigo', slug=artigo.slug)
+            except Exception as e:
+                print("🚨 Erro ao salvar o artigo:")
+                print(e)
+                messages.warning(request, f"Erro ao salvar o artigo: {e}")
         else:
-            print("❌ Formulário inválido")
-            print(form.errors.as_text())
+            print("⚠️ Erros no formulário:")
+            print(form.errors)
     else:
-        print("📄 Requisição GET - exibindo formulário")
         form = ArtigoForm()
-
+    
     return render(request, 'A_Lei_no_NT/criar_artigo.html', {'form': form})

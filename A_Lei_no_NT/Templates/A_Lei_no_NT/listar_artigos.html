@@ -9,9 +9,10 @@
 
     {% for artigo in artigos %}
         <div class="artigo-item">
-            <a href="visualizar_artigo' slug=artigo.slug %}">
-                {{ artigo.titulo }}
-            </a>
+         <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo.slug %}">
+             {{ artigo.titulo }}
+          </a>
+
         </div>
     {% endfor %}
 
