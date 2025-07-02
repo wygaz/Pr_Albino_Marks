@@ -7,7 +7,7 @@
 ## ✅ Instruções gerais
 
 - Execute o servidor com `run.bat` (versão corrigida para `localhost:8000`).
-- Acesse o site em: [https://localhost:8000/](https://localhost:8000/)
+- Acesse o site em: [ 	](https://localhost:8000/)
 - Teste cada etapa abaixo e marque com `X` quando concluído.
 
 ---

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.db.models import Max
 from django.utils import timezone
-from .utils import docx_para_html, gerar_slug
+from A_Lei_no_NT.utils import docx_para_html, gerar_slug
 
 
 class Autor(models.Model):

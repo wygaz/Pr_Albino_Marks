@@ -1,8 +1,21 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
   <h2 class="mb-4">📄 Criar Novo Artigo</h2>
+
+  {% if form.errors.titulo %}
+    <div class="alert alert-warning d-flex align-items-center" role="alert" id="alertaTitulo">
+      <span class="me-2">⚠️</span>
+      <div><strong>Atenção:</strong> Não foi possível detectar o título automaticamente. Por favor, insira-o manualmente.</div>
+    </div>
+
+    <audio id="audioAlerta" autoplay>
+      <source src="{% static 'audio/Voz_Insira_o_titulo_manuamente.mp3' %}" type="audio/mpeg">
+      Seu navegador não suporta áudio HTML5.
+    </audio>
+  {% endif %}
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}

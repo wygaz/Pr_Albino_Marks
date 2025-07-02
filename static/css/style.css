@@ -194,3 +194,25 @@ footer {
 .conteudo-artigo u {
     text-decoration: underline;
 }
+
+ol, ul {
+    margin-left: 2em;
+    padding-left: 1em;
+}
+
+li {
+    margin-bottom: 0.3em;
+}
+
+
+.page-break {
+    border: none;
+    border-top: 2px dashed #999;
+    margin: 2em 0;
+}
+
+.autor {
+    text-align: right;
+    font-style: italic;
+    margin-bottom: 20px;
+}
