@@ -1,0 +1,32 @@
+ O volume na unidade C n∆o tem nome.
+ O N£mero de SÇrie do Volume Ç E61F-7B03
+
+ Pasta de C:\Users\Wanderley\Apps\ExtratorAlbino\downloads\Publicar
+
+05/07/2025  15:49    <DIR>          .
+05/07/2025  15:49    <DIR>          ..
+05/07/2025  09:14            29.682 a-justica-de-deus-e-a-justica-dos-fariseus__29-10-2024.docx
+05/07/2025  15:49                 0 artigos_Pr_Albino_Marks.txt
+05/07/2025  09:14            22.788 as-predicoes-do-profeta-joao-no-apocalipse__20-09-2024.docx
+05/07/2025  09:14           103.659 as-sete-trombetas-e-os-sete-ultimos-flagelos__20-12-2024.docx
+05/07/2025  09:15            15.043 biografia__08-08-2020.docx
+05/07/2025  09:14            22.454 jesus-e-a-lei-nomos---2__14-11-2024.docx
+05/07/2025  09:14            22.889 jesus-e-a-lei-nomos__08-09-2024.docx
+05/07/2025  09:14            30.315 jesus-nao-revogando-mas-magnificando-a-lei__06-10-2024.docx
+05/07/2025  09:14            46.532 ninguem-e-justificado-por-obras-da-lei__31-01-2025.docx
+05/07/2025  09:14            34.949 o-apostolo-paulo-e-a-lei__18-09-2024.docx
+05/07/2025  09:14            27.123 o-apostolo-paulo-e-a-lei__22-10-2024.docx
+05/07/2025  09:14            40.043 o-conflito-cosmico-e-os-dois-poderes-em-confronto__12-11-2024.docx
+05/07/2025  09:14            42.214 o-diluvio__29-01-2025.docx
+05/07/2025  09:14            49.386 o-eterno-plano-da-redencao__19-09-2024.docx
+05/07/2025  09:14           218.486 o-grande-conflito-e-o-plano-da-salvacao__20-12-2024.docx
+05/07/2025  09:14            55.491 o-novo-testamento-jesus-a-lei-e-os-profetas__29-01-2025.docx
+05/07/2025  09:14            30.580 o-setimo-selo__13-11-2024.docx
+05/07/2025  09:14            53.805 os-escritores-do-novo-testamento-e-a-lei__28-01-2025-1_37pg.docx
+05/07/2025  09:14            53.805 os-escritores-do-novo-testamento-e-a-lei__28-01-202537pg.docx
+05/07/2025  09:14            24.148 paulo-e-a-graca-de-deus__09-02-2025.docx
+05/07/2025  09:14            13.482 Resumo_Biogr†fico_do Pr. Albino_12-12-2024.docx
+05/07/2025  09:48            62.341 sm1010-o-grande-conflito-e-o-plano-da-salvacao__18-09-2024.docx
+05/07/2025  09:49            53.251 sm1013-guerra-de-conceitos-espirituais-no-ceu__23-10-2024.docx
+              23 arquivo(s)      1.052.466 bytes
+               2 pasta(s)   249.065.406.464 bytes dispon°veis
