@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Novo Artigo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">📄 Criar Novo Artigo</h2>
+    <form method="POST" enctype="multipart/form-data" class="mb-5">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">💾 Salvar</button>
+        <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-secondary">⬅️ Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django import forms
 from .models import Artigo
 from .utils import docx_para_html, gerar_slug
 from django.db.models import Count
+import os
 
 class ArtigoForm(forms.ModelForm):
     class Meta:
@@ -11,6 +12,17 @@ class ArtigoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['titulo'].required = False  # Permite salvar sem preencher manualmente
+
+        # 🔒 Limitar seleção de arquivos a .docx no navegador
+        self.fields['arquivo_word'].widget.attrs.update({
+            'accept': '.docx'
+        })
+
+    def clean_arquivo_word(self):
+        arquivo = self.cleaned_data.get('arquivo_word')
+        if arquivo and not arquivo.name.endswith('.docx'):
+            raise forms.ValidationError('Apenas arquivos .docx são permitidos.')
+        return arquivo
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -26,7 +38,6 @@ class ArtigoForm(forms.ModelForm):
             instance.slug = gerar_slug(titulo_numerado)
 
             if autor_detectado:
-                from .models import Autor
                 autor_obj, _ = Autor.objects.get_or_create(nome=autor_detectado)
                 instance.autor = autor_obj
 
@@ -46,5 +57,22 @@ class ArtigoForm(forms.ModelForm):
                 artigo.titulo = novo_titulo
                 artigo.slug = gerar_slug(novo_titulo)
                 artigo.save()
+
+            # Renomear a imagem associada, se existir
+            if artigo.imagem_capa:
+                from django.conf import settings
+                antiga_path = artigo.imagem_capa.path
+                ext = os.path.splitext(antiga_path)[1]
+                novo_nome = f"{artigo.slug}{ext}"
+                novo_path = os.path.join(settings.MEDIA_ROOT, "imagens", "artigos", novo_nome)
+
+                try:
+                    os.rename(antiga_path, novo_path)
+                    artigo.imagem_capa.name = f"imagens/artigos/{novo_nome}"
+                    artigo.save()
+                    print(f"🔁 Imagem renomeada com sucesso: {novo_nome}")
+                except Exception as e:
+                    print(f"⚠️ Erro ao renomear imagem do artigo '{artigo.titulo}': {e}")
+
 
         return f"{titulo_base} ({total} de {total})"

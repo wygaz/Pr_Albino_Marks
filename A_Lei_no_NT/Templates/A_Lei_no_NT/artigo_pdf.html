@@ -1,0 +1,39 @@
+<!-- Templates/artigo_pdf.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ artigo.titulo }}</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 2cm;
+            line-height: 1.6;
+            font-size: 13pt;
+            color: #111;
+        }
+        h1 {
+            text-align: center;
+            font-size: 22pt;
+        }
+        .autor {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 1.5em;
+        }
+        .conteudo {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ artigo.titulo }}</h1>
+    {% if artigo.autor %}
+        <div class="autor">por {{ artigo.autor }}</div>
+    {% endif %}
+    <div class="conteudo">
+        {{ artigo.conteudo_html|safe }}
+    </div>
+</body>
+</html>
