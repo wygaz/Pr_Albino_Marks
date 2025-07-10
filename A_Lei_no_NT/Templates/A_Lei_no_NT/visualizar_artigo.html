@@ -7,11 +7,15 @@
 {% block content %}
 <article class="artigo">
 
-    {% if artigo.imagem_capa %}
-        <img src="{{ artigo.imagem_capa.url }}" alt="Imagem de capa" class="imagem-artigo-topo">
-    {% endif %}
+  {% if artigo.imagem_capa %}
+    <img src="{{ artigo.imagem_capa.url }}" alt="Imagem do artigo" class="imagem-artigo-topo">
+  {% else %}
+    {% with indice=artigo.id|add:"-1"|divisibleby:"6"|yesno:"6,5,4,3,2,1" %}
+      <img src="{% static 'imagens/artigos/imagem_padrao_' %}{{ indice }}.jpg" alt="Imagem padrão" class="imagem-artigo-topo">
+    {% endwith %}
+  {% endif %}
 
-    <h2>{{ artigo.titulo }}</h2>
+   <h2>{{ artigo.titulo }}</h2>
 
     
     {% if artigo.autor %}
@@ -26,7 +30,19 @@
         {{ artigo.conteudo_html|safe }}
     </div>
 
-    <p><a href="{% url 'A_Lei_no_NT:listar_artigos' %}">← Voltar para a lista</a></p>
+  <div class="d-flex justify-content-center my-4 gap-3">
+    <a href="{% url 'A_Lei_no_NT:artigo_pdf' artigo.slug %}" class="btn btn-outline-danger">
+      📄 Baixar PDF
+    </a>
+<a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
+  ⬅️ Voltar para Home
+</a>
+    <p><a href="{% url 'A_Lei_no_NT:listar_artigos' %}">
+      ← Voltar para a lista
+    </a>
+  </div>
+
+
 
 </article>
 {% endblock %}
