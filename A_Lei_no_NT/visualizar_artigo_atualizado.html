@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% include 'partials/regua_botoes.html' %}
 
 {% if artigo.slug %}
   <a href="{{ MEDIA_URL }}pdfs/{{ artigo.slug }}.pdf" class="btn btn-outline-primary mt-3" target="_blank">
@@ -20,8 +21,8 @@
     {% endwith %}
   {% endif %}
 
-  <h2>{{ artigo.titulo }}</h2>
-  <!-- ✅ Régua horizontal de navegação refinada -->
+   <h2>{{ artigo.titulo }}</h2>
+
     
     {% if artigo.autor %}
         <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>

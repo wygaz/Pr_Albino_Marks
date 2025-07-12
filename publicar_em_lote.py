@@ -16,9 +16,9 @@ django.setup()
 from A_Lei_no_NT.models import Artigo
 from A_Lei_no_NT.utils import gerar_slug, docx_para_html
 
-# Solicita os caminhos ao usuário
-caminho_docx = input("Informe o caminho da pasta com os arquivos .docx: ").strip()
-caminho_imagens = input("Informe o caminho da pasta com as imagens de capa: ").strip()
+# Caminhos fixos (ajuste conforme necessário)
+caminho_docx = r"C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado\media\imagens\Publicar"
+caminho_imagens = r"C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado\media\imagens\artigo"
 
 # Lista e ordena os arquivos .docx pela numeração inicial
 arquivos = sorted([f for f in os.listdir(caminho_docx) if f.endswith('.docx')])

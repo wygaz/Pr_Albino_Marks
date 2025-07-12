@@ -10,6 +10,9 @@ env = environ.Env(
 # Caminho base do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+PDF_OUTPUT_DIR = os.path.join(BASE_DIR, 'media', 'pdfs')
+
+
 # Ler o arquivo .env localizado na raiz do projeto
 env.read_env(os.path.join(BASE_DIR, '.env'))
 

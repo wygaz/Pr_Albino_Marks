@@ -1,21 +1,2 @@
                 <!-- Sidebar -->
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            📚 Navegação
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><a href="{% url 'A_Lei_no_NT:home' %}">🏠 Home</a></li>
-                            <li class="list-group-item"><a href="{% url 'A_Lei_no_NT:listar_artigos' %}">📄 Artigos</a></li>
-                            <li class="list-group-item"><a href="{% url 'A_Lei_no_NT:criar_artigo' %}">➕ Criar Artigo</a></li>
-                            <li class="list-group-item"><a href="{% url 'A_Lei_no_NT:biografia' %}">👤 Biografia</a></li>
-                            <li class="list-group-item"><a href="{% url 'A_Lei_no_NT:motivacao_publicacao' %}">📘 Motivação</a></li>
-                            <li class="list-group-item"><a href="/admin/">⚙️ Admin</a></li>
-                        </ul>
-                        {% if artigo %}
-                            <li class="list-group-item">
-                                <a href="{% url 'A_Lei_no_NT:artigo_pdf' artigo.slug %}">📄 Baixar PDF</a>
-                            </li>
-                        {% endif %}
-                    </div>
-                </div>
+                

@@ -100,7 +100,9 @@ footer {
     background-color: #003366;
     color: white;
     margin-top: 50px;
+    border-radius: 8px;
 }
+
 
 /* Estilo para a lista de artigos */
 .lista-artigos {

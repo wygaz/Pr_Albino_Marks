@@ -143,13 +143,16 @@ def remover_autor_do_conteudo(html, autor):
     if not autor:
         return html
 
-    html_final = converter_subtitulos_manualmente_numerados(html_final)
-
     soup = BeautifulSoup(html, 'html.parser')
     for p in soup.find_all('p'):
-        if autor in p.text:
+        if autor in p.text.strip():
             p.decompose()
-    return str(soup)
+            break  # Remove apenas a primeira ocorrência do nome do autor
+    html_final = str(soup)
+
+    html_final = converter_subtitulos_manualmente_numerados(html_final)
+
+    return html_final
 
 def formatar_paragrafo(paragrafo):
     partes = []
