@@ -42,3 +42,7 @@ yarn-error.log*
 pgdata/
 postgres-data/
 backups/
+
+#funcoes auxiliares
+A_Lei_no_NT/gerar_pdfs.py
+A_Lei_no_NT/gerar_pdfs_banco.py
