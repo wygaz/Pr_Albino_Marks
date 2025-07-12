@@ -5,9 +5,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.utils import timezone
-from weasyprint import HTML
 from io import BytesIO
-from weasyprint import HTML
 from .models import Artigo
 from .forms import ArtigoForm
 from django.shortcuts import redirect

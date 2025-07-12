@@ -1,7 +1,6 @@
 import os
 import django
 from django.conf import settings
-from weasyprint import HTML
 from django.template.loader import render_to_string
 
 # Setup Django
