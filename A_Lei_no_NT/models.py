@@ -1,8 +1,10 @@
 import os
-from django.db import models
-from django.utils.text import slugify
-from django.db.models import Max
+from django.template.loader import render_to_string
+from weasyprint import HTML
 from django.utils import timezone
+from django.db.models import Max
+
+from django.db import models
 from A_Lei_no_NT.utils import docx_para_html, gerar_slug
 
 

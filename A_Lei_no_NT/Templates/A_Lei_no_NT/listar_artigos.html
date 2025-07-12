@@ -1,29 +1,29 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% include 'partials/regua_botoes.html' %}
+
+{% block title %}Artigos — Projeto Pr. Albino Marks{% endblock %}
 
 {% block content %}
+<div class="container my-4">
+    <div class="card p-4 shadow-sm">
+        <h2 class="text-center mb-3" style="color: #003366;">Todos os Artigos</h2>
+        <hr>
 
-<div class="artigos-container">
-    <h2 class="titulo-pagina">Todos os Artigos</h2>
+        <ul class="list-unstyled">
+            {% for artigo in artigos %}
+                <li class="mb-2">
+                    <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo.slug %}" class="text-decoration-none text-primary fw-normal">
+                        {{ artigo.titulo }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>Nenhum artigo encontrado.</li>
+            {% endfor %}
+        </ul>
 
-    {% for artigo in artigos %}
-        <div class="artigo-item">
-         <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo.slug %}">
-             {{ artigo.titulo }}
-          </a>
-
+        <div class="mt-4 text-center text-muted">
+            <small>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</small>
         </div>
-    {% endfor %}
-
-    <div class="paginacao">
-        {% if artigos.has_previous %}
-            <a href="?page={{ artigos.previous_page_number }}">← Anterior</a>
-        {% endif %}
-        <span>Página {{ artigos.number }} de {{ artigos.paginator.num_pages }}</span>
-        {% if artigos.has_next %}
-            <a href="?page={{ artigos.next_page_number }}">Próxima →</a>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
