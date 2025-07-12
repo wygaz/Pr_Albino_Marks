@@ -10,6 +10,6 @@ urlpatterns = [
     path('motivacao/', views.motivacao_publicacao, name='motivacao_publicacao'),
     path('biografia/', views.biografia, name='biografia'),
     path('<slug:slug>/', views.visualizar_artigo, name='visualizar_artigo'),
-    path('artigo/<slug:slug>/pdf/', views.artigo_pdf, name='artigo_pdf'),
+ #   path('artigo/<slug:slug>/pdf/', views.artigo_pdf, name='artigo_pdf'),
 ]
 
