@@ -1,6 +1,5 @@
 import os
 from django.template.loader import render_to_string
-from weasyprint import HTML
 from django.utils import timezone
 from django.db.models import Max
 
