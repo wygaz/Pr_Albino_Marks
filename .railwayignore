@@ -1,0 +1,12 @@
+# .railwayignore
+
+# Ignorar mídia pesada e pastas locais
+media/
+# staticfiles/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.sqlite3
+.env
+venv/
