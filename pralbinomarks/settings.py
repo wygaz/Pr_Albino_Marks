@@ -12,16 +12,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 PDF_OUTPUT_DIR = os.path.join(BASE_DIR, 'media', 'pdfs')
 
-
 # Ler o arquivo .env localizado na raiz do projeto
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# environ.Env.read_env("C:/Users/Wanderley/Apps/Pr_Albino_Marks_restaurado/.env")
-
 SECRET_KEY = env('SECRET_KEY', default='changeme')
-
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost'])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,7 +65,6 @@ DATABASES = {
     'default': env.db()
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -87,7 +82,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# No final do arquivo:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
