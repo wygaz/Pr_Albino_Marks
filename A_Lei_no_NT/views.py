@@ -48,3 +48,6 @@ def biografia(request):
 
 def motivacao_publicacao(request):
     return render(request, 'A_Lei_no_NT/motivacao_publicacao.html')
+
+
+# comentário apenas para forçar novo deploy no Railway
