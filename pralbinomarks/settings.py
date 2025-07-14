@@ -46,7 +46,7 @@ ROOT_URLCONF = 'pralbinomarks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'A_Lei_no_NT' / 'templates'],
+        'DIRS': [BASE_DIR / 'A_Lei_no_NT' / 'templates' / 'A_Lei_no_NT'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
