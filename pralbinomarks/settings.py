@@ -4,7 +4,7 @@ import environ
 
 # Inicializar as variáveis de ambiente
 env = environ.Env(
-    DEBUG=(bool, True)
+    DEBUG=(bool, False)
 )
 
 # Caminho base do projeto
