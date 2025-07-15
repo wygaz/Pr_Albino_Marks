@@ -1,25 +1,28 @@
 {% extends 'base.html' %}
-
 {% block title %}Início — Projeto Pr. Albino Marks{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="text-center">
-        <h2 class="fw-bold text-primary">Bem-vindo ao Projeto Pr. Albino Marks</h2>
-        <p class="lead mt-2 mb-4 text-secondary">
-            Explorando a Lei no Novo Testamento sob uma perspectiva bíblica profunda.
-        </p>
+<div class="d-flex justify-content-center">
+  <div class="p-4 bg-white shadow-sm rounded" style="max-width: 800px; width: 100%;">
 
-        <hr class="mb-4" style="width: 60%; margin: auto;">
+    <h2 class="text-center mb-3" style="font-size: 1.8rem;">Bem-vindo ao Projeto Pr. Albino Marks</h2>
+    <p class="text-center text-muted" style="font-size: 1.1rem;">
+      Explorando a Lei no Novo Testamento sob uma perspectiva bíblica profunda.
+    </p>
 
-        <h5 class="fw-semibold text-dark mb-3">Início da jornada</h5>
-        <p class="text-muted mb-4" style="max-width: 700px; margin: auto;">
-            Este site reúne artigos selecionados do Pr. Albino Marks, com reflexões claras e fundamentadas.
-        </p>
+    <hr>
 
-        <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-primary px-4 py-2">
-            📄 Ver artigos
-        </a>
+    <h5 class="mt-4 mb-2 text-start">Início da jornada</h5>
+    <p class="text-center">
+      Este site reúne artigos selecionados do Pr. Albino Marks, com reflexões claras e fundamentadas.
+    </p>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-primary">
+        📄 Ver artigos
+      </a>
     </div>
+    
+  </div>
 </div>
 {% endblock %}
