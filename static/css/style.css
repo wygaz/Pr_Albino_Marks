@@ -1,3 +1,16 @@
+/* Centraliza a página na largura */
+.pagina-centralizada {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pagina-centralizada img {
+  max-height: 300px;
+  width: auto;
+}
+
+
 /* --- Reset simples para consistência --- */
 body, h1, h2, h3, p, ul, li, a {
     margin: 0;
