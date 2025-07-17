@@ -1,28 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}Início — Projeto Pr. Albino Marks{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-  <div class="p-4 bg-white shadow-sm rounded" style="max-width: 800px; width: 100%;">
+<!-- Centraliza o conteúdo em relação à página -->
+<div class="pagina-centralizada my-5">
 
-    <h2 class="text-center mb-3" style="font-size: 1.8rem;">Bem-vindo ao Projeto Pr. Albino Marks</h2>
-    <p class="text-center text-muted" style="font-size: 1.1rem;">
-      Explorando a Lei no Novo Testamento sob uma perspectiva bíblica profunda.
-    </p>
+  <!-- Imagem centralizada -->
+  <img src="{% static 'Imagens/capa_projeto.png' %}" 
+       class="img-fluid rounded shadow-sm mb-4 mx-auto d-block"
+       alt="Imagem de capa do Projeto Pr. Albino Marks">
 
-    <hr>
+  <!-- Apresentação -->
+  <h2 class="h4 fw-semibold mb-3">Projeto Pr. Albino Marks</h2>
+  <p class="mb-2">
+    Este projeto visa preservar e divulgar os estudos, reflexões e escritos do Pr. Albino Marks.
+  </p>
+  <p class="mb-4">
+    Um acervo de sabedoria, fé e dedicação, reunido com carinho para edificação espiritual e crescimento pessoal.
+  </p>
 
-    <h5 class="mt-4 mb-2 text-start">Início da jornada</h5>
-    <p class="text-center">
-      Este site reúne artigos selecionados do Pr. Albino Marks, com reflexões claras e fundamentadas.
-    </p>
-
-    <div class="text-center mt-4">
-      <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-primary">
-        📄 Ver artigos
-      </a>
-    </div>
-    
+  <!-- Botões de navegação -->
+  <div class="d-flex justify-content-center gap-3 flex-wrap">
+    <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-primary">
+      📄 Ver Artigos
+    </a>
+    <a href="{% url 'A_Lei_no_NT:biografia' %}" class="btn btn-outline-dark">
+      👤 Conhecer o Autor
+    </a>
+    <a href="{% url 'A_Lei_no_NT:motivacao_publicacao' %}" class="btn btn-outline-info">
+      📘 Entender o Projeto
+    </a>
   </div>
+
 </div>
 {% endblock %}
