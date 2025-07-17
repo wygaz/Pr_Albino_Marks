@@ -2,7 +2,7 @@
 {% load static %}
 
 {% if artigo.slug %}
-  <a href="{{ MEDIA_URL }}pdfs/{{ artigo.slug }}.pdf" class="btn btn-outline-primary mt-3" target="_blank">
+ <a href="/media/pdfs/{{ artigo.slug }}.pdf" class="btn btn-outline-primary mt-3" target="_blank">
     📥 Baixar PDF
   </a>
 {% endif %}
@@ -21,9 +21,9 @@
   {% endif %}
 
   <h2>{{ artigo.titulo }}</h2>
+  
   <!-- ✅ Régua horizontal de navegação refinada -->
-    
-    {% if artigo.autor %}
+        {% if artigo.autor %}
         <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
     {% endif %}
  
@@ -36,7 +36,7 @@
     </div>
 
   <div class="d-flex justify-content-center my-4 gap-3">
-  <a href="{{ MEDIA_URL }}pdfs/{{ artigo.slug }}.pdf" class="btn btn-outline-primary" target="_blank">
+<a href="/media/pdfs/{{ artigo.slug }}.pdf" class="btn btn-outline-primary" target="_blank">
     📥 Baixar PDF
   </a>
   <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
