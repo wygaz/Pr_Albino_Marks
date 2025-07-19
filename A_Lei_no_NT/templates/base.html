@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <link rel="icon" href="{% static 'favicon.ico' %}">
     <title>{% block title %}Projeto Pr. Albino Marks{% endblock %}</title>
+    <!-- Bootstrap CSS (faltava) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
@@ -66,6 +68,7 @@
 
     <!-- 🌟 CONTÊINER GLOBAL CENTRALIZADO -->
     <div style="max-width: 960px; margin: 0 auto; padding: 1rem;">
+        <!-- Adicione ao final de base.html, antes de fechar </body> -->
 
         <!-- ✨ Barra horizontal de navegação -->
         <div class="text-center mb-4">
@@ -82,6 +85,12 @@
         <!-- ✨ Conteúdo principal -->
         <div class="container-main">
             {% block content %}
+                <div class="text-center my-4">
+                    <button class="btn btn-outline-primary mx-1" onclick="mudarCor('#0a5c8c')">Azul Atlântico</button>
+                    <button class="btn btn-outline-dark mx-1" onclick="mudarCor('#000000')">Preto</button>
+                    <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1rem')">Normal</button>
+                    <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.5rem')">Grande</button>
+                </div>
             {% endblock %}
         </div>
 
@@ -91,7 +100,18 @@
         </div>
 
     </div>
+   
+    <script>
+    function mudarCor(cor) {
+        const texto = document.getElementById("bloco-texto");
+        if (texto) texto.style.color = cor;
+    }
 
+    function mudarTamanho(tamanho) {
+        const texto = document.getElementById("bloco-texto");
+        if (texto) texto.style.fontSize = tamanho;
+    }
+    </script>
 </body>
 
 </html>

@@ -44,7 +44,8 @@ def listar_artigos(request):
     return render(request, 'A_Lei_no_NT/listar_artigos.html', {'artigos': artigos})
 
 def biografia(request):
-    return redirect('A_Lei_no_NT:visualizar_artigo', slug='apresentacao-do-pastor-albino-marks')
+   # return redirect('A_Lei_no_NT:visualizar_artigo', slug='apresentacao-do-pastor-albino-marks')
+    return render(request, 'A_Lei_no_NT/biografia.html')
 
 def motivacao_publicacao(request):
     return render(request, 'A_Lei_no_NT/motivacao_publicacao.html')
