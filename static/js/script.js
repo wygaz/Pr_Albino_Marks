@@ -1,13 +1,13 @@
 function mudarCor(cor) {
   const bloco = document.getElementById("bloco-texto");
   if (bloco) {
-    bloco.style.color = cor;
+    bloco.querySelectorAll("*").forEach(el => el.style.color = cor);
   }
 }
 
 function mudarTamanho(tamanho) {
   const bloco = document.getElementById("bloco-texto");
   if (bloco) {
-    bloco.style.fontSize = tamanho;
+    bloco.querySelectorAll("*").forEach(el => el.style.fontSize = tamanho);
   }
 }
