@@ -1,24 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% if artigo.slug %}
- <a href="<a href="{% static 'pdfs/' %}{{ artigo.slug }}.pdf" class="btn btn-outline-primary mt-3" target="_blank">
-    📥 Baixar PDF
-  </a>
-{% endif %}
-
 {% block title %}{{ artigo.titulo }}{% endblock %}
 
 {% block content %}
 <div id="bloco-texto">
+
+  <!-- Botões de formatação -->
   <div class="text-center my-4">
-        <button class="btn btn-outline-primary mx-1" onclick="mudarCor('#0a5c8c')">Azul Atlântico</button>
-        <button class="btn btn-outline-dark mx-1" onclick="mudarCor('#000000')">Preto</button>
-        <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1rem')">Normal</button>
-        <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.5rem')">Grande</button>
+    <button class="btn btn-outline-primary mx-1" onclick="mudarCor('#0a5c8c')">Azul Atlântico</button>
+    <button class="btn btn-outline-dark mx-1" onclick="mudarCor('#000000')">Preto</button>
+    <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1rem')">Normal</button>
+    <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.5rem')">Grande</button>
   </div>
+
   <article class="artigo">
 
+    <!-- Imagem de capa -->
     {% if artigo.imagem_capa %}
       <img src="{{ artigo.imagem_capa.url }}" alt="Imagem do artigo" class="imagem-artigo-topo">
     {% else %}
@@ -27,35 +25,36 @@
       {% endwith %}
     {% endif %}
 
-    <h2>{{ artigo.titulo }}</h2>
-    
-    <!-- ✅ Régua horizontal de navegação refinada -->
-          {% if artigo.autor %}
-          <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
-      {% endif %}
-  
-      {% if artigo.midia %}
-          <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>
-      {% endif %}
+    <!-- Título -->
+    <h2 class="my-3">{{ artigo.titulo }}</h2>
 
-      <div id="bloco-texto" style="color: #0a5c8c; font-size: 1.25rem;">
-        <div class="conteudo-artigo">
-            {{ artigo.conteudo_html|safe }}
-        </div>
-      <div>
+    <!-- Autor e mídia -->
+    {% if artigo.autor %}
+      <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
+    {% endif %}
 
-  <div class="d-flex justify-content-center my-4 gap-3">
-    <a href="{% static 'pdfs/' %}{{ artigo.slug }}.pdf" class="btn btn-outline-primary" target="_blank">
-      📥 Baixar PDF
-    </a>
-    <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
-      ⬅️ Voltar para Home
-    </a>
-    <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-secondary">
-      ← Voltar para a lista
-    </a>
-  </div>
+    {% if artigo.midia %}
+      <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>
+    {% endif %}
+
+    <!-- Conteúdo formatado -->
+    <div id="conteudo-artigo" class="conteudo-artigo text-primary">
+      {{ artigo.conteudo_html|safe }}
+    </div>
+
+    <!-- Botões de ação -->
+    <div class="d-flex justify-content-center my-4 gap-3">
+      <a href="{% static 'pdfs/' %}{{ artigo.slug }}.pdf" class="btn btn-outline-primary" target="_blank">
+        📥 Baixar PDF
+      </a>
+      <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
+        ⬅️ Voltar para Home
+      </a>
+      <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-secondary">
+        ← Voltar para a lista
+      </a>
+    </div>
 
   </article>
- </div>
+</div>
 {% endblock %}
