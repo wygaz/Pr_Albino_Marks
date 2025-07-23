@@ -4,27 +4,26 @@
 {% block title %}Biografia - Pr. Albino Marks{% endblock %}
 
 {% block content %}
-
-
+  
 <div class="text-center my-4">
   <button class="btn btn-outline-primary mx-1" onclick="mudarCor('#0a5c8c')">Azul Atlântico</button>
   <button class="btn btn-outline-success mx-1" onclick="mudarCor('#14532d')">Verde Escuro</button>
   <button class="btn btn-outline-secondary mx-1" onclick="mudarCor('#2f3e46')">Cinza Azulado</button>
   <button class="btn btn-outline-dark mx-1" onclick="mudarCor('#000000')">Preto</button>
-</div>
+
 
 <div class="text-center my-4">
   <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1rem')">Normal</button>
   <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.25rem')">Médio</button>
   <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.5rem')">Grande</button>
   <button class="btn btn-outline-secondary mx-1" onclick="mudarTamanho('1.75rem')">Extra</button>
-</div>
+
 
 <div id="bloco-texto" style="color: #0a5c8c;">
   
   <div>
      <p class="mb-4 fs-2 text-center">BIOGRAFIA DO PR. ALBINO MARKS</p>
-  </div>
+  
      <p><strong>Albino Marks</strong>, bacharel em Teologia, serviu com dedicação nas áreas <strong>pastoral, educacional e administrativa</strong> da Igreja Adventista do Sétimo Dia. Atualmente, desfruta de sua aposentadoria ao lado de sua fiel companheira, <strong>Mirian Hartmann Marks</strong>, com quem compartilha mais de <strong>63 anos de convivência amorosa e feliz</strong>.</p>
 
       <p>Nascido em um lar humilde de camponeses, enfrentou desde cedo grandes desafios. Aos <strong>quatro anos</strong>, foi acometido por uma forma grave de <strong>paralisia infantil</strong>, que comprometeu seus membros superiores e inferiores. Após longo período de internação e tratamento, permaneceu <strong>dois anos sem conseguir andar</strong>. Quando finalmente se reergueu, seus primeiros passos foram como os de uma criança reaprendendo a viver. Sensibilizada com sua recuperação, sua mãe fez um voto de gratidão a Deus: <strong>dedicaria todos os esforços para que o filho se tornasse um pastor</strong>.</p>
@@ -40,7 +39,7 @@
     
       <div>
         <p class="my-3 fs-2 text-center">DESAFIO PARA O ESTUDO</p>
-      </div>
+      
 
       <p>Por que disponibilizar este material para leitura e estudo?</p>
 
@@ -65,5 +64,6 @@
           document.getElementById("bloco-texto").style.fontSize = tamanho;
         }
       </script>
-    
+  </div>
+</div>
 {% endblock %}
