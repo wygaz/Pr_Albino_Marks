@@ -4,24 +4,175 @@
 {% block title %}Artigos — Projeto Pr. Albino Marks{% endblock %}
 
 {% block content %}
+<div class="wrap artigos-page" data-theme="verde" data-size="normal">
+  <div class="page-head">
+    <div>
+      <h1>Todos os Artigos</h1>
+      <div class="sub">Explore os estudos do Pr. Albino Marks por tema ou mais recentes</div>
+    </div>
+    <div class="actions">
+      <a href="{% url 'A_Lei_no_NT:artigos_pdf' %}" class="btn ghost">📄 Gerar lista em PDF</a>
+    </div>
+  </div>
 
-<div class="pagina-centralizada my-5">
-  <h2 class="text-center mb-3" style="color: #003366;">Todos os Artigos</h2>
-  <hr>
-  <ul class="list-unstyled">
-    {% for artigo in artigos %}
-      <li class="mb-2">
-        <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo.slug %}" class="text-decoration-none text-primary fw-normal">
-          {{ artigo.titulo }}
-        </a>
-      </li>
-    {% empty %}
-      <li>Nenhum artigo encontrado.</li>
-    {% endfor %}
+  <!-- Controles de Aparência: tema e tamanho da fonte -->
+  <div class="prefs-toolbar-local" role="group" aria-label="Preferências de exibição">
+    <div class="palette" aria-label="Cores">
+      <button class="chip" type="button" data-theme="azul" aria-pressed="false">Azul Atlântico</button>
+      <button class="chip" type="button" data-theme="preto" aria-pressed="false">Preto</button>
+      <button class="chip" type="button" data-theme="verde" aria-pressed="true">Verde Escuro</button>
+      <button class="chip" type="button" data-theme="cinza" aria-pressed="false">Cinza Azulado</button>
+    </div>
+    <div class="sizes" aria-label="Tamanho da fonte">
+      <button class="chip size" type="button" data-size="normal" aria-pressed="true">Normal</button>
+      <button class="chip size" type="button" data-size="medio" aria-pressed="false">Médio</button>
+      <button class="chip size" type="button" data-size="grande" aria-pressed="false">Grande</button>
+      <button class="chip size" type="button" data-size="extra" aria-pressed="false">Extra</button>
+    </div>
+  </div>
+
+  <!-- LISTA EM TRÊS COLUNAS: miniatura • título • PDF -->
+  <ul class="article-table">
+  {% for artigo in artigos %}
+    <li class="article-row">
+      <!-- Coluna 1: miniatura -->
+      <div class="col-thumb">
+        {% if artigo.imagem_capa %}
+          <img class="thumb" src="{{ artigo.imagem_capa.url }}" alt="Capa de {{ artigo.titulo }}" loading="lazy">
+        {% else %}
+          <img class="thumb" src="{% static 'img/placeholder.jpg' %}" alt="Sem capa" loading="lazy">
+        {% endif %}
+      </div>
+
+      <!-- Coluna 2: título + meta -->
+      <div class="col-title">
+        <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo.slug %}" class="article-link">{{ artigo.titulo|title }}</a>
+        <div class="article-meta">
+          {{ artigo.publicado_em|date:"d 'de' F 'de' Y" }}{% if artigo.area %} • {{ artigo.area.nome }}{% endif %}
+        </div>
+      </div>
+
+      <!-- Coluna 3: ação PDF -->
+      <div class="col-actions">
+        {% if artigo.arquivo_pdf %}
+          <a class="btn-pdf" href="{% url 'A_Lei_no_NT:artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
+        {% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li>Nenhum artigo encontrado.</li>
+  {% endfor %}
   </ul>
+
+  {% if page_obj %}
   <div class="mt-4 text-center text-muted">
     <small>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</small>
   </div>
+  {% endif %}
 </div>
 
+<style>
+  /* Esconde a barra global herdada do base nesta página */
+  .prefs-toolbar{display:none!important}
+
+  /* Escopo apenas desta página */
+  .artigos-page{--brand:#2b6f3e;--brand-2:#3c8a52;--ink:#123;--muted:#6b7280;--paper:#fff;--edge:#e7ecef;--link:#1f4e8c}
+
+  /* Temas (trocam variáveis) */
+  .artigos-page[data-theme="verde"]{--brand:#2b6f3e;--brand-2:#3c8a52;--link:#2b6f3e}
+  .artigos-page[data-theme="azul"]{--brand:#0d6efd;--brand-2:#0b5ed7;--link:#0d6efd}
+  .artigos-page[data-theme="cinza"]{--brand:#3b556b;--brand-2:#2f4558;--link:#2f4558}
+  .artigos-page[data-theme="preto"]{--brand:#111827;--brand-2:#1f2937;--link:#111827}
+
+  /* Tamanho da fonte (escopo local) */
+  .artigos-page[data-size="normal"]{font-size:16px}
+  .artigos-page[data-size="medio"]{font-size:17.5px}
+  .artigos-page[data-size="grande"]{font-size:19px}
+  .artigos-page[data-size="extra"]{font-size:21px}
+
+  .artigos-page .page-head h1{font-size:2.1rem;letter-spacing:.2px;margin:.25rem 0}
+  .artigos-page .page-head .sub{color:var(--muted);font-size:.95rem}
+
+  /* Controles */
+  .prefs-toolbar-local{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 18px}
+  .prefs-toolbar-local .chip{border:1px solid var(--edge);background:#f6f9fb;color:#1f3f2b;padding:7px 12px;border-radius:999px;font-size:.95rem;cursor:pointer}
+  .prefs-toolbar-local .chip:hover{background:#eef7f1}
+  .prefs-toolbar-local .chip[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+  /* Tabela visual de artigos */
+  .artigos-page .article-table{list-style:none;margin:8px 0 24px;padding:0}
+  .artigos-page .article-row{
+    display:grid;grid-template-columns:84px 1fr 180px;gap:16px;align-items:center;
+    background:var(--paper);border:1px solid var(--edge);border-left:5px solid rgba(43,111,62,.18);
+    border-radius:14px;padding:12px 16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)
+  }
+  .artigos-page .article-row:hover{border-left-color:var(--brand);box-shadow:0 6px 18px rgba(16,24,40,.08)}
+
+  /* Miniatura */
+  .artigos-page .thumb{
+    width:64px;height:64px;border-radius:10px;object-fit:cover;display:block;
+    background:linear-gradient(135deg,#e6f2ea,#f6faf7);border:1px solid var(--edge)
+  }
+
+  /* Título/Meta */
+  .artigos-page .article-link{color:var(--link);text-decoration:none;font-weight:600;text-transform:titlecase}
+  .artigos-page .article-link:hover{text-decoration:underline}
+  .artigos-page .article-meta{color:var(--muted);font-size:.95rem;margin-top:2px}
+
+  /* Ações (PDF à direita) */
+  .artigos-page .col-actions{display:flex;align-items:center;justify-content:flex-end}
+  .artigos-page .btn-pdf{display:inline-block;background:var(--brand);color:#fff;text-decoration:none;padding:8px 12px;border-radius:999px;font-weight:600;font-size:.95rem;white-space:nowrap}
+  .artigos-page .btn-pdf:hover{background:var(--brand-2)}
+
+  @media (max-width:900px){
+    .artigos-page .article-row{grid-template-columns:72px 1fr 150px}
+  }
+  @media (max-width:720px){
+    .artigos-page .article-row{grid-template-columns:64px 1fr;grid-template-areas:
+      'thumb title'
+      'thumb actions';
+      gap:10px}
+    .artigos-page .col-thumb{grid-area:thumb}
+    .artigos-page .col-title{grid-area:title}
+    .artigos-page .col-actions{grid-area:actions;justify-content:flex-start}
+    .artigos-page .btn-pdf{width:100%;text-align:center}
+  }
+</style>
+
+<script>
+(function(){
+  const root = document.querySelector('.artigos-page');
+  const themeKey = 'artigosTheme';
+  const sizeKey  = 'artigosFontSize';
+
+  function setTheme(t){
+    root.setAttribute('data-theme', t);
+    localStorage.setItem(themeKey, t);
+    document.querySelectorAll('.prefs-toolbar-local .chip[data-theme]').forEach(btn=>{
+      btn.setAttribute('aria-pressed', btn.dataset.theme===t ? 'true' : 'false');
+    });
+  }
+  function setSize(s){
+    root.setAttribute('data-size', s);
+    localStorage.setItem(sizeKey, s);
+    document.querySelectorAll('.prefs-toolbar-local .chip[data-size]').forEach(btn=>{
+      btn.setAttribute('aria-pressed', btn.dataset.size===s ? 'true' : 'false');
+    });
+  }
+
+  // listeners
+  document.querySelectorAll('.prefs-toolbar-local .chip[data-theme]').forEach(btn=>{
+    btn.addEventListener('click', ()=> setTheme(btn.dataset.theme));
+  });
+  document.querySelectorAll('.prefs-toolbar-local .chip[data-size]').forEach(btn=>{
+    btn.addEventListener('click', ()=> setSize(btn.dataset.size));
+  });
+
+  // estado inicial
+  const startTheme = localStorage.getItem(themeKey) || 'verde';
+  const startSize  = localStorage.getItem(sizeKey)  || 'normal';
+  setTheme(startTheme);
+  setSize(startSize);
+})();
+</script>
 {% endblock %}
