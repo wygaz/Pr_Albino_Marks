@@ -6,7 +6,6 @@
 {% block content %}
 <div id="bloco-texto">
 
-  <!-- Botões de formatação -->
   <article class="artigo">
 
     <!-- Imagem de capa -->
@@ -37,9 +36,10 @@
 
     <!-- Botões de ação -->
     <div class="d-flex justify-content-center my-4 gap-3">
-      <a href="{% static 'pdfs/' %}{{ artigo.slug }}.pdf" class="btn btn-outline-primary" target="_blank">
-        📥 Baixar PDF
-      </a>
+      {% if artigo.arquivo_pdf %}
+          <a class="btn ghost" href="{% url 'artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
+      {% endif %}
+
       <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
         ⬅️ Voltar para Home
       </a>
