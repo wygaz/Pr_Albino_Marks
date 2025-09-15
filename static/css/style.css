@@ -231,3 +231,31 @@ li {
     font-style: italic;
     margin-bottom: 20px;
 }
+
+/* =========================
+   Página Artigos – facelift
+   ========================= */
+.page-head h1{font-size:2.15rem;letter-spacing:.2px;margin-bottom:.25rem}
+.page-head .sub{color:#6c757d;font-size:.95rem}
+
+.list-unstyled .article-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 16px;margin-bottom:10px;border-radius:12px;background:#fff;
+  box-shadow:0 1px 3px rgba(16,24,40,.08), 0 1px 1px rgba(16,24,40,.04)
+}
+.article-info{min-width:0}
+.article-title{
+  font-weight:600;color:#0d6efd;text-decoration:none;display:inline-block;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.article-title:hover{text-decoration:underline}
+.article-meta{display:block;color:#6b7280;margin-top:2px}
+.article-actions .btn{padding:6px 10px}
+
+/* responsivo */
+@media (max-width: 640px){
+  .list-unstyled .article-row{flex-direction:column;align-items:flex-start}
+  .article-title{white-space:normal}
+  .article-actions{width:100%}
+  .article-actions .btn{width:100%}
+}
