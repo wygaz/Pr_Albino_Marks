@@ -58,3 +58,7 @@ htmlcov/
 .ruff_cache/
 pip-wheel-metadata/
 __pypackages__/
+
+# nunca versionar instaladores e pasta Publicar
+Publicar/
+*.msi
