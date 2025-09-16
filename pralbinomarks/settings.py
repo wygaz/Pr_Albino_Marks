@@ -13,7 +13,14 @@ if ENV_FILE.exists():
 
 DEBUG = env.bool("DEBUG", default=(os.getenv("RAILWAY_ENVIRONMENT") is None))
 SECRET_KEY = env("SECRET_KEY", default="dev-secret")
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".railway.app", "albino....com.br"]  # seu domínio
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    ".railway.app",
+    "www.albinomarks.com.br",
+    "albinomarks.com.br",
+]
+
 
 # ========= Apps =========
 INSTALLED_APPS = [
