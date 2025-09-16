@@ -1,25 +1,31 @@
 # Python
-*.pyc
-*.pyo
-*.pyd
-*$py.class
 __pycache__/
+*.py[cod]
+*$py.class
 
-# Ambientes Virtuais
-.env/
+# Ambientes virtuais / ferramentas
+.env
 .venv/
-env/
 venv/
+env/
 ENV/
 env.bak/
 venv.bak/
+.python-version
 
-# Migrações do Django
-**/migrations/**
-!**/migrations/
-!**/migrations/__init__.py
+# Django
+# (IMPORTANTE: commit as migrations!)
+# Não ignore migrations.
 
-# Editores (IDE/Editor configs)
+# Static & media
+staticfiles/
+media/
+
+# Banco local
+db.sqlite3
+*.sqlite3
+
+# Editores
 .vscode/
 .idea/
 *.swp
@@ -27,15 +33,16 @@ venv.bak/
 # Sistema Operacional
 .DS_Store
 Thumbs.db
+desktop.ini
 *~
 
-# Node.js
+# Node
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# PostgreSQL
+# PostgreSQL dumps / dados locais
 *.sql
 *.dump
 *.backup
@@ -43,8 +50,11 @@ pgdata/
 postgres-data/
 backups/
 
-#funcoes auxiliares
-A_Lei_no_NT/gerar_pdfs.py
-A_Lei_no_NT/gerar_pdfs_banco.pyA
-
-media/
+# Testes / cobertura / caches
+.pytest_cache/
+.coverage
+htmlcov/ 
+.mypy_cache/
+.ruff_cache/
+pip-wheel-metadata/
+__pypackages__/
