@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "A_Lei_no_NT",
     "pralbinomarks",      # ok se você realmente tem app/config dentro do pacote do projeto
-    "django_extensions",  # opcional (dev)
     "whitenoise.runserver_nostatic",  # dev: desliga static do runserver
   ]
 
