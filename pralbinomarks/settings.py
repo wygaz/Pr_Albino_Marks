@@ -21,6 +21,10 @@ ALLOWED_HOSTS = [
     "albinomarks.com.br",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://albinomarks.com.br",
+    "https://www.albinomarks.com.br",
+]
 
 # ========= Apps =========
 INSTALLED_APPS = [
@@ -134,3 +138,19 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.albinomarks.com.br",
     "https://albinomarks.com.br",
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR',
+    },
+}
