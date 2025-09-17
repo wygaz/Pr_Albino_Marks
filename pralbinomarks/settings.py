@@ -34,8 +34,7 @@ INSTALLED_APPS = [
     "pralbinomarks",      # ok se você realmente tem app/config dentro do pacote do projeto
     "django_extensions",  # opcional (dev)
     "whitenoise.runserver_nostatic",  # dev: desliga static do runserver
-    "django.contrib.staticfiles",
-]
+  ]
 
 # ========= Middleware =========
 MIDDLEWARE = [
@@ -78,7 +77,7 @@ DATABASES = {
     "default": dj_database_url.config(
         env="DATABASE_URL",
         conn_max_age=600,                      # pool
-        ssl_require=bool(os.getenv("RAILWAY_ENVIRONMENT")),  # SSL só em produção
+    #   ssl_require=bool(os.getenv("RAILWAY_ENVIRONMENT")),  # SSL só em produção
     )
 }
 
@@ -104,6 +103,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"          # pasta de coleta
 STATICFILES_DIRS = [BASE_DIR / "static"]        # seus arquivos-fonte
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+if DEBUG:
+    INSTALLED_APPS += ["django_extensions"]
 
 # ========= Media / Storage =========
 if os.getenv("USE_S3") == "1":
@@ -117,7 +118,10 @@ if os.getenv("USE_S3") == "1":
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")  # opcional (Wasabi/B2)
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = None
-    # Não defina MEDIA_URL aqui; o storage retorna .url nos FileField
+
+    # Se tiver CDN, descomente as 2 linhas abaixo:
+    # AWS_S3_CUSTOM_DOMAIN = "cdn.seudominio.com"
+    # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 else:
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
