@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 import environ
 import dj_database_url  # ok manter se usar DATABASE_URL
