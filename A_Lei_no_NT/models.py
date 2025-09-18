@@ -81,6 +81,8 @@ class Artigo(models.Model):
         if self.arquivo_word:
             self._ensure_pdf_from_docx()
 
+            
+
     def _ensure_pdf_from_docx(self):
         """
         Gera (ou regenera) o PDF baseado no arquivo_word.
