@@ -5,6 +5,7 @@ __pycache__/
 
 # Ambientes virtuais / ferramentas
 .env
+.env.*
 .venv/
 venv/
 env/
@@ -12,6 +13,16 @@ ENV/
 env.bak/
 venv.bak/
 .python-version
+
+# segredos
+*.csv
+*.pem
+*.key
+*.pfx
+*.crt
+/Apenas_Local/
+
+
 
 # Django
 # (IMPORTANTE: commit as migrations!)
