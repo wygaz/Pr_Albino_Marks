@@ -1,8 +1,0 @@
-django-extensions>=3.2
-ipython
-black
-isort
-ruff
-pipreqs
-pip-check-reqs
-pipdeptree
