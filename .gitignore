@@ -20,7 +20,10 @@ venv.bak/
 *.key
 *.pfx
 *.crt
+*.7z
+/zip/
 /Apenas_Local/
+/Bat/
 
 
 
