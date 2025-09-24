@@ -1,6 +1,0 @@
-📊 AUDITORIA DE NOMES (views, urls, templates)
-
-⚠️ View: home → URL ❌ | TEMPLATE ❌ (esperado: home.html)
-⚠️ View: lista_artigos → URL ✔ | TEMPLATE ❌ (esperado: lista_artigos.html)
-⚠️ View: visualizar_artigo → URL ✔ | TEMPLATE ❌ (esperado: visualizar_artigo.html)
-⚠️ View: criar_artigo → URL ✔ | TEMPLATE ❌ (esperado: criar_artigo.html)

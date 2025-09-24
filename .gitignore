@@ -62,6 +62,7 @@ __pypackages__/
 # nunca versionar instaladores e pasta Publicar
 Publicar/
 *.msi
+Txt/
 
 albinomarks-railway_accessKeys.csv
 infraestrutura.md
