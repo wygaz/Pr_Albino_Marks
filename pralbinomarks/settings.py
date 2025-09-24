@@ -1,19 +1,37 @@
 import os
 import sys
 from pathlib import Path
-import environ
-import dj_database_url  # ok manter se usar DATABASE_URL
+from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ========= .env =========
-env = environ.Env()
-ENV_FILE = BASE_DIR / ".env"
-if ENV_FILE.exists():
-    env.read_env(str(ENV_FILE))
+# ENV_NAME escolhe qual .env carregar *se* existir (local/remote/prod)
+ENV_NAME = os.getenv("ENV_NAME", "local")
+env_file = BASE_DIR / f".env.{ENV_NAME}"
+if env_file.exists():
+    load_dotenv(env_file)  # local: carrega do arquivo
 
-DEBUG = env.bool("DEBUG", default=(os.getenv("RAILWAY_ENVIRONMENT") is None))
-SECRET_KEY = env("SECRET_KEY", default="dev-secret")
+# Configurações de segurança
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
+
+# Banco (sempre Postgres via DATABASE_URL)
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+if not DATABASE_URL:
+    raise ImproperlyConfigured("DATABASE_URL não definido. Ajuste suas variáveis de ambiente.")
+
+DB_SSL_REQUIRE = os.getenv("DB_SSL_REQUIRE", "0").strip().lower() in ("1", "true")
+DATABASES = {
+    "default": dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=DB_SSL_REQUIRE,
+    )
+}
+
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -75,16 +93,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "pralbinomarks.wsgi.application"
-
-# Usa DATABASE_URL quando houver (local ou Railway)
-DATABASES = {
-    "default": dj_database_url.config(
-        env="DATABASE_URL",
-        conn_max_age=600,                      # pool
-    #   ssl_require=bool(os.getenv("RAILWAY_ENVIRONMENT")),  # SSL só em produção
-    )
-}
-
 
 # ========= Password validation =========
 AUTH_PASSWORD_VALIDATORS = [
@@ -155,3 +163,14 @@ LOGGING = {
         'level': 'ERROR',
     },
 }
+
+# ===== Segurança em produção =====
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+if not DEBUG:
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
+    SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
+

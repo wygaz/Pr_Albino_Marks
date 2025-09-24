@@ -1,0 +1,159 @@
+Plano de rotação (resumido)
+    listar as keys atuais (ver quais existem)
+    criar nova key (gera AccessKeyId + SecretAccessKey)
+    armazenar nova key em local seguro e/ou em Secrets Manager
+    atualizar os lugares que consumiam a key antiga (Railway variables, CI secrets, aplicações) para a nova key
+    testar com a nova key (listar bucket, fazer upload, rodar app)
+    inativar a key antiga (status = Inactive) e re-testar; se tudo OK, deletar a key antiga
+    documentar e remover rastros (terminal history, clipboard)
+
+Comandos práticos — use o profile admin (aws-adm)
+
+    Nota: substitua nomes conforme necessário (albinomarks-railway ou wyg-aws). Aqui vamos usar albinomarks-railway como exemplo de usuário a rotacionar.
+    0) (opcional) confirmar identidade admin
+
+    aws sts get-caller-identity --profile aws-adm
+
+1) Listar keys existentes do usuário (para saber o que há)
+    $User = "albinomarks-railway"
+    aws iam list-access-keys --user-name $User --profile aws-adm --output table
+    # ou só os IDs:
+    aws iam list-access-keys --user-name $User --profile aws-adm --query 'AccessKeyMetadata[].AccessKeyId' --output text
+
+
+OBS: por usuário só podem existir até 2 access keys. Se já tiver 2, você deverá apagar uma antiga antes de criar outra (ou excluir a muito antiga).
+
+2) Criar nova Access Key (gera o SecretAccessKey uma única vez)
+    $User = "albinomarks-railway"
+    $newKeyJson = aws iam create-access-key --user-name $User --profile aws-adm --output json
+    $newKey = $newKeyJson | ConvertFrom-Json
+    $newAccessId = $newKey.AccessKey.AccessKeyId
+    $newSecret = $newKey.AccessKey.SecretAccessKey
+
+    Write-Host "Nova AccessKeyId: $newAccessId"
+    Write-Host "SecretAccessKey: $newSecret"
+
+
+— Importante: copie imediatamente o $newSecret para seu cofre (1Password/Bitwarden) ou salve no Secrets Manager. Depois apague qualquer arquivo que contenha esse valor.
+
+3) Guardar nova key no Secrets Manager (recomendado)
+
+Crie/atualize um secret albinomarks-media/s3 com os valores novos:
+
+$secretName = "albinomarks-media/s3"
+$region = "us-east-1"
+$profile = "aws-adm"
+
+$secretObj = @{
+  AWS_ACCESS_KEY_ID = $newAccessId
+  AWS_SECRET_ACCESS_KEY = $newSecret
+  AWS_STORAGE_BUCKET_NAME = "albinomarks-media"
+  AWS_S3_REGION_NAME = $region
+}
+$secretObj | ConvertTo-Json | Set-Content .\secret_s3.json -Encoding UTF8
+
+# Se não existe, cria; se existe, atualiza:
+try {
+  aws secretsmanager create-secret --name $secretName --description "S3 creds for Albinomarks (rotated)" --secret-string file://.\secret_s3.json --profile $profile --region $region
+  Write-Host "Secret criado."
+} catch {
+  aws secretsmanager put-secret-value --secret-id $secretName --secret-string file://.\secret_s3.json --profile $profile --region $region
+  Write-Host "Secret atualizado."
+}
+
+Remove-Item .\secret_s3.json
+
+
+Se você prefere não usar Secrets Manager, atualize diretamente as variáveis no Railway/CI com os novos valores (veja passo 4).
+
+4) Atualizar todos os consumidores da key
+
+Substitua a key antiga por essa nova em todos os locais onde ela foi usada:
+
+Railway → Service → Variables (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY).
+
+CI/CD (GitHub Actions secrets, GitLab CI, etc.).
+
+Arquivos .env locais (não comitar), arquivos de configuração de deploy.
+
+Qualquer script/VM que use essas credenciais.
+
+Se estiver usando Secrets Manager na sua app, apenas atualize o secret (feito no passo 3) e reinicie a app para recarregar (ou a app lê em runtime).
+
+5) Testar com a nova key (carregar só na sessão para teste)
+
+Recupere o secret (ou só exporte o valor que você guardou) e teste:
+
+# Recuperar do Secrets Manager (se usou esse método)
+$secretJsonFromAws = aws secretsmanager get-secret-value --secret-id albinomarks-media/s3 --profile aws-adm --region us-east-1 --query SecretString --output text
+$creds = ConvertFrom-Json $secretJsonFromAws
+
+# Exporta só na sessão
+$env:AWS_ACCESS_KEY_ID = $creds.AWS_ACCESS_KEY_ID
+$env:AWS_SECRET_ACCESS_KEY = $creds.AWS_SECRET_ACCESS_KEY
+$env:AWS_DEFAULT_REGION = $creds.AWS_S3_REGION_NAME
+
+# Teste: listar bucket
+aws s3 ls s3://$creds.AWS_STORAGE_BUCKET_NAME --region $env:AWS_DEFAULT_REGION
+
+# Quando terminar os testes:
+# Remove-Item env:AWS_ACCESS_KEY_ID; Remove-Item env:AWS_SECRET_ACCESS_KEY; Remove-Item env:AWS_DEFAULT_REGION
+
+
+Verifique também a aplicação (deploy, upload, recursos) que usa as credenciais — tudo deve funcionar com a nova key.
+
+6) Inativar a chave antiga (sempre teste antes de inativar)
+
+Liste as keys novamente, identifique a antiga e inative (status = Inactive):
+
+# listar novamente
+aws iam list-access-keys --user-name $User --profile aws-adm --output table
+
+# suponha que $oldKeyId seja a key antiga
+$oldKeyId = "AKIA_OLDKEY_ID"  # substitua
+
+# inativar
+aws iam update-access-key --user-name $User --access-key-id $oldKeyId --status Inactive --profile aws-adm
+Write-Host "Key $oldKeyId inativada. Aguarde alguns minutos e reteste a aplicação."
+
+# se tudo ok, delete:
+aws iam delete-access-key --user-name $User --access-key-id $oldKeyId --profile aws-adm
+Write-Host "Key $oldKeyId deletada."
+
+
+Por que inativar primeiro? — assim, se algo não foi atualizado, você pode reativar a key antiga rapidamente; se deletar direto e algo quebrar você perde acesso.
+
+7) Remover credenciais expostas (limpeza)
+
+Limpe histórico do PowerShell (Clear-History e limpar PSReadLine save path).
+
+Limpe clipboard ("" | Set-Clipboard).
+
+Feche a janela do terminal onde a key foi exibida.
+
+Remova profiles antigos do ~/.aws/credentials se você tiver salvo as chaves lá (notepad $env:USERPROFILE.aws\credentials).
+
+Comandos:
+
+Clear-History
+$histFile = (Get-PSReadLineOption).HistorySavePath
+if (Test-Path $histFile) { Set-Content -Path $histFile -Value "" -Encoding UTF8 }
+
+"" | Set-Clipboard
+notepad $env:USERPROFILE\.aws\credentials  # edite e remova profiles antigos, se preciso
+
+8) Documentar a rotação
+
+Anote em seu controle (documento seguro) a data da rotação, qual key foi criada e qual deletada, e onde foi atualizada (Railway, CI, etc.). Isso facilita auditoria.
+
+Observações / boas práticas
+
+Nunca exibir o SecretAccessKey em screenshots ou logs. Use Set-Clipboard e cole em um gerenciador de senhas.
+
+Faça rotações regulares (ex.: 90 dias) — idealmente automatizadas.
+
+Automatize rotação com Secrets Manager + Lambda se quiser rotacionar sem intervenção humana.
+
+Lembre que cada usuário tem máximo 2 access keys; ao rotacionar faça: criar nova → atualizar → inativar → deletar antiga.
+
+Se o usuário estiver associado a serviços (ex.: Railway) e você não conseguir atualizar a variável, planeje janelas de manutenção.

@@ -1,0 +1,39 @@
+# 1) obter ARN do secret (ajuste nome/região se necessário)
+$secretName = "albinomarks-media/s3"
+$region = "us-east-1"
+$profile = "aws-adm"
+
+$secretArn = aws secretsmanager describe-secret --secret-id $secretName --profile $profile --region $region --query 'ARN' --output text
+Write-Host "Secret ARN: $secretArn"
+
+# 2) criar arquivo de policy (local)
+$policyFile = ".\policy_secrets_access.json"
+@"
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowReadAlbinomarksS3Secret",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ],
+      "Resource": "$secretArn"
+    }
+  ]
+}
+"@ | Set-Content -Path $policyFile -Encoding UTF8
+
+# 3) criar managed policy e capturar ARN retornado
+$policyArn = aws iam create-policy --policy-name AlbinomarksSecretsReadOnly --policy-document file://$policyFile --profile $profile --query 'Policy.Arn' --output text
+Write-Host "Policy criada: $policyArn"
+
+# 4) anexar a wyg-aws
+aws iam attach-user-policy --user-name wyg-aws --policy-arn $policyArn --profile $profile
+Write-Host "Policy anexada a wyg-aws."
+
+# 5) (opcional) remover arquivo de policy local
+Remove-Item $policyFile
+
+ALTER USER <USERNAME> WITH PASSWORD '<NOVA_SENHA>';  -- trocar senha

@@ -1,16 +1,17 @@
 import os
 import subprocess
 import sys
+import tempfile
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.db.models import Max
 from django.db import models
-from django.core.files import File
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.conf import settings
 
 from A_Lei_no_NT.utils import docx_para_html, gerar_slug
-
-# ... (Autor, Area, caminho_imagem, caminho_arquivo iguais)
+from A_Lei_no_NT.utils_storage import open_file
 
 def caminho_pdf(instance, filename):
     # mantemos apenas a pasta; o nome final será pelo slug
@@ -22,7 +23,7 @@ class Artigo(models.Model):
     conteudo_html = models.TextField(null=True, blank=True)
     imagem_capa = models.ImageField(upload_to="imagens/artigos/", null=True, blank=True)
     arquivo_word = models.FileField(upload_to="uploads/artigos/", null=True, blank=True)
-    arquivo_pdf = models.FileField(upload_to=caminho_pdf, null=True, blank=True)  # <-- novo
+    arquivo_pdf = models.FileField(upload_to=caminho_pdf, null=True, blank=True)
     publicado_em = models.DateTimeField(null=True, blank=True)
     ordem = models.IntegerField(null=True, blank=True)
     visivel = models.BooleanField(default=True)
@@ -55,33 +56,33 @@ class Artigo(models.Model):
         if not self.publicado_em:
             self.publicado_em = timezone.now()
         if self.ordem is None:
-            from django.db.models import Max
             maior = Artigo.objects.aggregate(Max('ordem'))['ordem__max'] or 0
             self.ordem = maior + 1
 
         super().save(*args, **kwargs)  # salva para garantir PK
 
-        # 4) Renomear imagem de capa pelo slug (igual você já fazia)
+        # 4) Renomear imagem de capa pelo slug (S3-safe)
         if self.imagem_capa:
-            antiga_path = self.imagem_capa.path
-            ext = os.path.splitext(antiga_path)[1]
+            old_name = self.imagem_capa.name
+            ext = os.path.splitext(old_name)[1]
             novo_nome = f"{self.slug}{ext}"
             novo_rel = f"imagens/artigos/{novo_nome}"
-            novo_abs = os.path.join(settings.MEDIA_ROOT, "imagens", "artigos", novo_nome)
-            if not antiga_path.endswith(novo_nome):
+            if not old_name.endswith(novo_nome):
                 try:
-                    os.makedirs(os.path.dirname(novo_abs), exist_ok=True)
-                    os.replace(antiga_path, novo_abs)
+                    if default_storage.exists(novo_rel):
+                        default_storage.delete(novo_rel)
+                    with open_file(old_name, "rb") as src:
+                        default_storage.save(novo_rel, src)
+                    if default_storage.exists(old_name):
+                        default_storage.delete(old_name)
                     self.imagem_capa.name = novo_rel
                     super().save(update_fields=["imagem_capa"])
                 except Exception as e:
                     print(f"⚠️ Erro ao renomear imagem de capa: {e}")
 
-        # 5) Gerar/atualizar PDF a partir do DOCX se necessário
+        # 5) Gerar/atualizar PDF a partir do DOCX se necessário (S3-safe)
         if self.arquivo_word:
             self._ensure_pdf_from_docx()
-
-            
 
     def _ensure_pdf_from_docx(self):
         """
@@ -89,84 +90,84 @@ class Artigo(models.Model):
         • Linux: tenta LibreOffice headless
         • Windows/macOS: tenta docx2pdf (se instalado)
         """
-        try:
-            docx_path = self.arquivo_word.path
-        except Exception:
+        if not self.arquivo_word:
             return
 
-        # destino final
         pdf_filename = f"{self.slug}.pdf" if self.slug else "temp.pdf"
-        pdf_rel = os.path.join("pdfs", "artigos", pdf_filename)
-        pdf_abs = os.path.join(settings.MEDIA_ROOT, "pdfs", "artigos", pdf_filename)
+        pdf_rel = os.path.join("pdfs", "artigos", pdf_filename).replace("\\", "/")
 
-        # se PDF já existe e é mais novo que o DOCX, não refaz
-        if os.path.exists(pdf_abs):
-            if os.path.getmtime(pdf_abs) >= os.path.getmtime(docx_path):
-                if not self.arquivo_pdf:
-                    self.arquivo_pdf.name = pdf_rel
-                    super().save(update_fields=["arquivo_pdf"])
-                return
-
-        os.makedirs(os.path.dirname(pdf_abs), exist_ok=True)
+        # Se já existe no storage, apenas garante o apontamento
+        if default_storage.exists(pdf_rel):
+            if self.arquivo_pdf.name != pdf_rel:
+                self.arquivo_pdf.name = pdf_rel
+                super().save(update_fields=["arquivo_pdf"])
+            return
 
         ok = False
-        # 1) Linux / LibreOffice
-        if sys.platform.startswith("linux"):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_docx = os.path.join(tmpdir, "entrada.docx")
+            # baixa DOCX do storage para temp local
             try:
-                # Converte para a pasta destino; LibreOffice sempre cria com o mesmo nome base
-                subprocess.run(
-                    ["libreoffice", "--headless", "--convert-to", "pdf", "--outdir",
-                     os.path.dirname(pdf_abs), docx_path],
-                    check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-                )
-                ok = os.path.exists(pdf_abs)
+                with open_file(self.arquivo_word, "rb") as src, open(tmp_docx, "wb") as dst:
+                    dst.write(src.read())
             except Exception as e:
-                print("⚠️ LibreOffice não funcionou:", e)
+                print("⚠️ Não foi possível baixar o DOCX do storage:", e)
+                return
 
-        # 2) Fallback: docx2pdf (Windows/macOS)
-        if not ok:
-            try:
-                from docx2pdf import convert as docx2pdf_convert
-                docx2pdf_convert(docx_path, pdf_abs)
-                ok = os.path.exists(pdf_abs)
-            except Exception as e:
-                print("⚠️ docx2pdf indisponível:", e)
+            tmp_pdf = os.path.join(tmpdir, "saida.pdf")
 
-        if ok:
-            # aponta o FileField para o arquivo gerado
-            rel = pdf_rel.replace("\\", "/")
-            if self.arquivo_pdf.name != rel:
-                self.arquivo_pdf.name = rel
-                super().save(update_fields=["arquivo_pdf"])
+            # 1) Linux / LibreOffice
+            if sys.platform.startswith("linux"):
+                try:
+                    subprocess.run(
+                        ["libreoffice", "--headless", "--convert-to", "pdf", "--outdir",
+                         tmpdir, tmp_docx],
+                        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                    )
+                    # LO tende a gerar <base>.pdf no tmpdir
+                    base_pdf = os.path.splitext(tmp_docx)[0] + ".pdf"
+                    if os.path.exists(base_pdf):
+                        os.replace(base_pdf, tmp_pdf)
+                    ok = os.path.exists(tmp_pdf)
+                except Exception as e:
+                    print("⚠️ LibreOffice não funcionou:", e)
+
+            # 2) Fallback: docx2pdf (Windows/macOS)
+            if not ok:
+                try:
+                    from docx2pdf import convert as docx2pdf_convert
+                    docx2pdf_convert(tmp_docx, tmp_pdf)
+                    ok = os.path.exists(tmp_pdf)
+                except Exception as e:
+                    print("⚠️ docx2pdf indisponível:", e)
+
+            # 3) Sobe PDF gerado ao storage
+            if ok:
+                try:
+                    with open(tmp_pdf, "rb") as f:
+                        default_storage.save(pdf_rel, ContentFile(f.read()))
+                    if self.arquivo_pdf.name != pdf_rel:
+                        self.arquivo_pdf.name = pdf_rel
+                        super().save(update_fields=["arquivo_pdf"])
+                except Exception as e:
+                    print("⚠️ Falha ao salvar PDF no storage:", e)
 
     def __str__(self):
         return self.titulo or "(sem título)"
 
 
-
 class Autor(models.Model):
     nome = models.CharField(max_length=100)
     visivel = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nome
-
+    def __str__(self): return self.nome
 
 class Area(models.Model):
     nome = models.CharField(max_length=100)
     visivel = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nome
-
+    def __str__(self): return self.nome
 
 def caminho_imagem(instance, filename):
-    # Temporário – será renomeado após o slug estar disponível
     return f"imagens/artigos/temp_{filename}"
 
-
 def caminho_arquivo(instance, filename):
-    # Grava diretamente com base no slug (o .docx define o slug ao ser salvo)
     return f"uploads/artigo_{instance.slug or 'temp'}_{filename}"
-
-

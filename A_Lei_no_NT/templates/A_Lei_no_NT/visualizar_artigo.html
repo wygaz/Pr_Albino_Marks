@@ -37,7 +37,7 @@
     <!-- Botões de ação -->
     <div class="d-flex justify-content-center my-4 gap-3">
       {% if artigo.arquivo_pdf %}
-          <a class="btn ghost" href="{% url 'artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
+          <a class="btn ghost" href="{% url 'A_Lei_no_NT:artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
       {% endif %}
 
       <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
