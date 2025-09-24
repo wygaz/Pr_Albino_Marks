@@ -12,6 +12,7 @@ urlpatterns = [
     path('<slug:slug>/', views.visualizar_artigo, name='visualizar_artigo'),
     path("artigos/pdf/", views.artigos_pdf, name="artigos_pdf"),
     path("artigo/<slug:slug>/pdf/", views.artigo_pdf_download, name="artigo_pdf_download"),
+    path("artigos/<slug:slug>/pdf/", views.artigo_pdf_download, name="artigo_pdf_download"),
  #   path('artigo/<slug:slug>/pdf/', views.artigo_pdf, name='artigo_pdf'),
 ]
 

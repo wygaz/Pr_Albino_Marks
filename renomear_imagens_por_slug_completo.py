@@ -1,3 +1,4 @@
+# renomear_imagens_por_slug_completo.py  (S3-safe)
 # === CONFIGURAÇÃO DO DJANGO ===
 import os
 import sys
@@ -11,12 +12,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pralbinomarks.settings')
 django.setup()
 
 # === IMPORTAÇÕES ===
-from django.core.files import File
+from django.core.files.storage import default_storage
 from django.conf import settings
 from A_Lei_no_NT.models import Artigo
-
-# === CAMINHO DAS IMAGENS ===
-CAMINHO_IMAGENS = os.path.join(settings.MEDIA_ROOT, "imagens", "artigos")
+from A_Lei_no_NT.utils_storage import open_file
 
 print("🔍 Iniciando varredura de imagens com base no slug dos artigos...")
 
@@ -27,35 +26,37 @@ for artigo in artigos:
         print(f"❌ Artigo '{artigo.titulo}' não possui imagem associada.")
         continue
 
-    try:
-        caminho_atual = artigo.imagem_capa.path
-    except Exception as e:
-        print(f"⚠️ Caminho de imagem inválido para '{artigo.titulo}': {e}")
+    old_name = artigo.imagem_capa.name  # ex: 'imagens/artigos/foo.jpg'
+    if not old_name:
+        print(f"⚠️ Nome de imagem vazio para '{artigo.titulo}'.")
         continue
 
-    ext = os.path.splitext(caminho_atual)[1]
+    ext = os.path.splitext(old_name)[1]
     nome_esperado = f"{artigo.slug}{ext}"
-    caminho_destino = os.path.join(CAMINHO_IMAGENS, nome_esperado)
+    novo_name = f"imagens/artigos/{nome_esperado}"
 
-    if os.path.basename(caminho_atual) == nome_esperado:
+    if os.path.basename(old_name) == nome_esperado:
         print(f"✅ Imagem correta: {nome_esperado}")
         continue
 
-    # Verifica conflito de nome
-    if os.path.exists(caminho_destino):
-        print(f"⚠️ Já existe uma imagem com o nome: {nome_esperado}")
-        resposta = input("Deseja substituir a imagem existente? [1] Sim  [2] Não ➤ ")
+    # Conflito?
+    if default_storage.exists(novo_name):
+        resposta = input(f"⚠️ Já existe '{novo_name}'. Substituir? [1] Sim  [2] Não ➤ ")
         if resposta.strip() != "1":
             print("⏭️ Pulado pelo usuário.")
             continue
-        os.remove(caminho_destino)
+        default_storage.delete(novo_name)
 
-    # Tenta renomear fisicamente
+    # Copia no storage e apaga o antigo
     try:
-        os.rename(caminho_atual, caminho_destino)
-        artigo.imagem_capa.name = f"imagens/artigos/{nome_esperado}"
-        artigo.save()
-        print(f"🔁 Renomeado: {os.path.basename(caminho_atual)} → {nome_esperado}")
+        with open_file(old_name, "rb") as src:
+            default_storage.save(novo_name, src)
+        if default_storage.exists(old_name):
+            default_storage.delete(old_name)
+
+        artigo.imagem_capa.name = novo_name
+        artigo.save(update_fields=["imagem_capa"])
+        print(f"🔁 Renomeado: {os.path.basename(old_name)} → {nome_esperado}")
     except Exception as e:
         print(f"❌ Erro ao renomear imagem para '{artigo.titulo}': {e}")
 

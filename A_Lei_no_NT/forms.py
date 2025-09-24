@@ -1,7 +1,10 @@
 from django import forms
-from .models import Artigo
+from .models import Artigo, Autor
 from .utils import docx_para_html, gerar_slug
 from django.db.models import Count
+from django.conf import settings
+from django.core.files.storage import default_storage
+from A_Lei_no_NT.utils_storage import open_file
 import os
 
 class ArtigoForm(forms.ModelForm):
@@ -11,12 +14,8 @@ class ArtigoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['titulo'].required = False  # Permite salvar sem preencher manualmente
-
-        # 🔒 Limitar seleção de arquivos a .docx no navegador
-        self.fields['arquivo_word'].widget.attrs.update({
-            'accept': '.docx'
-        })
+        self.fields['titulo'].required = False
+        self.fields['arquivo_word'].widget.attrs.update({'accept': '.docx'})
 
     def clean_arquivo_word(self):
         arquivo = self.cleaned_data.get('arquivo_word')
@@ -47,32 +46,38 @@ class ArtigoForm(forms.ModelForm):
 
     @staticmethod
     def gerar_titulo_numerado(titulo_base):
-        from .models import Artigo  # importação local para evitar import circular
+        from .models import Artigo  # evita import circular
         artigos_similares = Artigo.objects.filter(titulo__startswith=titulo_base).order_by('id')
-        total = artigos_similares.count() + 1  # inclui o atual
+        total = artigos_similares.count() + 1
 
         for i, artigo in enumerate(artigos_similares, start=1):
             novo_titulo = f"{titulo_base} ({i} de {total})"
             if artigo.titulo != novo_titulo:
                 artigo.titulo = novo_titulo
                 artigo.slug = gerar_slug(novo_titulo)
-                artigo.save()
+                artigo.save(update_fields=["titulo", "slug"])
 
-            # Renomear a imagem associada, se existir
+            # Renomear a imagem associada, se existir (S3-safe)
             if artigo.imagem_capa:
-                from django.conf import settings
-                antiga_path = artigo.imagem_capa.path
-                ext = os.path.splitext(antiga_path)[1]
+                old_name = artigo.imagem_capa.name  # ex: 'imagens/artigos/abc.jpg'
+                ext = os.path.splitext(old_name)[1]
                 novo_nome = f"{artigo.slug}{ext}"
-                novo_path = os.path.join(settings.MEDIA_ROOT, "imagens", "artigos", novo_nome)
+                novo_name = f"imagens/artigos/{novo_nome}"
 
-                try:
-                    os.rename(antiga_path, novo_path)
-                    artigo.imagem_capa.name = f"imagens/artigos/{novo_nome}"
-                    artigo.save()
-                    print(f"🔁 Imagem renomeada com sucesso: {novo_nome}")
-                except Exception as e:
-                    print(f"⚠️ Erro ao renomear imagem do artigo '{artigo.titulo}': {e}")
-
+                if os.path.basename(old_name) != novo_nome:
+                    # se já existe o destino, decide o que fazer (aqui: substituir)
+                    if default_storage.exists(novo_name):
+                        default_storage.delete(novo_name)
+                    # copia + apaga o antigo
+                    try:
+                        with open_file(old_name, "rb") as src:
+                            default_storage.save(novo_name, src)
+                        if default_storage.exists(old_name):
+                            default_storage.delete(old_name)
+                        artigo.imagem_capa.name = novo_name
+                        artigo.save(update_fields=["imagem_capa"])
+                        print(f"🔁 Imagem renomeada com sucesso: {novo_nome}")
+                    except Exception as e:
+                        print(f"⚠️ Erro ao renomear imagem do artigo '{artigo.titulo}': {e}")
 
         return f"{titulo_base} ({total} de {total})"
