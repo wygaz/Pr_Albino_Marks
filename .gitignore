@@ -15,15 +15,17 @@ venv.bak/
 .python-version
 
 # segredos
-*.csv
-*.pem
-*.key
-*.pfx
-*.crt
-*.7z
-/zip/
-/Apenas_Local/
-/Bat/
+*.csv                # chaves AWS exportadas pelo IAM
+*.pem                # certificados
+*.key                # chaves privadas
+*.pfx                # pacotes PKCS#12
+*.crt                # certificados
+*.7z                 # pacotes de backup grandes
+/zip/                # pasta de pacotes (já deu problema no GitHub)
+/Apenas_Local/       # seu “cofre” local, com txt/md
+/Bat/                # scripts auxiliares (que podem conter segredos)
+s3-secrets.ps1       # seu script de manutenção do S3
+
 
 
 
