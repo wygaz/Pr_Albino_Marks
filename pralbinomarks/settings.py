@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ENV_NAME escolhe qual .env carregar *se* existir (local/remote/prod)
@@ -17,20 +18,27 @@ if env_file.exists():
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
-# Banco (sempre Postgres via DATABASE_URL)
-DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
-if not DATABASE_URL:
-    raise ImproperlyConfigured("DATABASE_URL não definido. Ajuste suas variáveis de ambiente.")
+# Escolhe a URL do banco por prioridade:
+    # 1) DATABASE_URL (sempre preferida)
+    # 2) DATABASE_PUBLIC_URL (fallback para acesso externo quando estiver rodando local)
+_db_url = os.getenv("DATABASE_URL") or os.getenv("DATABASE_PUBLIC_URL")
 
-DB_SSL_REQUIRE = os.getenv("DB_SSL_REQUIRE", "0").strip().lower() in ("1", "true")
+if not _db_url:
+    raise RuntimeError(
+        "DATABASE_URL não definido. "
+        "Defina DATABASE_URL (produção/contêiner) ou use o valor de DATABASE_PUBLIC_URL quando for acessar remotamente a partir do Django local."
+    )
+
+# Railway/Postgres normalmente requer SSL (obrigatório fora de redes 100% locais)
+DB_SSL_REQUIRE = os.getenv("DB_SSL_REQUIRE", "1").strip().lower() in ("1", "true", "yes")
+
 DATABASES = {
     "default": dj_database_url.parse(
-        DATABASE_URL,
-        conn_max_age=600,
+        _db_url,
+        conn_max_age=int(os.getenv("DB_CONN_MAX_AGE", "600")),
         ssl_require=DB_SSL_REQUIRE,
     )
 }
-
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -38,11 +46,6 @@ ALLOWED_HOSTS = [
     ".railway.app",
     "www.albinomarks.com.br",
     "albinomarks.com.br",
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://albinomarks.com.br",
-    "https://www.albinomarks.com.br",
 ]
 
 # ========= Apps =========
@@ -119,22 +122,31 @@ if DEBUG:
     INSTALLED_APPS += ["django_extensions"]
 
 # ========= Media / Storage =========
-if os.getenv("USE_S3") == "1":
+# ========= Media / Storage =========
+# Aceita USE_S3 ou USE_S3_FOR_MEDIA (qualquer um = "1" ativa S3)
+USE_S3 = os.getenv("USE_S3", os.getenv("USE_S3_FOR_MEDIA", "0")).strip() == "1"
+if USE_S3:
     INSTALLED_APPS += ["storages"]
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+    # Preferimos S3_BUCKET_NAME; se vier o antigo, ainda aceita:
+    AWS_STORAGE_BUCKET_NAME = os.getenv("S3_BUCKET_NAME") or os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.getenv("AWS_DEFAULT_REGION", os.getenv("AWS_S3_REGION_NAME", "us-east-1"))
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")  # opcional (Wasabi/B2)
-    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
+    AWS_S3_FILE_OVERWRITE = False
     AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
 
-    # Se tiver CDN, descomente as 2 linhas abaixo:
-    # AWS_S3_CUSTOM_DOMAIN = "cdn.seudominio.com"
-    # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
-else:
+    # URL pública padrão do bucket (se não usar CDN)
+    if not os.getenv("AWS_S3_CUSTOM_DOMAIN"):
+        MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
+    else:
+        AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN")
+        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
@@ -144,10 +156,10 @@ PDF_ARTIGOS_DIR = PDF_OUTPUT_DIR / "artigos"
 
 # ========= CSRF =========
 CSRF_TRUSTED_ORIGINS = [
-    "https://www.albinomarks.com.br",
+    "https://*.railway.app",
     "https://albinomarks.com.br",
+    "https://www.albinomarks.com.br",
 ]
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -168,6 +180,7 @@ LOGGING = {
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
