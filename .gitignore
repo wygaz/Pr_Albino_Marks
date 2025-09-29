@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
 # Ambientes virtuais / ferramentas
 .env
 .env.*
@@ -14,19 +15,21 @@ env.bak/
 venv.bak/
 .python-version
 
+
 # segredos
-*.csv                # chaves AWS exportadas pelo IAM
-*.pem                # certificados
-*.key                # chaves privadas
-*.pfx                # pacotes PKCS#12
-*.crt                # certificados
-*.7z                 # pacotes de backup grandes
-/zip/                # pasta de pacotes (já deu problema no GitHub)
-/Apenas_Local/       # seu “cofre” local, com txt/md
-/Bat/                # scripts auxiliares (que podem conter segredos)
-s3-secrets.ps1       # seu script de manutenção do S3
-
-
+Apenas_Local/
+aws_backup_*/
+healthcheck.txt
+requirements-dev.txt
+s3-secrets.ps1
+newkey.json
+*.csv
+*.pem
+*.key
+*.pfx
+*.crt
+*.7z
+/zip/
 
 
 # Django
