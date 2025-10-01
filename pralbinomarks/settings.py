@@ -177,7 +177,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.albinomarks.com.br",
 ]
 
-
 # ===== Segurança em produção =====
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
@@ -187,9 +186,9 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
 CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
 
-
 if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
     SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
+
 
