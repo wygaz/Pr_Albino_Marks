@@ -183,6 +183,10 @@ SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Cookies válidos em ambos os hosts (com e sem www)
+SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
+CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
+
 
 if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
