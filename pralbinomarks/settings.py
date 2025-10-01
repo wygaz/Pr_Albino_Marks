@@ -154,12 +154,6 @@ if USE_S3:
 PDF_OUTPUT_DIR  = BASE_DIR / "media" / "pdfs"
 PDF_ARTIGOS_DIR = PDF_OUTPUT_DIR / "artigos"
 
-# ========= CSRF =========
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.railway.app",
-    "https://albinomarks.com.br",
-    "https://www.albinomarks.com.br",
-]
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -175,6 +169,14 @@ LOGGING = {
         'level': 'ERROR',
     },
 }
+
+# ========= CSRF =========
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+    "https://albinomarks.com.br",
+    "https://www.albinomarks.com.br",
+]
+
 
 # ===== Segurança em produção =====
 SECURE_SSL_REDIRECT = not DEBUG
