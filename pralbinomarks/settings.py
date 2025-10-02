@@ -5,6 +5,42 @@ from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
+# ===== Segurança em produção =====
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE   = not DEBUG
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Hosts e detecção de domínio Railway
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+USE_RAILWAY_DOMAIN = any(
+    h.endswith(".railway.app") or h.endswith(".up.railway.app")
+    for h in ALLOWED_HOSTS
+)
+
+# Cookies (um único lugar):
+# - No seu domínio: cookies amarrados a .albinomarks.com.br (funciona com e sem www)
+# - Na Railway: sem domínio explícito (padrão do Django), para evitar 403 CSRF
+if USE_RAILWAY_DOMAIN:
+    SESSION_COOKIE_DOMAIN = None
+    CSRF_COOKIE_DOMAIN    = None
+else:
+    SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
+    CSRF_COOKIE_DOMAIN    = ".albinomarks.com.br"
+
+# HSTS (apenas em produção)
+if not DEBUG:
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
+    SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
+
+# CSRF trusted (deixe junto para facilitar)
+CSRF_TRUSTED_ORIGINS = [
+    "https://albinomarks.com.br",
+    "https://www.albinomarks.com.br",
+    "https://*.railway.app",
+    "https://*.up.railway.app",
+]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,7 +81,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     ".railway.app",
     "www.albinomarks.com.br",
-    "albinomarks.com.br",
+    "albinomarks.com.br", 
+    "pralbinomarks-production.up.railway.app",
 ]
 
 # ========= Apps =========
@@ -172,23 +209,14 @@ LOGGING = {
 
 # ========= CSRF =========
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.railway.app",
     "https://albinomarks.com.br",
     "https://www.albinomarks.com.br",
+    "https://*.railway.app",
+    "https://*.up.railway.app",
 ]
 
-# ===== Segurança em produção =====
-SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-# Cookies válidos em ambos os hosts (com e sem www)
-SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
-CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
 
-if not DEBUG:
-    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
-    SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
+
+
 
 
