@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
+# Configurações de segurança
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
+DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
+
 # ===== Segurança em produção =====
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
@@ -49,10 +53,6 @@ ENV_NAME = os.getenv("ENV_NAME", "local")
 env_file = BASE_DIR / f".env.{ENV_NAME}"
 if env_file.exists():
     load_dotenv(env_file)  # local: carrega do arquivo
-
-# Configurações de segurança
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
-DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
 # Escolhe a URL do banco por prioridade:
     # 1) DATABASE_URL (sempre preferida)
