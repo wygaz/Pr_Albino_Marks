@@ -16,8 +16,7 @@ if env_file.exists():
 
 # Configurações de segurança
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
-#DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
-Debug=True
+DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
 # Escolhe a URL do banco por prioridade:
     # 1) DATABASE_URL (sempre preferida)
