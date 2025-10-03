@@ -22,6 +22,13 @@ USE_RAILWAY_DOMAIN = any(
     for h in ALLOWED_HOSTS
 )
 
+# CSRF trusted (deixe junto para facilitar)
+CSRF_TRUSTED_ORIGINS = [
+    "https://albinomarks.com.br",
+    "https://www.albinomarks.com.br",
+    "https://*.railway.app",
+    "https://*.up.railway.app",
+]
 LOGIN_REDIRECT_URL = "/admin/"
 
 # Cookies (um único lugar):
@@ -40,13 +47,6 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
     SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
 
-# CSRF trusted (deixe junto para facilitar)
-CSRF_TRUSTED_ORIGINS = [
-    "https://albinomarks.com.br",
-    "https://www.albinomarks.com.br",
-    "https://*.railway.app",
-    "https://*.up.railway.app",
-]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -193,6 +193,23 @@ if USE_S3:
 PDF_OUTPUT_DIR  = BASE_DIR / "media" / "pdfs"
 PDF_ARTIGOS_DIR = PDF_OUTPUT_DIR / "artigos"
 
+
+# settings.py (adicione no final)
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.security": {"handlers": ["console"], "level": "INFO"},
+        "django.request": {"handlers": ["console"], "level": "INFO"},
+        "django.contrib.auth": {"handlers": ["console"], "level": "DEBUG"},
+    },
+}
+
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+
+
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -208,8 +225,9 @@ LOGGING = {
         'level': 'ERROR',
     },
 }
+'''
 
-AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+
 
 
 
