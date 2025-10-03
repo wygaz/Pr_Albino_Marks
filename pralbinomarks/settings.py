@@ -12,11 +12,11 @@ DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 # ===== Segurança em produção =====
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # ok atrás do Cloudflare
 SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
 
 # ALLOWED_HOSTS precisa ter AMBOS domínios (sem e com www)
 ALLOWED_HOSTS = [
@@ -27,8 +27,7 @@ ALLOWED_HOSTS = [
 
 USE_RAILWAY_DOMAIN = False  # já que o site público é nos seus domínios
 
-SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
-CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
+
 
 CSRF_TRUSTED_ORIGINS = [
     "https://albinomarks.com.br",
