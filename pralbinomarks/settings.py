@@ -10,25 +10,33 @@ SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
 # ===== Segurança em produção =====
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # ok atrás do Cloudflare
 SECURE_SSL_REDIRECT = not DEBUG
 SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE   = not DEBUG
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_COOKIE_SECURE = not DEBUG
 
-# Hosts e detecção de domínio Railway
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
-USE_RAILWAY_DOMAIN = any(
-    h.endswith(".railway.app") or h.endswith(".up.railway.app")
-    for h in ALLOWED_HOSTS
-)
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
 
-# CSRF trusted (deixe junto para facilitar)
+# ALLOWED_HOSTS precisa ter AMBOS domínios (sem e com www)
+ALLOWED_HOSTS = [
+    "albinomarks.com.br",
+    "www.albinomarks.com.br",
+]
+# ...se quiser manter via env, garanta que estes dois estão mesmo no valor da variável em produção.
+
+USE_RAILWAY_DOMAIN = False  # já que o site público é nos seus domínios
+
+SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
+CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
+
 CSRF_TRUSTED_ORIGINS = [
     "https://albinomarks.com.br",
     "https://www.albinomarks.com.br",
     "https://*.railway.app",
     "https://*.up.railway.app",
 ]
+
 LOGIN_REDIRECT_URL = "/admin/"
 
 # Cookies (um único lugar):
