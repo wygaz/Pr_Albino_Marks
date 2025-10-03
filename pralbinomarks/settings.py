@@ -22,6 +22,8 @@ USE_RAILWAY_DOMAIN = any(
     for h in ALLOWED_HOSTS
 )
 
+LOGIN_REDIRECT_URL = "/admin/"
+
 # Cookies (um único lugar):
 # - No seu domínio: cookies amarrados a .albinomarks.com.br (funciona com e sem www)
 # - Na Railway: sem domínio explícito (padrão do Django), para evitar 403 CSRF
@@ -207,13 +209,7 @@ LOGGING = {
     },
 }
 
-# ========= CSRF =========
-CSRF_TRUSTED_ORIGINS = [
-    "https://albinomarks.com.br",
-    "https://www.albinomarks.com.br",
-    "https://*.railway.app",
-    "https://*.up.railway.app",
-]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 
 
