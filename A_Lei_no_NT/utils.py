@@ -16,6 +16,8 @@ from django.db import transaction
 from django.apps import apps
 from pathlib import Path
 from django.conf import settings
+from django.utils.text import slugify
+#from .models import Artigo  # ajuste se o import for diferente
 
 # utils.py (trecho necessário para o auditor)
 
@@ -101,20 +103,22 @@ def path_capa_por_slug(slug: str, ext=".jpg") -> Path:
 
 def gerar_slug(titulo):
     from .models import Artigo
-    
+
     if not titulo or not titulo.strip():
-        titulo = gerar_titulo_numerado()  # fallback se título for vazio ou só espaços
+        titulo = "Artigo Sem Título"
 
     slug_base = slugify(unidecode(titulo))
     if not slug_base:
-        slug_base = f'artigo-{uuid4().hex[:6]}'
+        slug_base = f"artigo-{uuid4().hex[:6]}"
 
     slug = slug_base
     contador = 2
     while Artigo.objects.filter(slug=slug).exists():
         slug = f"{slug_base}-{contador}"
         contador += 1
+
     return slug
+
 
 def remover_autor_do_conteudo(html, autor):
     from bs4 import BeautifulSoup
