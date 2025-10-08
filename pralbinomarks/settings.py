@@ -6,28 +6,27 @@ from django.core.exceptions import ImproperlyConfigured
 import dj_database_url
 
 # Configurações de segurança
+import os
+
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
 
-# ===== Segurança em produção =====
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")  # ok atrás do Cloudflare
-SECURE_SSL_REDIRECT = not DEBUG
-SESSION_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Detecta subdomínio público da Railway, se existir (ex.: 5nc3lj5a.up.railway.app)
+RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").strip()  # Railway injeta isso em prod
+USE_RAILWAY_DOMAIN   = os.getenv("USE_RAILWAY_DOMAIN", "0").strip().lower() in ("1", "true", "yes")
 
+# Atrás de proxy HTTPS (Cloudflare/Railway)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# ALLOWED_HOSTS precisa ter AMBOS domínios (sem e com www)
+# ===== Hosts / CSRF =====
 ALLOWED_HOSTS = [
     "albinomarks.com.br",
     "www.albinomarks.com.br",
 ]
-# ...se quiser manter via env, garanta que estes dois estão mesmo no valor da variável em produção.
 
-USE_RAILWAY_DOMAIN = False  # já que o site público é nos seus domínios
-
-
+# Inclui o domínio público da Railway (útil para healthcheck e testes em prod)
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
 
 CSRF_TRUSTED_ORIGINS = [
     "https://albinomarks.com.br",
@@ -35,24 +34,49 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
     "https://*.up.railway.app",
 ]
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RAILWAY_PUBLIC_DOMAIN}")
 
-LOGIN_REDIRECT_URL = "/admin/"
+# Se estiver em desenvolvimento local (DEBUG=1), permita localhost/127.0.0.1 em HTTP
+if DEBUG:
+    ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
+    CSRF_TRUSTED_ORIGINS += [
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+    ]
 
-# Cookies (um único lugar):
-# - No seu domínio: cookies amarrados a .albinomarks.com.br (funciona com e sem www)
-# - Na Railway: sem domínio explícito (padrão do Django), para evitar 403 CSRF
-if USE_RAILWAY_DOMAIN:
+# ===== Cookies / SSL =====
+if DEBUG:
+    # Ambiente local: HTTP
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_DOMAIN = None
-    CSRF_COOKIE_DOMAIN    = None
+    CSRF_COOKIE_DOMAIN = None
 else:
-    SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
-    CSRF_COOKIE_DOMAIN    = ".albinomarks.com.br"
+    # Produção: HTTPS e cookies seguros
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "None"
+    CSRF_COOKIE_SAMESITE = "None"
 
-# HSTS (apenas em produção)
-if not DEBUG:
+    # Se o site público usa seu domínio, fixe o domínio do cookie; se só Railway, deixe None
+    if USE_RAILWAY_DOMAIN:
+        SESSION_COOKIE_DOMAIN = None
+        CSRF_COOKIE_DOMAIN = None
+    else:
+        SESSION_COOKIE_DOMAIN = ".albinomarks.com.br"
+        CSRF_COOKIE_DOMAIN = ".albinomarks.com.br"
+
+    # HSTS (opcional, controlado por env)
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0") or 0)
     SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
     SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "False") == "True"
+
+LOGIN_REDIRECT_URL = "/admin/"
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -167,34 +191,57 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 if DEBUG:
     INSTALLED_APPS += ["django_extensions"]
 
+
 # ========= Media / Storage =========
-# ========= Media / Storage =========
-# Aceita USE_S3 ou USE_S3_FOR_MEDIA (qualquer um = "1" ativa S3)
+# Ativa uso de S3 se USE_S3=1 (ou USE_S3_FOR_MEDIA=1) estiver definido no ambiente
 USE_S3 = os.getenv("USE_S3", os.getenv("USE_S3_FOR_MEDIA", "0")).strip() == "1"
+
 if USE_S3:
     INSTALLED_APPS += ["storages"]
+
+    # Backend de armazenamento padrão para arquivos de mídia
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
+    # Credenciais e parâmetros base
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    # Preferimos S3_BUCKET_NAME; se vier o antigo, ainda aceita:
-    AWS_STORAGE_BUCKET_NAME = os.getenv("S3_BUCKET_NAME") or os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = os.getenv("AWS_DEFAULT_REGION", os.getenv("AWS_S3_REGION_NAME", "us-east-1"))
-    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")  # opcional (Wasabi/B2)
+    AWS_STORAGE_BUCKET_NAME = (
+        os.getenv("S3_BUCKET_NAME") or os.getenv("AWS_STORAGE_BUCKET_NAME")
+    )
+
+    # Região e endpoint (Wasabi / Backblaze / etc. usam endpoint próprio)
+    AWS_S3_REGION_NAME = os.getenv(
+        "AWS_DEFAULT_REGION", os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+    )
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")  # opcional
     AWS_S3_SIGNATURE_VERSION = "s3v4"
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_DEFAULT_ACL = None
-    AWS_QUERYSTRING_AUTH = False
 
-    # URL pública padrão do bucket (se não usar CDN)
-    if not os.getenv("AWS_S3_CUSTOM_DOMAIN"):
-        MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
-    else:
-        AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN")
+    # Comportamento e permissões
+    AWS_S3_FILE_OVERWRITE = False  # não sobrescreve uploads
+    AWS_DEFAULT_ACL = None         # ACL neutra, usa permissões IAM
+
+    # URLs assinadas → impedem AccessDenied sem precisar deixar o bucket público
+    AWS_QUERYSTRING_AUTH = True
+    AWS_QUERYSTRING_EXPIRE = int(os.getenv("AWS_QUERYSTRING_EXPIRE", "86400"))  # 24h
+
+    # Cache dos objetos de mídia (imagens, PDFs, DOCX)
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=31536000, public"  # 1 ano
+    }
+
+    # Domínio do bucket (ou CDN)
+    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN")  # ex: dxxxx.cloudfront.net
+    if AWS_S3_CUSTOM_DOMAIN:
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    else:
+        MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/"
 
+    # Não define MEDIA_ROOT quando usa S3
+else:
+    # Storage local (ambiente de desenvolvimento)
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
+
 
 # Pastas de PDF sempre válidas (independente do ramo acima)
 PDF_OUTPUT_DIR  = BASE_DIR / "media" / "pdfs"
