@@ -40,7 +40,7 @@
         {% if artigo.imagem_capa %}
           <img class="thumb" src="{{ artigo.imagem_capa.url }}" alt="Capa de {{ artigo.titulo }}" loading="lazy">
         {% else %}
-          <img class="thumb" src="{% static 'img/placeholder.jpg' %}" alt="Sem capa" loading="lazy">
+          <img class="thumb" src="{% static 'imagens/placeholder.jpg' %}" alt="Sem capa" loading="lazy">
         {% endif %}
       </div>
 
@@ -60,7 +60,7 @@
       </div>
     </li>
   {% empty %}
-    <li>Nenhum artigo encontrado.</li>
+    <li>Nenhum artigo encontrado</li>
   {% endfor %}
   </ul>
 
