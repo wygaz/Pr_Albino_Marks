@@ -16,11 +16,8 @@ from django.db import transaction
 from django.apps import apps
 from pathlib import Path
 from django.conf import settings
-from django.utils.text import slugify
-#from .models import Artigo  # ajuste se o import for diferente
 
 # utils.py (trecho necessário para o auditor)
-
 # Padrões de numeração que queremos remover do fim do título
 _PADROES_NUM = [
     r"\s*-\s*\d+\s+de\s+\d+\s*$",
@@ -104,39 +101,40 @@ def path_capa_por_slug(slug: str, ext=".jpg") -> Path:
 def gerar_slug(titulo):
     from .models import Artigo
 
-    if not titulo or not titulo.strip():
-        titulo = "Artigo Sem Título"
+    max_len = Artigo._meta.get_field("slug").max_length
+    titulo = (titulo or "").strip()
 
-    slug_base = slugify(unidecode(titulo))
-    if not slug_base:
-        slug_base = f"artigo-{uuid4().hex[:6]}"
+    # base do slug
+    base = slugify(unidecode(titulo)) if titulo else ""
+    if not base:
+        base = f"artigo-{uuid4().hex[:6]}"
 
-    slug = slug_base
-    contador = 2
+    base = base[:max_len]  # garante que nunca excede a coluna
+    slug = base
+    i = 2
+    # garante unicidade sem estourar o tamanho ao acrescentar "-2", "-3", ...
     while Artigo.objects.filter(slug=slug).exists():
-        slug = f"{slug_base}-{contador}"
-        contador += 1
+        suf = f"-{i}"
+        slug = f"{base[:max_len - len(suf)]}{suf}"
+        i += 1
 
     return slug
-
 
 def remover_autor_do_conteudo(html, autor):
     from bs4 import BeautifulSoup
     import re
 
     soup = BeautifulSoup(html, 'html.parser')
-    autor_lower = autor.lower().strip()
-    candidatos = soup.find_all(['p', 'li'])[:3]  # verifica só os 3 primeiros parágrafos
+    autor_lower = str(autor).lower().strip()
+    candidatos = soup.find_all(['p', 'li'])[:3]
 
-    for tag in candidatos:
+    for tag in list(candidatos):
         texto = tag.get_text(strip=True).lower()
 
-        # Remove se contiver nome do autor + poucas palavras
-        if autor_lower in texto and len(texto.split()) <= 6:
-            tag.decompose()
+        # "Por", "Autor:", e prefixos como "Pr." (opcional)
+        padrao_simples = rf'^(por\s+|autor:\s+)?(pr\.?\s+)?{re.escape(autor_lower)}[.,:;]?$'
 
-        # Remove se começar com algo como "1. Albino Marks", "I. Albino Marks", "a) Albino Marks"
-        if re.match(r'^(\d+\.|[ivxlc]+\.|[a-z]\))\s*' + re.escape(autor_lower), texto):
+        if (autor_lower in texto and len(texto.split()) <= 6) or re.match(padrao_simples, texto):
             tag.decompose()
 
     return str(soup)

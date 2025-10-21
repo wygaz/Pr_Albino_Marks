@@ -11,6 +11,8 @@ from reportlab.lib.units import cm
 from .models import Artigo
 from .forms import ArtigoForm
 from A_Lei_no_NT.utils_storage import open_file
+from django.db import IntegrityError, transaction
+from .utils import gerar_slug
 
 def home(request):
     artigos = Artigo.objects.filter(visivel=True).order_by('-publicado_em')
@@ -21,20 +23,25 @@ def visualizar_artigo(request, slug):
     return render(request, 'A_Lei_no_NT/visualizar_artigo.html', {'artigo': artigo})
 
 def criar_artigo(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ArtigoForm(request.POST, request.FILES)
         if form.is_valid():
+            obj = form.save(commit=False)
+            if not obj.slug:
+                obj.slug = gerar_slug(obj.titulo)
             try:
-                form.save()
-                messages.success(request, 'Artigo salvo com sucesso!')
-                return redirect('A_Lei_no_NT:home')
-            except Exception as e:
-                erro_msg = f"Erro ao salvar o artigo: {str(e)}"
-                print(f"\n🚨 {erro_msg}")
-                messages.error(request, erro_msg)
+                with transaction.atomic():
+                    obj.save()
+            except IntegrityError:
+                # colisão rara: gera outro e salva
+                obj.slug = gerar_slug(obj.titulo)
+                obj.save()
+            form.save_m2m()
+            messages.success(request, "Artigo criado com sucesso.")
+            return redirect("listar_artigos")
     else:
         form = ArtigoForm()
-    return render(request, 'A_Lei_no_NT/artigo_form.html', {'form': form})
+    return render(request, "A_Lei_no_NT/criar.html", {"form": form})
 
 def listar_artigos(request):
     artigos = Artigo.objects.filter(visivel=True).order_by('ordem', 'titulo')

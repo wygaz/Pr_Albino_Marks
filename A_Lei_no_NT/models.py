@@ -18,8 +18,9 @@ def caminho_pdf(instance, filename):
     return f"pdfs/artigos/{filename}"
 
 class Artigo(models.Model):
-    titulo = models.CharField(max_length=255, null=True, blank=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
+    titulo = models.CharField(max_length=255)  # (não nulo)
+    slug = models.SlugField(max_length=100, unique=True)  # agora sem null/blank
+#   slug = models.SlugField(max_length=100, unique=True, db_index=True)
     conteudo_html = models.TextField(null=True, blank=True)
     imagem_capa = models.ImageField(upload_to="imagens/artigos/", null=True, blank=True)
     arquivo_word = models.FileField(upload_to="uploads/artigos/", null=True, blank=True)

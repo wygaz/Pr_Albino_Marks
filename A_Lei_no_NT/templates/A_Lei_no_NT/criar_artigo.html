@@ -2,47 +2,82 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">📄 Criar Novo Artigo</h2>
+<link rel="stylesheet" href="{% static 'css/form-artigo.css' %}">
 
-  {% if form.errors.titulo %}
-    <div class="alert alert-warning d-flex align-items-center" role="alert" id="alertaTitulo">
-      <span class="me-2">⚠️</span>
-      <div><strong>Atenção:</strong> Não foi possível detectar o título automaticamente. Por favor, insira-o manualmente.</div>
-    </div>
+<div class="page-wrap">
+  <div class="form-card">
+    <h2 class="form-title">📄 Criar Novo Artigo</h2>
 
-    <audio id="audioAlerta" autoplay>
-      <source src="{% static 'audio/Voz_Insira_o_titulo_manuamente.mp3' %}" type="audio/mpeg">
-      Seu navegador não suporta áudio HTML5.
-    </audio>
-  {% endif %}
+    {% if form.titulo.errors %}
+      <div class="alert alert-warning d-flex align-items-center" role="alert" id="alertaTitulo" style="margin-bottom:14px">
+        <span class="me-2">⚠️</span>
+        <div><strong>Atenção:</strong> Não foi possível detectar o título automaticamente. Insira-o manualmente.</div>
+      </div>
+      <audio id="audioAlerta" autoplay>
+        <source src="{% static 'audio/Voz_Insira_o_titulo_manuamente.mp3' %}" type="audio/mpeg">
+        Seu navegador não suporta áudio HTML5.
+      </audio>
+    {% endif %}
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+    <form method="post" enctype="multipart/form-data" id="artigo-form">
+      {% csrf_token %}
 
-    <div class="form-group mb-3">
-      {{ form.titulo.label_tag }}
-      {{ form.titulo }}
-    </div>
+      <!-- Título (linha inteira) -->
+      <div class="form-row full">
+        {{ form.titulo.label_tag }}
+        {{ form.titulo }}
+      </div>
 
-    <div class="form-group mb-3">
-      {{ form.imagem_capa.label_tag }}
-      {{ form.imagem_capa }}
-    </div>
+      <!-- Ordem pedida: PDF -> DOCX -> IMAGEM -->
+      <div class="form-row">
+        {{ form.arquivo_pdf.label_tag }}
+        {{ form.arquivo_pdf }}
+        <div class="help">PDF até 20 MB.</div>
+      </div>
 
-    <div class="form-group mb-3">
-      {{ form.arquivo_word.label_tag }}
-      {{ form.arquivo_word }}
-    </div>
+      <div class="form-row">
+        {{ form.arquivo_word.label_tag }}
+        {{ form.arquivo_word }}
+        <div class="help">DOCX até 20 MB.</div>
+      </div>
 
-    <div class="form-group mb-3">
-      {{ form.visivel.label_tag }}
-      {{ form.visivel }}
-    </div>
+      <div class="form-row full">
+        {{ form.imagem_capa.label_tag }}
+        {{ form.imagem_capa }}
+        <div class="help">PNG, JPG ou WEBP.</div>
+      </div>
 
-    <button type="submit" class="btn btn-success mt-3">
-      💾 Salvar Artigo
-    </button>
-  </form>
+      <!-- Demais campos -->
+      <div class="form-row">
+        {{ form.publicado_em.label_tag }}
+        {{ form.publicado_em }}
+      </div>
+
+      <div class="form-row">
+        {{ form.ordem.label_tag }}
+        {{ form.ordem }}
+      </div>
+
+      <div class="form-row">
+        {{ form.visivel.label_tag }}
+        {{ form.visivel }}
+      </div>
+
+      <div class="form-row">
+        {{ form.autor.label_tag }}
+        {{ form.autor }}
+      </div>
+
+      <div class="form-row">
+        {{ form.area.label_tag }}
+        {{ form.area }}
+      </div>
+
+      <div class="actions full">
+        <button type="submit" class="btn btn-save">💾 Salvar</button>
+        <a href="{% url 'listar_artigos' %}" class="btn btn-cancel">Cancelar</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
