@@ -41,7 +41,7 @@ def criar_artigo(request):
             return redirect("listar_artigos")
     else:
         form = ArtigoForm()
-    return render(request, "A_Lei_no_NT/criar_artigo.html", {"form": form})
+    return render(request, "A_Lei_no_NT/artigo_form.html", {"form": form})
 
 def listar_artigos(request):
     artigos = Artigo.objects.filter(visivel=True).order_by('ordem', 'titulo')
