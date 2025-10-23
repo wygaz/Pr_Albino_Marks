@@ -1,17 +1,81 @@
-{% extends 'base.html' %}
+{# A_Lei_no_NT/templates/A_Lei_no_NT/artigo_form.html #}
+{% extends "base.html" %}
 {% load static %}
-
-{% block title %}Novo Artigo{% endblock %}
+{% load form_extras %}
 
 {% block content %}
+<div class="container py-4" style="max-width: 900px;">
+  <h1 class="h4 mb-3">{{ titulo_pagina }}</h1>
 
-<div class="pagina-centralizada my-5">
-  <h2 class="mb-3">📄 Criar Novo Artigo</h2>
-  <form method="POST" enctype="multipart/form-data" class="mb-5">
+  <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">💾 Salvar</button>
-    <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-secondary">⬅️ Cancelar</a>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label">Título</label>
+            {{ form.titulo|add_class:"form-control" }}
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Área</label>
+            {{ form.area|add_class:"form-select" }}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Subtítulo</label>
+            {{ form.subtitulo|add_class:"form-control" }}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">DOCX (fonte)</label>
+            {{ form.arquivo_word|add_class:"form-control" }}
+            <div class="form-text">Opcional. Se enviado, ficará disponível para download.</div>
+            {% if obj and obj.arquivo_word %}
+              <div class="small mt-1">Atual: <a href="{{ obj.arquivo_word.url }}" target="_blank">baixar</a></div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">PDF (publicação)</label>
+            {{ form.arquivo_pdf|add_class:"form-control" }}
+            <div class="form-text">Envie o PDF já gerado localmente.</div>
+            {% if obj and obj.arquivo_pdf %}
+              <div class="small mt-1">Atual: <a href="{{ obj.arquivo_pdf.url }}" target="_blank">abrir</a></div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Imagem de capa</label>
+            {{ form.imagem_capa|add_class:"form-control" }}
+            {% if obj and obj.imagem_capa %}
+              <div class="small mt-1">Atual: <a href="{{ obj.imagem_capa.url }}" target="_blank">ver capa</a></div>
+            {% endif %}
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Autor</label>
+            {{ form.autor|add_class:"form-select" }}
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Resumo</label>
+            {{ form.resumo|add_class:"form-control"|attr:"rows:4" }}
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-check mt-2">
+              {{ form.publicado|add_class:"form-check-input" }}
+              <label class="form-check-label">Publicado</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer bg-white d-flex gap-2 justify-content-end">
+        <a href="{% url 'listar_artigos' %}" class="btn btn-outline-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </div>
   </form>
 </div>
 
