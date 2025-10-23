@@ -11,6 +11,6 @@ urlpatterns = [
         url=static("favicon.ico"),
         permanent=False,  # evita cache duro de 301
     )),
-]
 '''
+    ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
