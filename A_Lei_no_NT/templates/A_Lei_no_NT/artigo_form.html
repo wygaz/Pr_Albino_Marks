@@ -21,10 +21,12 @@
             <label class="form-label">Área</label>
             {{ form.area|add_class:"form-select" }}
           </div>
-          <div class="col-12">
-            <label class="form-label">Subtítulo</label>
-            {{ form.subtitulo|add_class:"form-control" }}
-          </div>
+          {% if form.fields.subtitulo %}
+            <div class="col-12">
+              <label class="form-label">Subtítulo</label>
+              {{ form.subtitulo|add_class:"form-control" }}
+            </div>
+          {% endif %}
 
           <div class="col-md-6">
             <label class="form-label">DOCX (fonte)</label>
@@ -72,7 +74,7 @@
       </div>
 
       <div class="card-footer bg-white d-flex gap-2 justify-content-end">
-        <a href="{% url 'listar_artigos' %}" class="btn btn-outline-secondary">Cancelar</a>
+        <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-secondary">Cancelar</a>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </div>
