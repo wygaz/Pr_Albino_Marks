@@ -89,3 +89,7 @@ infraestrutura.md
 Txt/
 
 !docs/*.md
+
+__pycache__/
+
+*.pyc
