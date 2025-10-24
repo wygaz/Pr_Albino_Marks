@@ -1,9 +1,6 @@
 {
   "exclude": [
     "Apenas_Local",
-    "**/__pycache__",
-    ".venv",
-    "venv",
-    ".git"
+    "**/__pycache__"
   ]
 }
