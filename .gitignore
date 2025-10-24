@@ -87,3 +87,38 @@ albinomarks-railway_accessKeys.csv
 infraestrutura.md
 
 Txt/
+
+!docs/*.md
+
+
+*.pyc
+
+# uploads e mídia (Django)
+A_Lei_no_NT/media/
+media/
+
+# caches Python
+__pycache__/
+*.py[cod]
+
+# chaves/certificados locais (nunca versionar)
+*.key
+*.key.pem
+*.pem
+*.crt
+*.cer
+*.pfx
+
+# Envs (nunca versionar)
+.env
+.env.*
+
+# Certificados/chaves locais (nunca versionar)
+*.key
+*.pem
+*.crt
+*.cer
+*.pfx
+
+# VS Code (só ignore o que for local/usuário)
+.vscode/launch.json

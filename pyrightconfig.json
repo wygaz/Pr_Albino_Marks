@@ -1,0 +1,6 @@
+{
+  "exclude": [
+    "Apenas_Local",
+    "**/__pycache__"
+  ]
+}
