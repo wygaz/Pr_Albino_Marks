@@ -109,3 +109,16 @@ __pycache__/
 *.cer
 *.pfx
 
+# Envs (nunca versionar)
+.env
+.env.*
+
+# Certificados/chaves locais (nunca versionar)
+*.key
+*.pem
+*.crt
+*.cer
+*.pfx
+
+# VS Code (só ignore o que for local/usuário)
+.vscode/launch.json
