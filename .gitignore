@@ -90,6 +90,22 @@ Txt/
 
 !docs/*.md
 
-__pycache__/
 
 *.pyc
+
+# uploads e mídia (Django)
+A_Lei_no_NT/media/
+media/
+
+# caches Python
+__pycache__/
+*.py[cod]
+
+# chaves/certificados locais (nunca versionar)
+*.key
+*.key.pem
+*.pem
+*.crt
+*.cer
+*.pfx
+
