@@ -11,9 +11,39 @@ from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
 from .forms import ArtigoForm
-from .models import Artigo
+from .models import Area, Artigo
 from .utils import gerar_slug
 from A_Lei_no_NT.utils_storage import open_file
+from django.db.models import Count, Q
+
+
+def listar_areas(request):
+    """
+    Página principal: lista apenas as áreas (temas) disponíveis.
+    """
+    areas = Area.objects.all().order_by("nome")
+    return render(request, "A_Lei_no_NT/listar_areas.html", {"areas": areas})
+
+
+def listar_artigos_por_area(request, area_slug):
+    """
+    Lista os artigos de uma área específica.
+    """
+    area = get_object_or_404(Area, slug=area_slug)  # se o campo não for 'slug', ajuste aqui
+    artigos = (
+        Artigo.objects
+        .filter(area=area)
+        .order_by("-publicado_em", "-id")
+    )
+
+    context = {
+        "area": area,
+        "artigos": artigos,
+        "page_obj": None,  # se você usar paginação depois, dá pra trocar
+    }
+    return render(request, "A_Lei_no_NT/listar_arquivos.html", context)
+
+
 
 
 def home(request):
@@ -60,8 +90,21 @@ def artigo_form(request, slug=None):
 
 
 def listar_artigos(request):
-    artigos = Artigo.objects.filter(visivel=True).order_by("ordem", "titulo")
-    return render(request, "A_Lei_no_NT/listar_artigos.html", {"artigos": artigos})
+    """Página única: filtros de área no topo e lista de artigos abaixo."""
+    areas = Area.objects.filter(visivel=True).order_by("nome")
+    artigos = (
+        Artigo.objects
+        .filter(visivel=True)
+        .select_related("area")
+        .order_by("ordem", "titulo")
+    )
+    context = {
+        "areas": areas,
+        "artigos": artigos,
+        "page_obj": None,  # reservado para futura paginação, se você quiser depois
+    }
+    return render(request, "A_Lei_no_NT/listar_artigos.html", context)
+
 
 
 def biografia(request):

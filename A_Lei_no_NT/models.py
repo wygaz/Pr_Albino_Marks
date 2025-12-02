@@ -27,7 +27,27 @@ class Artigo(models.Model):
     area = models.ForeignKey("Area", on_delete=models.SET_NULL, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # 1) Extrair HTML/título/autor do DOCX, se aplicável (blindado)
+        """
+        - Extrai HTML/título/autor do DOCX (se houver).
+        - Gera slug único:
+            * se ainda não existir; ou
+            * se o título foi alterado (mantém slug em sincronia).
+        - Preenche data de publicação e ordem, se faltarem.
+        - Renomeia a imagem de capa para <slug>.<ext>.
+        """
+
+        # -----------------------------------------------------
+        # 0) Foto do estado anterior (para saber se o título mudou)
+        # -----------------------------------------------------
+        old_titulo = None
+        if self.pk:
+            antigo = type(self).objects.filter(pk=self.pk).only("titulo", "slug").first()
+            if antigo:
+                old_titulo = (antigo.titulo or "").strip()
+
+        # -----------------------------------------------------
+        # 1) Extrair HTML/título/autor do DOCX, se aplicável
+        # -----------------------------------------------------
         if self.arquivo_word and not self.conteudo_html:
             try:
                 html, titulo_extraido, autor_detectado = docx_para_html(self.arquivo_word)
@@ -40,38 +60,63 @@ class Artigo(models.Model):
             except Exception as e:
                 print(f"⚠️ Erro ao extrair HTML do DOCX: {e}")
 
-        # 2) Slug único (gera só se estiver vazio)
-        if not self.slug and self.titulo:
-            base = gerar_slug(self.titulo)
-            slug = base
-            i = 1
-            while Artigo.objects.filter(slug=slug).exclude(pk=self.pk).exists():
-                slug = f"{base}-{i}"
-                i += 1
-            self.slug = slug
+        # -----------------------------------------------------
+        # 2) Slug único — gera quando:
+        #    - ainda não existe; OU
+        #    - o título foi alterado (no admin ou em qualquer lugar)
+        # -----------------------------------------------------
+        titulo_atual = (self.titulo or "").strip()
+        if titulo_atual:
+            precisa_slug_novo = False
 
+            # novo artigo ou slug vazio
+            if not self.slug:
+                precisa_slug_novo = True
+
+            # artigo já existente: título foi alterado?
+            elif old_titulo is not None and titulo_atual != old_titulo:
+                precisa_slug_novo = True
+
+            if precisa_slug_novo:
+                # gerar_slug já garante unicidade respeitando o max_length
+                self.slug = gerar_slug(titulo_atual)
+
+        # -----------------------------------------------------
         # 3) Datas e ordem
+        # -----------------------------------------------------
         if not self.publicado_em:
             self.publicado_em = timezone.now()
+
         if self.ordem is None:
             maior = Artigo.objects.aggregate(Max("ordem"))["ordem__max"] or 0
             self.ordem = maior + 1
 
-        super().save(*args, **kwargs)  # garante PK
+        # Salva para garantir PK antes de mexer com arquivos
+        super().save(*args, **kwargs)
 
+        # -----------------------------------------------------
         # 4) Renomear imagem de capa pelo slug (S3-safe)
+        # -----------------------------------------------------
         if self.imagem_capa and self.slug:
             old_name = self.imagem_capa.name
             ext = os.path.splitext(old_name)[1]
             novo_rel = f"imagens/artigos/{self.slug}{ext}"
+
             if old_name != novo_rel:
                 try:
+                    # apaga se já existir uma capa com esse nome
                     if default_storage.exists(novo_rel):
                         default_storage.delete(novo_rel)
+
+                    # copia o conteúdo para o novo caminho
                     with open_file(old_name, "rb") as src:
                         default_storage.save(novo_rel, src)
+
+                    # remove o arquivo antigo
                     if default_storage.exists(old_name):
                         default_storage.delete(old_name)
+
+                    # atualiza o campo no modelo
                     self.imagem_capa.name = novo_rel
                     super().save(update_fields=["imagem_capa"])
                 except Exception as e:

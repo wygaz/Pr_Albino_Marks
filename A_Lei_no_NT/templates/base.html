@@ -20,23 +20,32 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
+        /* 🔹 Botões do menu principal (Início, Artigos, etc.) */
         .nav-btn {
-            border: 1px solid #ffc107;
-            background-color: white;
-            color: #0d6efd;
-            font-weight: 500;
-            font-size: 0.92rem;
-            padding: 0.4rem 0.85rem;
+            border: 1px solid #87CEEB;
+            background-color: #2f4f4f;     /* fundo amarelo-claro para destacar */
+            color: #ffff77;     /* cor da fonte amarelo-claro para destacar */
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.85rem 0.95rem;
             margin: 0.2rem;
-            border-radius: 0.6rem;
+            border-radius: 999px;
             transition: all 0.2s ease-in-out;
             text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
         .nav-btn:hover {
-            background-color: #fff3cd;
-            color: #0a58ca;
-            box-shadow: 0 0 5px rgba(255, 193, 7, 0.4);
+            background-color: #ffc107;     /* mais intenso no hover */
+            color: #1f2933;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
+        }
+
+        /* 🔹 Botões de ajuste de cor/tamanho (meia escala) */
+        .text-center.my-4 .btn {
+            font-size: 0.70rem;            /* ~metade do padrão */
+            padding: 0.22rem 0.45rem;
+            border-linear: 999px;
         }
 
         .custom-footer {
@@ -50,13 +59,14 @@
         }
 
         .container-main {
-            background-color: white;
+            background-color: #ffe4b5;     /* fundo amarelo-claro para destacar */
             padding: 2rem;
             border-radius: 1rem;
+            border: 1px solid #00008B;;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
         }
-
     </style>
+
 </head>
 <body>
 
