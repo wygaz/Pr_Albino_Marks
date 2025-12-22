@@ -1,3 +1,4 @@
+# C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado\A_Lei_no_NT\models.py
 import os
 from django.utils import timezone
 from django.db.models import Max
@@ -8,6 +9,7 @@ from A_Lei_no_NT.utils import docx_para_html, gerar_slug
 from A_Lei_no_NT.utils_storage import open_file
 
 
+
 def caminho_pdf(instance, filename):
     # Mantemos apenas a pasta; o nome final é decidido no upload
     return f"pdfs/artigos/{filename}"
@@ -16,15 +18,17 @@ def caminho_pdf(instance, filename):
 class Artigo(models.Model):
     titulo = models.CharField(max_length=255)
     slug = models.SlugField(max_length=100, unique=True, blank=True)  # permite gerar no save()
+    visivel = models.BooleanField(default=True)
     conteudo_html = models.TextField(null=True, blank=True)
     imagem_capa = models.ImageField(upload_to="imagens/artigos/", null=True, blank=True)
     arquivo_word = models.FileField(upload_to="uploads/artigos/", null=True, blank=True)
     arquivo_pdf = models.FileField(upload_to=caminho_pdf, null=True, blank=True)
     publicado_em = models.DateTimeField(null=True, blank=True)
     ordem = models.IntegerField(null=True, blank=True)
-    visivel = models.BooleanField(default=True)
     autor = models.ForeignKey("Autor", on_delete=models.SET_NULL, null=True, blank=True)
     area = models.ForeignKey("Area", on_delete=models.SET_NULL, null=True, blank=True)
+    views = models.PositiveIntegerField(default=0, editable=False)
+    
 
     def save(self, *args, **kwargs):
         """

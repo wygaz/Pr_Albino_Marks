@@ -14,7 +14,7 @@ from .forms import ArtigoForm
 from .models import Area, Artigo
 from .utils import gerar_slug
 from A_Lei_no_NT.utils_storage import open_file
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
 
 
 def listar_areas(request):
@@ -53,6 +53,17 @@ def home(request):
 
 def visualizar_artigo(request, slug):
     artigo = get_object_or_404(Artigo, slug=slug, visivel=True)
+
+    # opcional: não contar staff/admin
+    if not (request.user.is_authenticated and request.user.is_staff):
+        session_key = f"viewed_artigo_{artigo.pk}"
+        if not request.session.get(session_key):
+            Artigo.objects.filter(pk=artigo.pk).update(views=F("views") + 1)
+            request.session[session_key] = True
+
+    # opcional: trazer o valor atualizado pra exibir na página
+    artigo.refresh_from_db(fields=["views"])
+
     return render(request, "A_Lei_no_NT/visualizar_artigo.html", {"artigo": artigo})
 
 

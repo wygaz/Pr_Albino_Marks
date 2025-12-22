@@ -1,19 +1,23 @@
+# A_Lei_no_NT/admin.py
 from django.contrib import admin
 from .models import Artigo, Area, Autor
 from . import mensagens
-
+from .forms import ArtigoForm
 
 @admin.register(Artigo)
 class ArtigoAdmin(admin.ModelAdmin):
-    # título como link, ordem logo ao lado
-    list_display = ("titulo", "ordem", "autor", "visivel", "publicado_em")
+    form = ArtigoForm
+
+    # título como link, ordem logo ao lado + contador
+    list_display = ("titulo", "ordem", "autor", "area", "visivel", "publicado_em", "views")
     list_display_links = ("titulo",)  # só o título é clicável
 
-    list_filter = ("autor", "visivel")
-    search_fields = ("titulo", "autor__nome")
+    list_filter = ("area", "autor", "visivel")
+    search_fields = ("titulo", "slug", "autor__nome", "area__nome")
     ordering = ("ordem", "-publicado_em")
 
-    readonly_fields = ("slug",)
+    # slug e views não devem ser editados manualmente
+    readonly_fields = ("slug", "views")
 
     # editar ordem e visível direto na lista
     list_editable = ("ordem", "visivel")
