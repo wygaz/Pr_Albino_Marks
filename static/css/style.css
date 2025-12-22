@@ -259,3 +259,44 @@ li {
   .article-actions{width:100%}
   .article-actions .btn{width:100%}
 }
+
+/* Pílulas de área */
+.artigos-page .chip-area{
+  border:1px solid var(--edge);
+  background:#fffe4f;
+  color:var(--ink);
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.82rem;
+  cursor:pointer;
+  transition: background-color .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease, color .15s ease;
+}
+
+/* Hover (pílula não ativa) */
+.artigos-page .chip-area:hover{
+  background: rgba(43,111,62,.08);
+  border-color: rgba(43,111,62,.28);
+  color: var(--brand);
+  box-shadow: 0 4px 12px rgba(16,24,40,.08);
+  transform: translateY(-1px);
+}
+
+/* Ativa (selecionada) */
+.artigos-page .chip-area.active{
+  background: var(--brand);
+  border-color: var(--brand);
+  color:#fff;
+}
+
+/* Hover da ativa (opcional, fica “vivo”) */
+.artigos-page .chip-area.active:hover{
+  background: var(--brand-2);
+  border-color: var(--brand-2);
+  box-shadow: 0 6px 16px rgba(16,24,40,.10);
+}
+
+/* Acessibilidade: foco no teclado */
+.artigos-page .chip-area:focus-visible{
+  outline: 2px solid rgba(43,111,62,.45);
+  outline-offset: 2px;
+}
