@@ -2,11 +2,12 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from .models import Artigo, Autor
-from .utils import docx_para_html, gerar_slug
+from .utils import docx_para_html, gerar_slug, limpar_numeracao
 from A_Lei_no_NT.utils_storage import open_file
-# imports (topo do forms.py)
 from django.utils.safestring import mark_safe
+from django.db.models import Count
 import os
+
 
 class ArtigoForm(forms.ModelForm):
     class Meta:
@@ -81,17 +82,20 @@ class ArtigoForm(forms.ModelForm):
         """
         instance = super().save(commit=False)
 
-        if self.cleaned_data.get("arquivo_word"):
-            docx_file = self.cleaned_data["arquivo_word"]
+        if self.cleaned_data.get('arquivo_word'):
+            docx_file = self.cleaned_data['arquivo_word']
             html, titulo_detectado, autor_detectado = docx_para_html(docx_file)
             instance.conteudo_html = html
 
-            titulo_base = titulo_detectado or instance.titulo or "Título não definido"
-            titulo_numerado = self.gerar_titulo_numerado(titulo_base)
-            instance.titulo = titulo_numerado
+            # Base do título vinda do DOCX (ou do próprio instance)
+            titulo_base = titulo_detectado or instance.titulo or 'Título não definido'
 
-            if not instance.slug:
-                instance.slug = gerar_slug(titulo_numerado)
+            # Remove qualquer numeração tipo "1 de 3", "(1/3)", "nº 1", "parte 1", etc.
+            titulo_limpo = limpar_numeracao(titulo_base)
+
+            # Grava só o título limpo, sem numeração automática
+            instance.titulo = titulo_limpo
+            instance.slug = gerar_slug(titulo_limpo)
 
             if autor_detectado:
                 autor_obj, _ = Autor.objects.get_or_create(nome=autor_detectado)
@@ -110,23 +114,18 @@ class ArtigoForm(forms.ModelForm):
                 pass
         return instance
 
-    @staticmethod
-    def gerar_titulo_numerado(titulo_base):
-        """
-        Mantém tua numeração + renomeio de imagem (S3-safe).
-        """
-        from .models import Artigo  # evita import circular
-        artigos_similares = Artigo.objects.filter(
-            titulo__startswith=titulo_base
-        ).order_by("id")
-        total = artigos_similares.count() + 1
+@staticmethod
+def gerar_titulo_numerado(titulo_base):
+    from .models import Artigo  # importação local para evitar import circular
+    artigos_similares = Artigo.objects.filter(titulo__startswith=titulo_base).order_by('id')
+    total = artigos_similares.count() + 1  # inclui o atual
 
-        for i, artigo in enumerate(artigos_similares, start=1):
-            novo_titulo = f"{titulo_base} ({i} de {total})"
-            if artigo.titulo != novo_titulo:
-                artigo.titulo = novo_titulo
-                artigo.slug = gerar_slug(novo_titulo)
-                artigo.save(update_fields=["titulo", "slug"])
+    for i, artigo in enumerate(artigos_similares, start=1):
+        novo_titulo = f"{titulo_base} ({i} de {total})"
+        if artigo.titulo != novo_titulo:
+            artigo.titulo = novo_titulo
+            artigo.slug = gerar_slug(novo_titulo)
+            artigo.save()
 
             # Renomear a imagem associada, se existir (S3-safe)
             if artigo.imagem_capa:
@@ -149,4 +148,4 @@ class ArtigoForm(forms.ModelForm):
                     except Exception as e:
                         print(f"⚠️ Erro ao renomear imagem de '{artigo.titulo}': {e}")
 
-        return f"{titulo_base} ({total} de {total})"
+    return f"{titulo_base} ({total} de {total})"

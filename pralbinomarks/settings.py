@@ -22,6 +22,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = [
     "albinomarks.com.br",
     "www.albinomarks.com.br",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
 
 # Inclui o domínio público da Railway (útil para healthcheck e testes em prod)
@@ -85,7 +87,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_NAME = os.getenv("ENV_NAME", "local")
 env_file = BASE_DIR / f".env.{ENV_NAME}"
 if env_file.exists():
-    load_dotenv(env_file)  # local: carrega do arquivo
+     load_dotenv(env_file, override=True)  # override=True garante que o .env *sempre* vence no ambiente local
 
 # Escolhe a URL do banco por prioridade:
     # 1) DATABASE_URL (sempre preferida)
@@ -129,6 +131,7 @@ INSTALLED_APPS = [
     "A_Lei_no_NT",
     "pralbinomarks",      # ok se você realmente tem app/config dentro do pacote do projeto
     "whitenoise.runserver_nostatic",  # dev: desliga static do runserver
+
   ]
 
 # ========= Middleware =========
@@ -261,30 +264,5 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
-
-
-'''
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'ERROR',
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'ERROR',
-    },
-}
-'''
-
-
-
-
-
-
 
 

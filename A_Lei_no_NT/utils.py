@@ -20,12 +20,12 @@ from django.conf import settings
 # utils.py (trecho necessário para o auditor)
 # Padrões de numeração que queremos remover do fim do título
 _PADROES_NUM = [
-    r"\s*-\s*\d+\s+de\s+\d+\s*$",
-    r"\s*\(\s*\d+\s*/\s*\d+\s*\)\s*$",
-    r"\s*n[ºo]\.?\s*\d+\s*$",
-    r"\s*-\s*parte\s*\d+\s*$",
+    r"\s*-\s*\d+\s+de\s+\d+\s*$",          # " - 1 de 3"
+    r"\s*\(\s*\d+\s*/\s*\d+\s*\)\s*$",     # "(1/3)"
+    r"\s*\(\s*\d+\s+de\s+\d+\s*\)\s*$",    # "(1 de 3)"
+    r"\s*n[ºo]\.?\s*\d+\s*$",              # "nº 1"
+    r"\s*-\s*parte\s*\d+\s*$",             # "- parte 1"
 ]
-
 
 def path_docx_por_slug(slug: str) -> Path:
     return Path(settings.MEDIA_ROOT) / "uploads" / f"{slug}.docx"
@@ -98,27 +98,30 @@ def limpar_numeracao(titulo: str) -> str:
 def path_capa_por_slug(slug: str, ext=".jpg") -> Path:
     return Path(settings.MEDIA_ROOT) / "imagens" / "artigos" / f"{slug}{ext}"
 
-def gerar_slug(titulo):
+def gerar_slug(titulo: str) -> str:
+    """
+    Gera um slug único a partir de um título já 'limpo'.
+    Não mexe mais no texto do título, só acrescenta sufixo no slug se colidir.
+    """
     from .models import Artigo
 
-    max_len = Artigo._meta.get_field("slug").max_length
     titulo = (titulo or "").strip()
+    if not titulo:
+        titulo = "Artigo"
 
-    # base do slug
-    base = slugify(unidecode(titulo)) if titulo else ""
-    if not base:
-        base = f"artigo-{uuid4().hex[:6]}"
+    slug_base = slugify(unidecode(titulo))
+    if not slug_base:
+        # fallback bem neutro se o título não gerar slug
+        import uuid
+        slug_base = f"artigo-{uuid.uuid4().hex[:6]}"
 
-    base = base[:max_len]  # garante que nunca excede a coluna
-    slug = base
-    i = 2
-    # garante unicidade sem estourar o tamanho ao acrescentar "-2", "-3", ...
+    slug = slug_base
+    contador = 2
     while Artigo.objects.filter(slug=slug).exists():
-        suf = f"-{i}"
-        slug = f"{base[:max_len - len(suf)]}{suf}"
-        i += 1
-
+        slug = f"{slug_base}-{contador}"
+        contador += 1
     return slug
+
 
 def remover_autor_do_conteudo(html, autor):
     from bs4 import BeautifulSoup
@@ -143,49 +146,15 @@ def remover_autor_do_conteudo(html, autor):
 @transaction.atomic
 def gerar_titulo_numerado(titulo_base: str, ordem_por: str = "id") -> str:
     """
-    Recebe um título-base (SEM numeração) e calcula o título definitivo do novo artigo,
-    renumerando retroativamente os existentes do mesmo tema se necessário.
+    [LEGADO] Mantida só por compatibilidade.
+    Não gera mais 'Título - 1 de 3' ou 'Título (1 de 3)'.
 
-    Regras:
-    - Se total do tema == 1 => título fica SEM numeração.
-    - Se total >= 2         => todos ficam " - k de N" e o novo recebe " - N de N".
-
-    Observações:
-    - A 'família' do tema é identificada pelo mesmo título-base no início (case-insensitive).
-    - Usa transação + select_for_update para evitar corrida entre dois saves simultâneos.
+    Agora apenas remove qualquer numeração no final e devolve o título-base.
     """
-    Artigo = apps.get_model("A_Lei_no_NT", "Artigo")
-
-    base = limpar_numeracao(titulo_base)
+    base = limpar_numeracao(titulo_base or "")
     if not base:
         base = "Artigo"
-
-    # Bloqueia os artigos do mesmo tema durante a renumeração
-    qs = (Artigo.objects
-          .select_for_update()
-          .filter(titulo__istartswith=base)
-          .order_by(ordem_por))
-
-    existentes = list(qs)
-    for a in existentes:
-        # Normaliza em memória: remove numeração antiga para garantir consistência
-        a.titulo = limpar_numeracao(a.titulo)
-
-    total = len(existentes) + 1  # incluindo o NOVO que ainda vai ser salvo
-
-    if total == 1:
-        # Será o único do tema -> sem numeração
-        return base
-
-    # Renumera retroativamente os existentes: 1..(total-1)
-    for idx, a in enumerate(existentes, start=1):
-        novo_titulo = f"{base} - {idx} de {total}"
-        if a.titulo != novo_titulo:
-            a.titulo = novo_titulo
-            a.save(update_fields=["titulo"])
-
-    # Título do NOVO artigo: "base - total de total"
-    return f"{base} - {total} de {total}"
+    return base
 
 
 def detectar_titulo_possivel(paragrafos):

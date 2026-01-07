@@ -32,6 +32,13 @@ newkey.json
 /zip/
 
 
+# lixo local / arquivos de apoio
+/Diversos/
+/A_Lei_no_NT/templates.zip
+*.pgdump
+*.zip
+
+
 # Django
 # (IMPORTANTE: commit as migrations!)
 # Não ignore migrations.
@@ -39,6 +46,8 @@ newkey.json
 # Static & media
 staticfiles/
 media/
+static/Imagens/ChatGPT*.png
+
 
 # Banco local
 db.sqlite3
