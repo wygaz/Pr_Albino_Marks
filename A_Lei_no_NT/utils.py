@@ -123,24 +123,49 @@ def gerar_slug(titulo: str) -> str:
     return slug
 
 
-def remover_autor_do_conteudo(html, autor):
-    from bs4 import BeautifulSoup
-    import re
+def remover_autor_do_conteudo(html: str, autor: str | None) -> str:
+    """
+    Remove o autor do topo do HTML.
+    Mesmo que o autor tenha virado <li> (por causa do conversor de listas),
+    removemos apenas no cabeçalho (primeiros blocos) para não apagar citações no corpo.
+    """
+    if not html or not autor:
+        return html
 
-    soup = BeautifulSoup(html, 'html.parser')
-    autor_lower = str(autor).lower().strip()
-    candidatos = soup.find_all(['p', 'li'])[:3]
+    autor_n = _norm_cmp(autor)
+    soup = BeautifulSoup(html, "html.parser")
 
-    for tag in list(candidatos):
-        texto = tag.get_text(strip=True).lower()
+    # olha só o topo (primeiros 6 blocos)
+    top = []
+    for el in list(soup.contents):
+        if getattr(el, "name", None) in ("p", "ol", "ul", "h1", "h2", "h3"):
+            top.append(el)
+        if len(top) >= 6:
+            break
 
-        # "Por", "Autor:", e prefixos como "Pr." (opcional)
-        padrao_simples = rf'^(por\s+|autor:\s+)?(pr\.?\s+)?{re.escape(autor_lower)}[.,:;]?$'
+    def parece_autor(txt: str) -> bool:
+        t = (txt or "").strip()
+        if not t:
+            return False
+        # limpa marcadores comuns
+        t = re.sub(r"^(autor\s*:\s*|por\s+)", "", t, flags=re.I).strip()
+        t = re.sub(r"^(\d+|[ivxlc]+|[a-z])[\.\)\-–:]\s+", "", t, flags=re.I).strip()
+        return _norm_cmp(t) == autor_n
 
-        if (autor_lower in texto and len(texto.split()) <= 6) or re.match(padrao_simples, texto):
-            tag.decompose()
+    for el in top:
+        if el.name == "p":
+            if parece_autor(el.get_text(" ", strip=True)):
+                el.decompose()
+                break
+
+        if el.name in ("ol", "ul"):
+            lis = el.find_all("li", recursive=True)
+            if len(lis) == 1 and parece_autor(lis[0].get_text(" ", strip=True)):
+                el.decompose()
+                break
 
     return str(soup)
+
 
         
 @transaction.atomic
@@ -183,21 +208,6 @@ def detectar_autor(paragrafos):
             return texto
     return None
 
-def remover_autor_do_conteudo(html, autor):
-    if not autor:
-        return html
-
-    soup = BeautifulSoup(html, 'html.parser')
-    for p in soup.find_all('p'):
-        if autor in p.text.strip():
-            p.decompose()
-            break  # Remove apenas a primeira ocorrência do nome do autor
-    html_final = str(soup)
-
-    html_final = converter_subtitulos_manualmente_numerados(html_final)
-
-    return html_final
-
 def formatar_paragrafo(paragrafo):
     partes = []
 
@@ -220,26 +230,6 @@ def formatar_paragrafo(paragrafo):
             partes.append(texto)
 
     return ''.join(partes)
-
-def converter_para_html(paragrafos):
-    html = ''
-    padrao_lista = re.compile(r'^(\d+\.)|([ivxlc]+\.)|([IVXLC]+\.)|([a-zA-Z]\.)|([a-zA-Z]\))\s+')
-    for p in paragrafos:
-        texto_bruto = ''.join(run.text for run in p.runs).strip()
-        if not texto_bruto:
-            continue
-        texto_formatado = formatar_paragrafo(p)
-        if p.style.name.lower().startswith('heading'):
-            html += f'<h2>{texto_formatado}</h2>\n'
-        elif padrao_lista.match(texto_bruto):
-            # Remove o prefixo manual antes de inserir como item de lista
-            texto_formatado = padrao_lista.sub('', texto_formatado).strip()
-            html += f'<ol><li>{texto_formatado}</li></ol>\n'
-        elif texto_bruto.startswith(('-', '*', '•')):
-            html += f'<ul><li>{texto_formatado[1:].strip()}</li></ul>\n'
-        else:
-            html += f'<p>{texto_formatado}</p>\n'
-    return html
 
 def renomear_com_slug(caminho_arquivo, slug):
     ext = os.path.splitext(caminho_arquivo)[1]
@@ -410,96 +400,140 @@ def aplicar_estrutura_listas(html):
     return str(BeautifulSoup(''.join(str(tag) for tag in novas_tags), 'html.parser'))
 
 
-def docx_para_html(arquivo):
-    from docx import Document
-    from bs4 import BeautifulSoup
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
+SM_PREFIX_RE = re.compile(r"^\s*sm\s*\d+[a-z]?\s+", re.IGNORECASE)
 
+def remover_sm_prefix(texto: str) -> str:
+    return SM_PREFIX_RE.sub("", (texto or "").strip()).strip()
+
+def _norm_cmp(texto: str) -> str:
+    t = remover_sm_prefix(texto or "")
+    t = re.sub(r"\s+", " ", t).strip().lower()
+    return t
+
+
+def docx_para_html(arquivo):
     doc = Document(arquivo)
     paragrafos = doc.paragraphs
 
-    # 🔍 Detectar título (máx. 12 palavras, estilo Heading, ou centralizado em negrito)
+    # -------- 1) detectar título (sem depender de negrito do 1º run)
     titulo = None
-    indice_titulo = None
-    for i, p in enumerate(paragrafos[:5]):
-        texto = ''.join(run.text for run in p.runs).strip()
-        if texto and len(texto.split()) <= 12 and (p.style.name.startswith('Heading') or p.runs[0].bold or p.alignment == WD_ALIGN_PARAGRAPH.CENTER):
-            titulo = texto
-            indice_titulo = i
+    idx_titulo = None
+
+    for i, p in enumerate(paragrafos[:8]):
+        txt = ''.join(run.text for run in p.runs).strip()
+        if not txt:
+            continue
+
+        estilo = (p.style.name or "").lower() if p.style else ""
+        alinhado_centro = (p.alignment == WD_PARAGRAPH_ALIGNMENT.CENTER)
+        tem_negrito = any((run.bold and run.text.strip()) for run in p.runs)
+
+        # Regra forte: começa com Sm#### -> é título (quase sempre)
+        if SM_PREFIX_RE.match(txt):
+            titulo = remover_sm_prefix(txt)
+            idx_titulo = i
             break
 
-    # 🔐 Cópia segura dos parágrafos, sem o título
-    paragrafos_sem_titulo = [p for i, p in enumerate(paragrafos) if i != indice_titulo]
+        # Headings
+        if estilo.startswith("heading"):
+            titulo = remover_sm_prefix(txt)
+            idx_titulo = i
+            break
 
-    # 🎯 Detectar autor com base no conteúdo restante
-    autor = detectar_autor(paragrafos_sem_titulo)
+        # Centro + curto
+        if alinhado_centro and len(txt.split()) <= 18:
+            titulo = remover_sm_prefix(txt)
+            idx_titulo = i
+            break
 
-    # 🧾 Converter parágrafos em HTML (com quebra de linha, negrito, itálico etc.)
-    html = converter_para_html(paragrafos_sem_titulo)
+        # Negrito em algum run + curto (nos primeiros)
+        if i <= 2 and tem_negrito and len(txt.split()) <= 18:
+            titulo = remover_sm_prefix(txt)
+            idx_titulo = i
+            break
 
-    # 📋 Adicionar tabelas do documento
+    # remove o parágrafo do título (se achou)
+    work = [p for j, p in enumerate(paragrafos) if j != idx_titulo]
+
+    # -------- 2) detectar autor (e REMOVER ANTES de converter para evitar virar <li>)
+    autor = None
+    idx_autor = None
+
+    for j, p in enumerate(work[:8]):
+        txt = ''.join(run.text for run in p.runs).strip()
+        if not txt:
+            continue
+
+        # não confundir com o próprio título repetido
+        if titulo and _norm_cmp(txt) == _norm_cmp(titulo):
+            continue
+
+        # marcadores explícitos
+        if re.match(r"^\s*(autor\s*:|por\s+)", txt, flags=re.I):
+            autor = re.sub(r"^\s*(autor\s*:\s*|por\s+)", "", txt, flags=re.I).strip()
+            idx_autor = j
+            break
+
+        # alinhado à direita e curto
+        if p.alignment == WD_PARAGRAPH_ALIGNMENT.RIGHT and len(txt.split()) <= 6:
+            autor = txt.strip()
+            idx_autor = j
+            break
+
+        # heurística simples no topo
+        if j <= 2 and len(txt.split()) <= 5 and not re.search(r"[.!?]\s*$", txt):
+            autor = txt.strip()
+            idx_autor = j
+            break
+
+    if idx_autor is not None:
+        work = [p for k, p in enumerate(work) if k != idx_autor]
+
+    # -------- 3) converter parágrafos para HTML
+    html = converter_para_html(work)
+
+    # -------- 4) adicionar tabelas (simples, sem “tabelas aninhadas”)
     for tabela in doc.tables:
         html += '<table border="1" style="border-collapse: collapse; margin-top: 1em;">'
         for linha in tabela.rows:
             html += '<tr>'
             for celula in linha.cells:
-                conteudo = '<br>'.join(p.text for p in celula.paragraphs)
+                conteudo = '<br>'.join(pp.text for pp in celula.paragraphs)
                 html += f'<td style="padding: 4px;">{conteudo}</td>'
             html += '</tr>'
         html += '</table>'
 
-    # 🧼 Remover nome do autor do conteúdo renderizado
+    # -------- 5) limpeza final: remove autor se ainda aparecer no topo
     html = remover_autor_do_conteudo(html, autor)
 
-    # 🧠 Agrupamento de listas sequenciais (ul, ol)
-    soup = BeautifulSoup(html, 'html.parser')
-    novas_tags = []
-    lista_atual = []
-    tipo_lista = None
+    # -------- 6) remove título duplicado no topo (caso apareça por repetição no DOCX)
+    if titulo:
+        soup = BeautifulSoup(html, "html.parser")
+        for _ in range(6):
+            first = None
+            for el in list(soup.contents):
+                if getattr(el, "name", None) in ("p", "h1", "h2", "h3"):
+                    first = el
+                    break
+            if not first:
+                break
+            t = first.get_text(" ", strip=True)
+            if not t:
+                first.decompose()
+                continue
+            if _norm_cmp(t) == _norm_cmp(titulo):
+                first.decompose()
+                continue
+            # se ainda vier “Sm#### Título”
+            if SM_PREFIX_RE.match(t) and _norm_cmp(remover_sm_prefix(t)) == _norm_cmp(titulo):
+                first.decompose()
+                continue
+            break
+        html = str(soup)
 
-    for el in soup.contents:
-        if el.name in ['ul', 'ol']:
-            if tipo_lista == el.name:
-                lista_atual.extend(el.find_all('li'))
-            else:
-                if lista_atual:
-                    nova_lista = soup.new_tag(tipo_lista)
-                    for item in lista_atual:
-                        nova_lista.append(item)
-                    novas_tags.append(nova_lista)
-                tipo_lista = el.name
-                lista_atual = el.find_all('li')
-        else:
-            if lista_atual:
-                nova_lista = soup.new_tag(tipo_lista)
-                for item in lista_atual:
-                    nova_lista.append(item)
-                novas_tags.append(nova_lista)
-                lista_atual = []
-                tipo_lista = None
-            novas_tags.append(el)
+    # -------- 7) sem prints
+    return html, titulo, autor
 
-    if lista_atual:
-        nova_lista = soup.new_tag(tipo_lista)
-        for item in lista_atual:
-            nova_lista.append(item)
-        novas_tags.append(nova_lista)
-
-    soup.clear()
-    for tag in novas_tags:
-        soup.append(tag)
-
-    # 🔧 Converte para string e aplica estrutura inteligente de listas e subtítulos
-    try:
-        html_final = str(soup)
-        html_final = aplicar_estrutura_listas(html_final)
-    except Exception as e:
-        print("⚠️ Erro ao processar HTML final:", e)
-        html_final = ""
-
-    # ✅ Retorna conteúdo final + título extraído + autor identificado
-    print("Retornando:", html_final, titulo)
-    return html_final, titulo, autor
 
 
 # =====================================================

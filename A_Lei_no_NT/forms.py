@@ -1,11 +1,10 @@
+# A_Lei_no_NT/forms.py
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.files.storage import default_storage
+
 from .models import Artigo, Autor
 from .utils import docx_para_html, gerar_slug, limpar_numeracao
-from A_Lei_no_NT.utils_storage import open_file
-from django.utils.safestring import mark_safe
-from django.db.models import Count
+
 import os
 
 
@@ -15,21 +14,27 @@ class ArtigoForm(forms.ModelForm):
         # >>> ORDEM dos campos no formulário <<<
         fields = (
             "titulo",
-            "arquivo_pdf",    # 1º
-            "arquivo_word",   # 2º
-            "imagem_capa",    # 3º
+            "arquivo_pdf",
+            "arquivo_word",
+            "imagem_capa",
             "publicado_em",
             "ordem",
             "visivel",
             "autor",
             "area",
-            # 'conteudo_html' fica fora do form (preenchido via DOCX)
-            # 'slug' também fica fora (gerado automaticamente)
+            "conteudo_html",  # ✅ agora aparece no admin para correção manual
         )
         labels = {
             "arquivo_pdf":  "Arquivo PDF",
             "arquivo_word": "Arquivo DOCX",
             "imagem_capa":  "Imagem (PNG/JPG/WEBP)",
+            "conteudo_html": "Conteúdo (HTML)",
+        }
+        widgets = {
+            "conteudo_html": forms.Textarea(attrs={
+                "rows": 28,
+                "style": "font-family: ui-monospace, Consolas, monospace; font-size: 12px;",
+            })
         }
 
     def __init__(self, *args, **kwargs):
@@ -40,6 +45,7 @@ class ArtigoForm(forms.ModelForm):
         self.fields["arquivo_pdf"].required = False
         self.fields["arquivo_word"].required = False
         self.fields["imagem_capa"].required = False
+        self.fields["conteudo_html"].required = False
 
         # Aceites nos inputs
         self.fields["arquivo_pdf"].widget.attrs.update({
@@ -61,7 +67,7 @@ class ArtigoForm(forms.ModelForm):
 
     def clean_arquivo_word(self):
         f = self.cleaned_data.get("arquivo_word")
-        if f and not f.name.lower().endswith(".docx"):
+        if f and hasattr(f, "name") and not f.name.lower().endswith(".docx"):
             raise ValidationError("Apenas arquivos .docx são permitidos.")
         return f
 
@@ -76,76 +82,50 @@ class ArtigoForm(forms.ModelForm):
     def save(self, commit=True):
         """
         Mantém tua lógica:
-        - Se DOCX, converte para HTML, detecta título/autor e numera título.
+        - Se DOCX NOVO for enviado, converte para HTML e detecta título/autor.
+        - Não numera título automaticamente (só limpa numeração indevida).
         - Garante slug mesmo sem DOCX (fallback).
-        - Renomeio de imagem preservado na função auxiliar.
+        - Se não houver DOCX novo, NÃO sobrescreve conteudo_html.
         """
         instance = super().save(commit=False)
 
-        if self.cleaned_data.get('arquivo_word'):
-            docx_file = self.cleaned_data['arquivo_word']
+        # ✅ Só faz conversão se houver upload novo neste POST
+        docx_file = self.files.get("arquivo_word")
+
+        if docx_file:
             html, titulo_detectado, autor_detectado = docx_para_html(docx_file)
             instance.conteudo_html = html
 
             # Base do título vinda do DOCX (ou do próprio instance)
-            titulo_base = titulo_detectado or instance.titulo or 'Título não definido'
+            # 1) Se você digitou título no admin, ele ganha.
+            titulo_digitado = (instance.titulo or "").strip()
 
-            # Remove qualquer numeração tipo "1 de 3", "(1/3)", "nº 1", "parte 1", etc.
-            titulo_limpo = limpar_numeracao(titulo_base)
+            # 2) Se não digitou, usa o que veio do DOCX.
+            titulo_base = (titulo_digitado or (titulo_detectado or "").strip() or "Título não definido").strip()
 
-            # Grava só o título limpo, sem numeração automática
+            titulo_limpo = limpar_numeracao(titulo_base).strip()
             instance.titulo = titulo_limpo
-            instance.slug = gerar_slug(titulo_limpo)
+
+            # 3) NÃO forçar slug aqui — deixe o model.save() cuidar (evita slug “pulando” sem necessidade)
+            # instance.slug = gerar_slug(titulo_limpo)
+
 
             if autor_detectado:
-                autor_obj, _ = Autor.objects.get_or_create(nome=autor_detectado)
-                instance.autor = autor_obj
+                autor_nome = str(autor_detectado).strip()
+                if autor_nome:
+                    autor_obj, _ = Autor.objects.get_or_create(nome=autor_nome)
+                    instance.autor = autor_obj
+
         else:
-            # Se a view não setou, garante o slug aqui
+            # Se não subiu DOCX novo, mantém o HTML como está (inclusive correções manuais)
             if not instance.slug:
                 instance.slug = gerar_slug(instance.titulo or "Artigo Sem Título")
 
         if commit:
             instance.save()
-            # se tiver M2M
             try:
                 self.save_m2m()
             except Exception:
                 pass
+
         return instance
-
-@staticmethod
-def gerar_titulo_numerado(titulo_base):
-    from .models import Artigo  # importação local para evitar import circular
-    artigos_similares = Artigo.objects.filter(titulo__startswith=titulo_base).order_by('id')
-    total = artigos_similares.count() + 1  # inclui o atual
-
-    for i, artigo in enumerate(artigos_similares, start=1):
-        novo_titulo = f"{titulo_base} ({i} de {total})"
-        if artigo.titulo != novo_titulo:
-            artigo.titulo = novo_titulo
-            artigo.slug = gerar_slug(novo_titulo)
-            artigo.save()
-
-            # Renomear a imagem associada, se existir (S3-safe)
-            if artigo.imagem_capa:
-                old_name = artigo.imagem_capa.name  # ex: 'imagens/artigos/abc.jpg'
-                ext = os.path.splitext(old_name)[1]
-                novo_nome = f"{artigo.slug}{ext}"
-                novo_path = f"imagens/artigos/{novo_nome}"
-
-                if os.path.basename(old_name) != novo_nome:
-                    if default_storage.exists(novo_path):
-                        default_storage.delete(novo_path)
-                    try:
-                        with open_file(old_name, "rb") as src:
-                            default_storage.save(novo_path, src)
-                        if default_storage.exists(old_name):
-                            default_storage.delete(old_name)
-                        artigo.imagem_capa.name = novo_path
-                        artigo.save(update_fields=["imagem_capa"])
-                        print(f"🔁 Imagem renomeada: {novo_path}")
-                    except Exception as e:
-                        print(f"⚠️ Erro ao renomear imagem de '{artigo.titulo}': {e}")
-
-    return f"{titulo_base} ({total} de {total})"

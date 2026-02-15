@@ -39,7 +39,7 @@ class Artigo(models.Model):
         - Preenche data de publicação e ordem, se faltarem.
         - Renomeia a imagem de capa para <slug>.<ext>.
         """
-
+       
         # -----------------------------------------------------
         # 0) Foto do estado anterior (para saber se o título mudou)
         # -----------------------------------------------------
@@ -91,12 +91,15 @@ class Artigo(models.Model):
         if not self.publicado_em:
             self.publicado_em = timezone.now()
 
+        # ⚠️ Só define ordem se ainda NÃO existe (para respeitar ESBOÇO/importação)
         if self.ordem is None:
-            maior = Artigo.objects.aggregate(Max("ordem"))["ordem__max"] or 0
+            qs = Artigo.objects.all()
+            if self.area:
+                qs = qs.filter(area=self.area)
+
+            maior = qs.aggregate(Max("ordem"))["ordem__max"] or 0
             self.ordem = maior + 1
 
-        # Salva para garantir PK antes de mexer com arquivos
-        super().save(*args, **kwargs)
 
         # -----------------------------------------------------
         # 4) Renomear imagem de capa pelo slug (S3-safe)

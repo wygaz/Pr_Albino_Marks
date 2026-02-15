@@ -34,10 +34,10 @@ newkey.json
 
 # lixo local / arquivos de apoio
 /Diversos/
-/A_Lei_no_NT/templates.zip
+/A_Lei_no_NT/zip
 *.pgdump
+A_Lei_no_NT/*.zip
 *.zip
-
 
 # Django
 # (IMPORTANTE: commit as migrations!)
@@ -99,6 +99,9 @@ Txt/
 
 !docs/*.md
 
+# PDFs e imagens locais que você está gerando/publicando manualmente
+static/pdfs/
+static/Imagens/
 
 *.pyc
 

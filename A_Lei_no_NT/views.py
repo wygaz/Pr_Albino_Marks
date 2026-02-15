@@ -16,7 +16,6 @@ from .utils import gerar_slug
 from A_Lei_no_NT.utils_storage import open_file
 from django.db.models import Count, Q, F
 
-
 def listar_areas(request):
     """
     Página principal: lista apenas as áreas (temas) disponíveis.
@@ -30,11 +29,8 @@ def listar_artigos_por_area(request, area_slug):
     Lista os artigos de uma área específica.
     """
     area = get_object_or_404(Area, slug=area_slug)  # se o campo não for 'slug', ajuste aqui
-    artigos = (
-        Artigo.objects
-        .filter(area=area)
-        .order_by("-publicado_em", "-id")
-    )
+    artigos = Artigo.objects.filter(area=area, visivel=True).order_by("ordem", "titulo")
+
 
     context = {
         "area": area,
