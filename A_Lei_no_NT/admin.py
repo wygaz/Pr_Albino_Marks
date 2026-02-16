@@ -8,6 +8,9 @@ from . import mensagens
 from .forms import ArtigoForm
 from .models import Artigo, Area, Autor
 
+from django.utils.html import format_html
+from django.core.files.storage import default_storage
+
 
 PAT_ALBINO = re.compile(r"\balbino\s+marks\b", re.IGNORECASE)
 
@@ -109,10 +112,14 @@ def aplicar_remover_primeira_linha_albino_marks(modeladmin, request, queryset):
     print(f"[AdminAction] PKs alterados ({len(updated_pks)}): {updated_pks}")
 
 
-
 @admin.register(Artigo)
 class ArtigoAdmin(admin.ModelAdmin):
     form = ArtigoForm
+
+    search_fields = (
+        "titulo", "slug", "autor__nome", "area__nome",
+        "arquivo_pdf", "arquivo_word", "imagem_capa",
+    )
 
     # ⚠️ Se seu model NÃO tiver 'area' e/ou 'views', remova do list_display
     list_display = ("titulo", "ordem", "autor", "area", "visivel", "publicado_em", "views")
@@ -124,6 +131,30 @@ class ArtigoAdmin(admin.ModelAdmin):
 
     readonly_fields = ("slug", "views")
     list_editable = ("ordem", "visivel")
+
+    def status_arquivos(self, obj):
+        def row(label, field):
+            if not field or not getattr(field, "name", ""):
+                return f"<li><b>{label}:</b> (vazio)</li>"
+            name = field.name
+            ok = default_storage.exists(name)
+            badge = "✅ OK" if ok else "❌ FALTA"
+            try:
+                url = field.url
+                link = f' — <a href="{url}" target="_blank">abrir</a>'
+            except Exception:
+                link = ""
+            return f"<li><b>{label}:</b> {badge}<br><code>{name}</code>{link}</li>"
+
+        html = "<ul>"
+        html += row("PDF", obj.arquivo_pdf)
+        html += row("DOCX", obj.arquivo_word)
+        html += row("IMG", obj.imagem_capa)
+        html += "</ul>"
+        return format_html(html)
+
+    status_arquivos.short_description = "Arquivos no storage"
+
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
