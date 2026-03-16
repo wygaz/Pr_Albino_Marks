@@ -1,5 +1,6 @@
 import re
 import argparse
+import shutil
 from pathlib import Path
 from docx import Document
 
@@ -66,10 +67,69 @@ def pick_latest_date_folder(base: Path) -> str | None:
             dates.append(d.name)
     return max(dates) if dates else None
 
+
+# =========================
+# UTIL: localizar raiz do repo (manage.py/.git)
+# =========================
+def find_repo_root(start: Path, max_levels: int = 10) -> Path | None:
+    cur = start
+    for _ in range(max_levels + 1):
+        if (cur / 'manage.py').exists() or (cur / '.git').exists():
+            return cur
+        if cur.parent == cur:
+            break
+        cur = cur.parent
+    return None
+
+def resolve_data_root(arg_value: str | None, scripts_dir: Path) -> Path:
+    """
+    Resolve a pasta 'anexos_filtrados' (DataRoot).
+    - Se o usuário passou --data-root: usa ele
+    - Senão: tenta <RepoRoot>/Apenas_Local/anexos_filtrados
+    - Fallback: scripts_dir.parent
+    """
+    if arg_value and str(arg_value).strip():
+        return Path(arg_value).expanduser().resolve()
+
+    repo = find_repo_root(scripts_dir)
+    if repo:
+        cand = (repo / 'Apenas_Local' / 'anexos_filtrados')
+        if cand.exists():
+            return cand.resolve()
+
+    return scripts_dir.parent.resolve()
+
+
+def copiar_para_docx_normalizados(base: Path, chosen: str, docx_paths: list[Path]) -> Path:
+    """
+    Copia (não move) os DOCX (e PDFs com mesmo stem) para:
+    <base>/DOCX_NORMALIZADOS/<chosen>/
+    """
+    dest_dir = (base / "DOCX_NORMALIZADOS" / chosen)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    for src_docx in docx_paths:
+        # copia docx
+        dst_docx = unique_path(dest_dir / src_docx.name)
+        shutil.copy2(src_docx, dst_docx)
+
+        # copia pdf correspondente (se existir)
+        src_pdf = src_docx.with_suffix(".pdf")
+        if src_pdf.exists():
+            dst_pdf = unique_path(dest_dir / src_pdf.name)
+            shutil.copy2(src_pdf, dst_pdf)
+
+    return dest_dir
+
+
 def main():
     ap = argparse.ArgumentParser(description="Normaliza nomes e Title interno dos DOCX no lote (YYYY-MM-DD).")
     ap.add_argument("--data-root", default="", help="Pasta 'anexos_filtrados' (DataRoot). Se vazio, tenta repo/Apenas_Local/anexos_filtrados.")
     ap.add_argument("--lote", help="Nome da pasta do lote (YYYY-MM-DD). Se omitido, usa a mais recente.")
+    ap.add_argument("--copiar-normalizados", action="store_true",
+                    help="Após normalizar, copia DOCX/PDF para <base>/DOCX_NORMALIZADOS/<lote>/")
+    ap.add_argument("--modo", choices=["publicacao", "sermoes", "nenhum"], default="nenhum",
+                    help="Apenas imprime sugestão do próximo passo após normalizar.")
     args = ap.parse_args()
 
     scripts_dir = Path(__file__).resolve().parent
@@ -92,6 +152,9 @@ def main():
     docx_files = sorted(folder.glob("*.docx"))
     print(f"\n📄 DOCX em {folder.name}: {len(docx_files)}")
 
+    # Vamos acumular os caminhos finais (após renomear) para cópia posterior
+    final_docx_paths: list[Path] = []
+
     for f in docx_files:
         doc = Document(str(f))
         title = safe_filename(best_doc_title(doc))
@@ -109,42 +172,25 @@ def main():
             if new_pdf.name != old_pdf.name:
                 rename_force(old_pdf, new_pdf)
 
+        final_docx_paths.append(new_docx)
         print("✅", new_docx.name)
 
     print("\n✅ Normalização concluída.")
 
+    # Copiar para DOCX_NORMALIZADOS (se solicitado)
+    if args.copiar_normalizados:
+        dest_dir = copiar_para_docx_normalizados(base, chosen, final_docx_paths)
+        print(f"\n📦 Cópia (sem mover) para: {dest_dir}")
+
+    # “Pergunta de continuidade” (sem executar outros scripts; só sugere)
+    if args.modo != "nenhum":
+        print("\n➡️ Próximo passo sugerido:")
+        if args.modo == "publicacao":
+            print("   - Continue o pipeline de PUBLICAÇÃO (consolidação/importação).")
+        elif args.modo == "sermoes":
+            print("   - Use a pasta DOCX_NORMALIZADOS para listagem de páginas e seleção do artigo-teste.")
+        print("   (Observação: este script não executa o próximo passo automaticamente.)")
+
+
 if __name__ == "__main__":
     main()
-
-
-# =========================
-# UTIL: localizar raiz do repo (manage.py/.git)
-# =========================
-def find_repo_root(start: Path, max_levels: int = 10) -> Path | None:
-    cur = start
-    for _ in range(max_levels + 1):
-        if (cur / 'manage.py').exists() or (cur / '.git').exists():
-            return cur
-        if cur.parent == cur:
-            break
-        cur = cur.parent
-    return None
-
-
-def resolve_data_root(arg_value: str | None, scripts_dir: Path) -> Path:
-    """
-    Resolve a pasta 'anexos_filtrados' (DataRoot).
-    - Se o usuário passou --data-root: usa ele
-    - Senão: tenta <RepoRoot>/Apenas_Local/anexos_filtrados
-    - Fallback: comportamento legado (scripts_dir.parent)
-    """
-    if arg_value and str(arg_value).strip():
-        return Path(arg_value).expanduser().resolve()
-
-    repo = find_repo_root(scripts_dir)
-    if repo:
-        cand = (repo / 'Apenas_Local' / 'anexos_filtrados')
-        if cand.exists():
-            return cand.resolve()
-
-    return scripts_dir.parent.resolve()

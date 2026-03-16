@@ -135,9 +135,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    
     "A_Lei_no_NT",
     "pralbinomarks",
+    "sermoes",
+
 
     # útil em dev para WhiteNoise assumir o controle
     "whitenoise.runserver_nostatic",
