@@ -11,7 +11,7 @@ from django.conf.urls.static import static as serve_media
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sermoes/', include('sermoes.urls')),
+#    path('sermoes/', include('sermoes.urls')),
     path('', include(('A_Lei_no_NT.urls', 'A_Lei_no_NT'), namespace='A_Lei_no_NT')),
 
 

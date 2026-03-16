@@ -138,7 +138,7 @@ INSTALLED_APPS = [
     
     "A_Lei_no_NT",
     "pralbinomarks",
-    "sermoes",
+    #"sermoes",
 
 
     # útil em dev para WhiteNoise assumir o controle
