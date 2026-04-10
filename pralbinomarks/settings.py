@@ -41,6 +41,7 @@ ALLOWED_HOSTS = [
     "www.albinomarks.com.br",
     "127.0.0.1",
     "localhost",
+    "healthcheck.railway.app",
     ".railway.app",
     ".up.railway.app",
 ]
@@ -78,7 +79,9 @@ if IS_RUNSERVER or DEBUG:
     SESSION_COOKIE_DOMAIN = None
     CSRF_COOKIE_DOMAIN = None
 else:
-    SECURE_SSL_REDIRECT = True
+    # Railway healthchecks may arrive over plain HTTP before the proxy headers
+    # are in the shape Django expects for HTTPS enforcement.
+    SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = "None"
