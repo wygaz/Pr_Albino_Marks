@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ sermao.titulo_exibicao|default:sermao.titulo }}{% endblock %}
+
+{% block content %}
+<section class="artefato-page">
+  {% include 'Partials/editorial_nav.html' %}
+
+  <header class="artifact-hero">
+    <div class="artifact-copy">
+      <div class="hero-topline">
+        <span class="artifact-badge">Sermão</span>
+      </div>
+      <h1>{{ sermao.titulo_exibicao|default:sermao.titulo }}</h1>
+      {% if subtitulo_artefato %}
+        <p class="lead">{{ subtitulo_artefato }}</p>
+      {% endif %}
+      <div class="meta-line">
+        <span>Série: {{ sermao.serie }}</span>
+        <span>Posição na série: {{ sermao.ordem }} de {{ serie_ctx.total }}</span>
+        <span>Publicado em {{ sermao.data_publicacao|date:"d/m/Y" }}</span>
+      </div>
+      <div class="journey-nav">
+        <a href="#leitura">Ler agora</a>
+        {% if artigo_relacionado %}<a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo_relacionado.slug %}">Artigo</a>{% endif %}
+        {% if sermao.relatorio_tecnico_pdf %}<a href="{% url 'sermoes:relatorio' sermao.slug %}">Estudo</a>{% endif %}
+        {% if formatos.a4 %}<a href="{% url 'sermoes:arquivo' sermao.slug 'pdf-a4' %}">PDF A4</a>{% endif %}
+        {% if formatos.docx %}<a href="{% url 'sermoes:arquivo' sermao.slug 'docx-a4' %}">DOCX</a>{% endif %}
+        {% if serie_ctx.anterior %}<a href="{% url 'sermoes:detalhe' serie_ctx.anterior.slug %}">Anterior</a>{% endif %}
+        {% if serie_ctx.proximo %}<a href="{% url 'sermoes:detalhe' serie_ctx.proximo.slug %}">Próximo</a>{% endif %}
+        <a href="/sermoes/?serie={{ serie_ctx.anchor }}">Série</a>
+      </div>
+    </div>
+    <div class="artifact-media">
+      {% if imagem_editorial %}
+        <img src="{{ imagem_editorial.url }}" alt="Capa de {{ sermao.titulo_exibicao|default:sermao.titulo }}">
+      {% endif %}
+    </div>
+  </header>
+
+  <article id="leitura" class="reading-card">
+    {% if conteudo_sermao.painel %}
+      <section class="key-panel">{{ conteudo_sermao.painel|safe }}</section>
+    {% endif %}
+    <div class="reading-body">{{ conteudo_sermao.corpo|safe }}</div>
+  </article>
+
+  {% if relacionados %}
+    <section class="related-card">
+      <div class="related-head">
+        <div>
+          <p class="bridge-kicker">Continuidade da série</p>
+          <h2>Outros sermões desta série</h2>
+        </div>
+      </div>
+      <ul class="related-list">
+        {% for item in relacionados %}
+          <li><a href="{% url 'sermoes:detalhe' item.slug %}">{{ item.titulo_exibicao|default:item.titulo }}</a></li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</section>
+
+<style>
+  .artefato-page { display:grid; gap:1rem; }
+  .artifact-hero, .reading-card, .related-card {
+    background:#fffef8;
+    border:1px solid #d6dde5;
+    border-radius:20px;
+    box-shadow:0 10px 24px rgba(25,42,70,.06);
+  }
+  .artifact-hero {
+    display:grid;
+    grid-template-columns:1.45fr .85fr;
+    gap:1.25rem;
+    padding:1.15rem 1.2rem;
+    background:linear-gradient(180deg, #143f74 0%, #123a69 100%);
+    border:1px solid rgba(201,162,39,.55);
+    box-shadow:0 14px 28px rgba(18,58,105,.16);
+    align-items:center;
+  }
+  .hero-topline { display:flex; gap:.45rem; flex-wrap:wrap; align-items:center; margin-bottom:.45rem; }
+  .artifact-badge {
+    display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:#f8fbff; color:#1d334a;
+    border:1px solid rgba(255,255,255,.28); padding:.28rem .74rem; font-size:.8rem; font-weight:700;
+  }
+  .artifact-copy h1 { margin:.05rem 0 .45rem; font-size:1.7rem; line-height:1.2; color:#ffffff; }
+  .lead { color:#e6eff7; margin:0; font-size:1.02rem; max-width:58ch; }
+  .meta-line { display:flex; gap:.75rem 1rem; flex-wrap:wrap; margin-top:.8rem; color:#dbe8f5; font-size:.9rem; }
+  .journey-nav { display:flex; gap:.55rem; flex-wrap:wrap; margin-top:.8rem; }
+  .journey-nav a {
+    text-decoration:none; background:rgba(255,255,255,.1); color:#f8fbff; border:1px solid rgba(255,255,255,.18); border-radius:999px;
+    padding:.38rem .72rem; font-weight:600; font-size:.9rem;
+  }
+  .artifact-media { display:flex; justify-content:flex-end; }
+  .artifact-media img {
+    width:100%; border-radius:16px; object-fit:cover; max-height:320px; border:1px solid rgba(201,162,39,.7); box-shadow:0 10px 22px rgba(0,0,0,.14);
+  }
+  .reading-card { padding:1.2rem; line-height:1.8; background:#fffdfa; }
+  .reading-card .page-shell,
+  .reading-card .reading-surface {
+    max-width:none; margin:0; background:transparent; border:none; box-shadow:none; padding:0;
+  }
+  .reading-card .key-panel {
+    margin:.2rem 0 .95rem; background:#d9e9fb; border:1px solid #c9a227; border-radius:18px; padding:.8rem .95rem; color:#1d334a;
+  }
+  .reading-card .key-panel p { margin:.18rem 0; font-family:"Segoe UI", sans-serif; line-height:1.55; }
+  .reading-card .reading-body { padding:0 .2rem; color:#223446; }
+  .reading-card p, .reading-card li, .reading-card div, .reading-card span, .reading-card strong, .reading-card em, .reading-card b {
+    font-size:inherit !important; line-height:inherit !important;
+  }
+  .reading-card h1, .reading-card h2, .reading-card h3, .reading-card h4, .reading-card h5, .reading-card h6 {
+    color:#1d334a; font-size:1.12rem !important; line-height:1.35; margin:1.35rem 0 .7rem; font-family:"Segoe UI", sans-serif;
+  }
+  .reading-card h1 { font-size:1.3rem !important; }
+  .reading-card p, .reading-card li { font-size:1rem; line-height:1.72; }
+  .reading-card ul, .reading-card ol { padding-left:1.35rem; margin:.45rem 0 1rem; }
+  .related-card { padding:1.2rem 1.3rem; }
+  .bridge-kicker { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin:0; }
+  .related-head h2 { margin:.15rem 0 0; font-size:1.15rem; }
+  .related-list { margin:0; padding-left:1.2rem; display:grid; gap:.45rem; }
+  .related-list a { color:#244d84; text-decoration:none; }
+  .related-list a:hover { text-decoration:underline; }
+  @media (max-width: 860px) {
+    .artifact-hero { grid-template-columns:1fr; }
+  }
+</style>
+{% endblock %}

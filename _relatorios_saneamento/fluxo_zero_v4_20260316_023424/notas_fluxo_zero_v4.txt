@@ -1,0 +1,23 @@
+﻿LIMPEZA GERAL + RESERVA + FLUXO ZERO (v4)
+Gerado em: 2026-03-16 02:34:32
+
+v4 endurecida:
+- exclui __pycache__, .pyc, _temp_update, zips, site.webmanifest
+- exclui nomes com (1), (2), Old_ e variantes numeradas do README
+- exclui auxiliares fora do fluxo imediato
+- desclassifica arquivos zerados
+- forÃ§a o README_ETAPA2_ORQUESTRADOR.md da raiz como canÃ´nico
+
+Locais movidos para reserva:
+- Apenas_Local
+- scripts
+- tools/Scripts
+- tools/pralbino_pipeline
+- tools/pralbino_sermoes
+- A_Lei_no_NT/Zip
+- arquivos operacionais soltos da raiz
+
+Protegido / nÃ£o tocado:
+- apps Django
+- manage.py e arquivos core da aplicaÃ§Ã£o
+- .git, venv, media, static, banco

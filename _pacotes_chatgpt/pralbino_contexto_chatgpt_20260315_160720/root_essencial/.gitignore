@@ -1,0 +1,136 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+
+# Ambientes virtuais / ferramentas
+.env
+.env.*
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+
+# segredos
+Apenas_Local/
+aws_backup_*/
+healthcheck.txt
+requirements-dev.txt
+s3-secrets.ps1
+newkey.json
+*.csv
+*.pem
+*.key
+*.pfx
+*.crt
+*.7z
+/zip/
+
+
+# lixo local / arquivos de apoio
+/Diversos/
+/A_Lei_no_NT/zip
+*.pgdump
+A_Lei_no_NT/*.zip
+*.zip
+
+# Django
+# (IMPORTANTE: commit as migrations!)
+# Não ignore migrations.
+
+# Static & media
+staticfiles/
+media/
+static/Imagens/ChatGPT*.png
+
+
+# Banco local
+db.sqlite3
+*.sqlite3
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PostgreSQL dumps / dados locais
+*.sql
+*.dump
+*.backup
+pgdata/
+postgres-data/
+backups/
+
+# Testes / cobertura / caches
+.pytest_cache/
+.coverage
+htmlcov/ 
+.mypy_cache/
+.ruff_cache/
+pip-wheel-metadata/
+__pypackages__/
+
+# nunca versionar instaladores e pasta Publicar
+Publicar/
+*.msi
+
+
+albinomarks-railway_accessKeys.csv
+infraestrutura.md
+
+Txt/
+
+!docs/*.md
+
+# PDFs e imagens locais que você está gerando/publicando manualmente
+static/pdfs/
+static/Imagens/
+
+*.pyc
+
+# uploads e mídia (Django)
+A_Lei_no_NT/media/
+media/
+
+# caches Python
+__pycache__/
+*.py[cod]
+
+# chaves/certificados locais (nunca versionar)
+*.key
+*.key.pem
+*.pem
+*.crt
+*.cer
+*.pfx
+
+# Envs (nunca versionar)
+.env
+.env.*
+
+# Certificados/chaves locais (nunca versionar)
+*.key
+*.pem
+*.crt
+*.cer
+*.pfx
+
+# VS Code (só ignore o que for local/usuário)
+.vscode/launch.json

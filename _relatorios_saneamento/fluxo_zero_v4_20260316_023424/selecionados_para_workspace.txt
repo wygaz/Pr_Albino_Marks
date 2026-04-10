@@ -1,0 +1,27 @@
+﻿SELECIONADOS PARA Apenas_Local\anexos_filtrados
+Gerado em: 2026-03-16 02:34:32
+
+baixar_anexos_pralbino_esbocos.py <= tools\Scripts\baixar_anexos_pralbino_esbocos.py
+baixar_anexos_pralbino_final.py <= tools\pralbino_pipeline\baixar_anexos_pralbino_final.py
+baixar_referenciados_s3.ps1 <= baixar_referenciados_s3.ps1
+baixar_restantes_fallback.ps1 <= baixar_restantes_fallback.ps1
+classificar_em_4_series.py <= classificar_em_4_series.py
+consolidar_serie_por_esboco.py <= tools\pralbino_pipeline\consolidar_serie_por_esboco.py
+converter_em_pdf_por_esboco.py <= tools\pralbino_pipeline\converter_em_pdf_por_esboco.py
+exportar_refs_arquivos.py <= exportar_refs_arquivos.py
+filtrar_refs_uploads_artigos.py <= filtrar_refs_uploads_artigos.py
+gerar_relatorio_tecnico_de_docx.py <= gerar_relatorio_tecnico_de_docx.py
+gerar_sermao_de_docx.py <= tools\pralbino_pipeline\gerar_sermao_de_docx.py
+gerar_sermao_de_relatorio.py <= gerar_sermao_de_relatorio.py
+listar_artigos_docx_paginas.py <= tools\pralbino_pipeline\listar_artigos_docx_paginas.py
+normalizar_titulos_pasta.py <= tools\pralbino_pipeline\normalizar_titulos_pasta.py
+orquestrador_sermoes.py <= scripts\publicacao\orquestrador_sermoes.py
+pipeline_publicar_sermao.py <= scripts\publicacao\pipeline_publicar_sermao.py
+publicar_sermao_local.py <= scripts\publicacao\publicar_sermao_local.py
+README_ETAPA2_ORQUESTRADOR.md <= README_ETAPA2_ORQUESTRADOR.md
+run_pipeline_pralbino.ps1 <= tools\pralbino_pipeline\run_pipeline_pralbino.ps1
+run_pipeline_sermao_completo.ps1 <= run_pipeline_sermao_completo.ps1
+segmentar_docx_pralbino.py <= tools\pralbino_pipeline\segmentar_docx_pralbino.py
+sermoes_browse.py <= scripts\publicacao\sermoes_browse.py
+sermoes_inventory.py <= scripts\publicacao\sermoes_inventory.py
+sermoes_runner.py <= scripts\publicacao\sermoes_runner.py

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro - Projeto Pr. Albino Marks{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+  <div class="auth-card">
+    <p class="eyebrow">Cadastro</p>
+    <h1>Criar conta</h1>
+    <p class="lead">Crie sua conta para prosseguir ao fluxo de aceite e liberar o acesso aos sermoes e relatorios tecnicos.</p>
+
+    <form method="post" class="row g-3">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="{% if field.name == 'username' or field.name == 'email' %}col-md-6{% else %}col-12{% endif %}">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="form-text">{{ field.help_text|safe }}</div>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <div class="col-12 d-flex gap-2 flex-wrap">
+        <button class="btn btn-primary" type="submit">Criar conta</button>
+        <a class="btn btn-outline-secondary" href="{% url 'login' %}">Ja tenho conta</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .auth-shell { display:flex; justify-content:center; }
+  .auth-card {
+    width:min(100%, 760px);
+    background:#fffef8;
+    border:1px solid #d5d9e1;
+    border-radius:18px;
+    padding:2rem;
+    box-shadow:0 10px 30px rgba(25,42,70,.08);
+  }
+  .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin-bottom:.5rem; }
+  .lead { color:#52606d; margin-bottom:1.4rem; }
+  .auth-card input {
+    display:block;
+    width:100%;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    padding:.7rem .9rem;
+    background:#fff;
+  }
+</style>
+{% endblock %}

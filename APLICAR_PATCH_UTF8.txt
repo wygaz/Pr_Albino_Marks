@@ -1,0 +1,10 @@
+Extraia este ZIP na raiz do projeto Pr_Albino_Marks_restaurado e substitua os arquivos existentes.
+
+Arquivos incluidos:
+- scripts/artigos_sermoes/pipeline_publicar_sermao.py
+- scripts/artigos_sermoes/exportar_formatos_sermao_md.py
+
+Depois:
+1) Reabra o terminal ou mantenha UTF-8 ativo.
+2) Regenere os HTMLs do sermão.
+3) Republice o sermão de teste.

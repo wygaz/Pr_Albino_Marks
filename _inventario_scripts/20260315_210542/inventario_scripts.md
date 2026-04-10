@@ -1,0 +1,315 @@
+# Inventário de scripts
+
+Raiz: `C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado`
+
+Total: **292**
+
+## Resumo por escopo
+
+- **pr_albino_marks**: 182
+- **shared_generic**: 54
+- **revisar**: 46
+- **shared_candidate**: 10
+
+## Itens
+
+### pr_albino_marks
+
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/RodaSite.bat` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/__init__.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/asgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/convert_docx_to_html.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/inclusao.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/settings.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/tools/db_fingerprint.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/urls.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_orig/pralbinomarks/wsgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/RodaSite.bat` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/__init__.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/asgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/convert_docx_to_html.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/inclusao.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/settings.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/tools/db_fingerprint.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/urls.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/pralbinomarks_temp/pralbinomarks/wsgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/auditar_consistencia_artigos.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/auditar_consistencia_artigos_a.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/gerar_pdfs_local.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: gerar_pdfs
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/importar_serie.py` → `scripts/apps/pr_albino_marks/02_workspace` [média] — palavras-chave Pr. Albino: serie
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0002_area_artigo_autor_midia_delete_texto_artigo_autor_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0003_remove_artigo_texto_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0004_alter_artigo_caminho_arquivo_docx.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0005_artigo_conteudo_artigo_nome_arquivo_txt_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0006_alter_artigo_conteudo_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0007_artigo_ordem_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0008_remove_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0010_rename_conteudo_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0011_artigo_imagem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0013_artigo_imagem_capa_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0014_remove_artigo_imagem_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0015_remove_artigo_area_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0016_artigo_area_artigo_data_publicacao_artigo_midia_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0017_alter_artigo_arquivo_word.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0018_remove_artigo_ativo_artigo_visivel.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0019_alter_artigo_ordem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0020_alter_artigo_conteudo_html_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0021_alter_artigo_conteudo_html_alter_artigo_slug_and_more.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0022_delete_midia_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0023_alter_artigo_arquivo_word_alter_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0024_artigo_arquivo_pdf_alter_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0025_alter_artigo_slug_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0026_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0027_artigo_views_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/auditar_consistencia_artigos.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/auditar_consistencia_artigos_a.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/gerar_pdfs_local.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: gerar_pdfs
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/importar_serie.py` → `scripts/apps/pr_albino_marks/02_workspace` [média] — palavras-chave Pr. Albino: serie
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0002_area_artigo_autor_midia_delete_texto_artigo_autor_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0003_remove_artigo_texto_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0004_alter_artigo_caminho_arquivo_docx.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0005_artigo_conteudo_artigo_nome_arquivo_txt_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0006_alter_artigo_conteudo_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0007_artigo_ordem_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0008_remove_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0010_rename_conteudo_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0011_artigo_imagem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0013_artigo_imagem_capa_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0014_remove_artigo_imagem_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0015_remove_artigo_area_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0016_artigo_area_artigo_data_publicacao_artigo_midia_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0017_alter_artigo_arquivo_word.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0018_remove_artigo_ativo_artigo_visivel.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0019_alter_artigo_ordem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0020_alter_artigo_conteudo_html_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0021_alter_artigo_conteudo_html_alter_artigo_slug_and_more.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0022_delete_midia_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0023_alter_artigo_arquivo_word_alter_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0024_artigo_arquivo_pdf_alter_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0025_alter_artigo_slug_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0026_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0027_artigo_views_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/management/commands/auditar_consistencia_artigos.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/management/commands/auditar_consistencia_artigos_a.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `A_Lei_no_NT/management/commands/gerar_pdfs_local.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: gerar_pdfs
+- `A_Lei_no_NT/management/commands/import_series.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: serie, series
+- `A_Lei_no_NT/management/commands/importar_serie.py` → `scripts/apps/pr_albino_marks/02_workspace` [média] — palavras-chave Pr. Albino: serie
+- `A_Lei_no_NT/migrations/0002_area_artigo_autor_midia_delete_texto_artigo_autor_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0003_remove_artigo_texto_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0004_alter_artigo_caminho_arquivo_docx.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0005_artigo_conteudo_artigo_nome_arquivo_txt_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0006_alter_artigo_conteudo_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0007_artigo_ordem_alter_artigo_nome_arquivo_txt.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0008_remove_artigo_caminho_arquivo_docx_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0010_rename_conteudo_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0011_artigo_imagem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0013_artigo_imagem_capa_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0014_remove_artigo_imagem_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0015_remove_artigo_area_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0016_artigo_area_artigo_data_publicacao_artigo_midia_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0017_alter_artigo_arquivo_word.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0018_remove_artigo_ativo_artigo_visivel.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0019_alter_artigo_ordem.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0020_alter_artigo_conteudo_html_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/migrations/0021_alter_artigo_conteudo_html_alter_artigo_slug_and_more.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/migrations/0022_delete_midia_remove_artigo_data_publicacao_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0023_alter_artigo_arquivo_word_alter_artigo_conteudo_html_and_more.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0024_artigo_arquivo_pdf_alter_artigo_arquivo_word_and_more.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: artigo
+- `A_Lei_no_NT/migrations/0025_alter_artigo_slug_alter_artigo_titulo.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/migrations/0026_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `A_Lei_no_NT/migrations/0027_artigo_views_alter_artigo_slug.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: artigo, slug
+- `Apenas_Local/anexos_filtrados/Scripts/baixar_anexos_pralbino_esbocos.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, esboco, pralbino
+- `Apenas_Local/anexos_filtrados/Scripts/baixar_anexos_pralbino_final.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `Apenas_Local/anexos_filtrados/Scripts/consolidar_serie_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: esboco, serie
+- `Apenas_Local/anexos_filtrados/Scripts/consolidar_serie_por_esboco_Old_08-03-2026.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: esboco, serie
+- `Apenas_Local/anexos_filtrados/Scripts/converter_em_pdf_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [média] — palavras-chave Pr. Albino: esboco
+- `Apenas_Local/anexos_filtrados/Scripts/gerar_imagens_lote.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: gerar_imagens_lote
+- `Apenas_Local/anexos_filtrados/Scripts/gerar_sermao_de_docx.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: sermao
+- `Apenas_Local/anexos_filtrados/Scripts/listar_artigos_docx_paginas.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `Apenas_Local/anexos_filtrados/Scripts/run_pipeline_pralbino.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `Apenas_Local/anexos_filtrados/Scripts/segmentar_docx_pralbino.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `atualizar_zips_Pr_Albino.ps1` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: albino
+- `baixar_anexos_pralbino_esbocos.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, esboco, pralbino
+- `classificar_em_4_series.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: serie, series
+- `coletar_contexto_pralbino_para_chatgpt.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `coletar_contexto_pralbino_para_chatgpt_v2.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `comparar_modelos_sermoes_pralbino.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: albino, pralbino, sermoes
+- `exportar_formatos_sermao_md.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermao
+- `filtrar_refs_uploads_artigos.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `gerar_pdfs.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: gerar_pdfs
+- `gerar_pdfs_banco.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: gerar_pdfs
+- `gerar_sermao_de_relatorio.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: sermao
+- `pralbinomarks/RodaSite.bat` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/__init__.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/asgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/convert_docx_to_html.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/inclusao.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/settings.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/tools/db_fingerprint.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/urls.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `pralbinomarks/wsgi.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `run_pipeline_sermao_completo (1).ps1` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermao
+- `run_pipeline_sermao_completo.ps1` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermao
+- `scripts/coletar_contexto_pralbino_para_chatgpt.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `scripts/publicacao/artigos_django.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `scripts/publicacao/gerar_sermao_de_docx.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: sermao
+- `scripts/publicacao/orquestrador_sermoes.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/pipeline_publicar_sermao.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: publicar, sermao
+- `scripts/publicacao/publicar_sermao_local.py` → `scripts/apps/pr_albino_marks/04_publicacao` [alta] — palavras-chave Pr. Albino: publicar, sermao
+- `scripts/publicacao/run_orquestrador_sermoes.ps1` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/run_pipeline_pralbino.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `scripts/publicacao/run_pipeline_sermao_completo.ps1` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermao
+- `scripts/publicacao/sermoes_browse - .py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/sermoes_browse.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/sermoes_django.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/sermoes_inventory.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `scripts/publicacao/sermoes_runner.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/__init__.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/admin.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/apps.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/migrations/0001_initial.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/migrations/__init__.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/models.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/tests.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/urls.py` → `scripts/apps/pr_albino_marks/04_publicacao` [média] — palavras-chave Pr. Albino: sermoes
+- `sermoes/views.py` → `scripts/apps/pr_albino_marks/04_publicacao` [média] — palavras-chave Pr. Albino: sermoes
+- `tools/Scripts/baixar_anexos_pralbino_esbocos.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, esboco, pralbino
+- `tools/Scripts/baixar_anexos_pralbino_final.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/Scripts/consolidar_serie_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: esboco, serie
+- `tools/Scripts/consolidar_serie_por_esboco_Old_08-03-2026.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: esboco, serie
+- `tools/Scripts/converter_em_pdf_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [média] — palavras-chave Pr. Albino: esboco
+- `tools/Scripts/gerar_imagens_lote.py` → `scripts/apps/pr_albino_marks` [média] — palavras-chave Pr. Albino: gerar_imagens_lote
+- `tools/Scripts/gerar_sermao_de_docx.py` → `scripts/apps/pr_albino_marks/03_producao` [média] — palavras-chave Pr. Albino: sermao
+- `tools/Scripts/listar_artigos_docx_paginas.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `tools/Scripts/run_pipeline_pralbino.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/Scripts/segmentar_docx_pralbino.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/listar_artigos_docx_paginas.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: artigo, artigos
+- `tools/pralbino_pipeline/baixar_anexos_pralbino_final.py` → `scripts/apps/pr_albino_marks/01_coleta` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/pralbino_pipeline/consolidar_serie_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: albino, esboco, pralbino, serie
+- `tools/pralbino_pipeline/converter_em_pdf_por_esboco.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: albino, esboco, pralbino
+- `tools/pralbino_pipeline/gerar_imagens_lote.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, gerar_imagens_lote, pralbino
+- `tools/pralbino_pipeline/gerar_prompts_imagens.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/pralbino_pipeline/gerar_sermao_de_docx.py` → `scripts/apps/pr_albino_marks/03_producao` [alta] — palavras-chave Pr. Albino: albino, pralbino, sermao
+- `tools/pralbino_pipeline/listar_artigos_docx_paginas.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: albino, artigo, artigos, pralbino
+- `tools/pralbino_pipeline/normalizar_titulos_pasta.py` → `scripts/apps/pr_albino_marks/02_workspace` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/pralbino_pipeline/run_pipeline_pralbino.ps1` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/pralbino_pipeline/segmentar_docx_pralbino.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+- `tools/pralbino_sermoes/listar_artigos_docx_paginas.py` → `scripts/apps/pr_albino_marks/90_diagnosticos` [alta] — palavras-chave Pr. Albino: albino, artigo, artigos, pralbino, sermoes
+- `tools/pralbino_sermoes/segmentar_docx_pralbino.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino, sermoes
+- `tools/segmentar_docx_pralbino.py` → `scripts/apps/pr_albino_marks` [alta] — palavras-chave Pr. Albino: albino, pralbino
+### revisar
+
+- `A_Lei_no_NT/__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/admin.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/apps.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/forms.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/forms_Old.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/management/__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/management/commands/__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/management/commands/atualiza_nome_arquivo.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/management/commands/aws_health.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/management/commands/storage_ls.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/mensagens.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/migrations/0001_initial.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/migrations/0009_set_default_ordem.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/migrations/0012_remove_area_descricao_remove_area_nome_area_and_more.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/migrations/__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/models.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/templatetags/__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/templatetags/custom_filters.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/templatetags/custom_tags.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/templatetags/form_extras.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/tests.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/urls.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/utils.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/utils_Old.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/utils_storage.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/validators.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `A_Lei_no_NT/views.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `Apenas_Local/anexos_filtrados/Scripts/html_para_pdf_playwright.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `Ativarvenv.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `__init__.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `comparar_db_vs_s3.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `delete_old_iam_user.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `inventariar_classificar_scripts_ecossistema.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `manage.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `rastrear_saneiar_segredos_scripts.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `rastrear_saneiar_segredos_scripts_v2.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `rodar_remoto.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `run.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `scripts/publicacao/pipeline_steps.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `teste_db_conn.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `teste_estruturado.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `teste_minimo.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `tools/Scripts/html_para_pdf_playwright.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `tools/apply_storage_safe_refactor.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `tools/db_fingerprint.py` → `scripts/revisar` [baixa] — sem sinal suficiente
+- `tools/db_reset_local_utf8.ps1` → `scripts/revisar` [baixa] — sem sinal suficiente
+### shared_candidate
+
+- `A_Lei_no_NT/management/commands/baixar_anexos_completo.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `Apenas_Local/anexos_filtrados/Scripts/gerar_prompts_imagens.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `Apenas_Local/anexos_filtrados/Scripts/normalizar_titulos_pasta.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `baixar_referenciados_s3.ps1` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `baixar_restantes_fallback.ps1` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `exportar_refs_arquivos.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `gerar_relatorio_tecnico_de_docx.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `normalizar_s3_listagem.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `tools/Scripts/gerar_prompts_imagens.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+- `tools/Scripts/normalizar_titulos_pasta.py` → `scripts/revisar/shared_candidate` [baixa] — verbo utilitário, mas sem app claro
+### shared_generic
+
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/admin.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/apps.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/forms.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/atualiza_nome_arquivo.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/aws_health.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/baixar_anexos_completo.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/management/commands/limpar_numeracao_titulos.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: limpa, limpar, zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0001_initial.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0009_set_default_ordem.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/0012_remove_area_descricao_remove_area_nome_area_and_more.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/migrations/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/models.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/templatetags/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/templatetags/custom_filters.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/templatetags/custom_tags.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/templatetags/form_extras.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/tests.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/urls.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/utils.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/utils_storage.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/validators.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_orig/views.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/admin.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/apps.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/forms.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/atualiza_nome_arquivo.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/aws_health.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/baixar_anexos_completo.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/management/commands/limpar_numeracao_titulos.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: limpa, limpar, zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0001_initial.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0009_set_default_ordem.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/0012_remove_area_descricao_remove_area_nome_area_and_more.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/migrations/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/models.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/templatetags/__init__.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/templatetags/custom_filters.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/templatetags/custom_tags.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/templatetags/form_extras.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/tests.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/urls.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/utils.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/utils_storage.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/validators.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/Zip/_temp_update/raiz+app_temp/views.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `A_Lei_no_NT/management/commands/limpar_numeracao_titulos.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: limpa, limpar
+- `atualizar_zips_generico.ps1` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `teste_db_diag.ps1` → `scripts/shared/utils` [média] — palavras-chave genéricas: diag
+- `tools/db_check.py` → `scripts/shared/utils` [média] — palavras-chave genéricas: check
+- `tools/zip_projeto_sem_venv.ps1` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip
+- `zip_repo_sanitizado.ps1` → `scripts/shared/utils` [média] — palavras-chave genéricas: zip

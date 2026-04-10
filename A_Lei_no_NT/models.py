@@ -1,6 +1,7 @@
 # C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado\A_Lei_no_NT\models.py
 import os
 
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Max
 from django.db import models
@@ -180,6 +181,40 @@ class Area(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class AcessoUsuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="acesso_site")
+    termos_aceitos = models.BooleanField(default=False)
+    lgpd_aceita = models.BooleanField(default=False)
+    termos_versao = models.CharField(max_length=32, default="v1")
+    lgpd_versao = models.CharField(max_length=32, default="v1")
+    aceite_realizado_em = models.DateTimeField(null=True, blank=True)
+    habilitado_em = models.DateTimeField(null=True, blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Acesso de usuario"
+        verbose_name_plural = "Acessos de usuarios"
+
+    @property
+    def acesso_liberado(self):
+        return bool(self.termos_aceitos and self.lgpd_aceita)
+
+    def registrar_aceite(self, *, termos_versao="v1", lgpd_versao="v1"):
+        agora = timezone.now()
+        self.termos_aceitos = True
+        self.lgpd_aceita = True
+        self.termos_versao = termos_versao
+        self.lgpd_versao = lgpd_versao
+        self.aceite_realizado_em = agora
+        self.habilitado_em = agora
+        self.save()
+
+    def __str__(self):
+        estado = "habilitado" if self.acesso_liberado else "pendente"
+        return f"{self.user.username} ({estado})"
 
 
 # Helpers não usados pelos campos; se não usar em outro lugar, pode remover

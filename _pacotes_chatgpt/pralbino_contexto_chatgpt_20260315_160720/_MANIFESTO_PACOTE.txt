@@ -1,0 +1,21 @@
+﻿Pacote gerado para apoio de anÃ¡lise do projeto Pr_Albino_Marks
+Data: 2026-03-15 16:07:23
+Root: C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado
+
+IncluÃ­do por padrÃ£o:
+- arquivos essenciais de raiz
+- pralbinomarks / apps / artigos / templates / scripts / docs / requirements (se existirem)
+- static customizado (exclui static/admin)
+- scripts espalhados em Apenas_Local
+- manifests, browse, relatorios tÃ©cnicos, sermÃµes gerados/formatados
+- ESBOCOS_FILTRADOS e IMG
+
+Opcional:
+- IncludeWorkspacePesado => SERIES_CLASSIFICADAS
+- IncludeDownloadsReferenciados => downloads_referenciados
+- IncludeMedia => media
+
+ExclusÃµes automÃ¡ticas:
+- .git, .venv, venv, __pycache__, node_modules, caches, build/dist
+- *.pyc, *.pyo, *.log, *.tmp, *.bak, *.sqlite3, *.db
+- static/admin

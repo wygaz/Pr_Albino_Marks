@@ -6,7 +6,7 @@ from django.db import transaction
 
 from . import mensagens
 from .forms import ArtigoForm
-from .models import Artigo, Area, Autor
+from .models import AcessoUsuario, Artigo, Area, Autor
 
 from django.utils.html import format_html
 from django.core.files.storage import default_storage
@@ -183,3 +183,17 @@ class AutorAdmin(admin.ModelAdmin):
     list_display = ("id", "nome")
     search_fields = ("nome",)
     ordering = ("nome",)
+
+
+@admin.register(AcessoUsuario)
+class AcessoUsuarioAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "termos_aceitos",
+        "lgpd_aceita",
+        "aceite_realizado_em",
+        "habilitado_em",
+        "atualizado_em",
+    )
+    list_filter = ("termos_aceitos", "lgpd_aceita")
+    search_fields = ("user__username", "user__email", "user__first_name", "user__last_name")

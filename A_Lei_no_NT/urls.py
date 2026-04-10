@@ -5,6 +5,8 @@ app_name = "A_Lei_no_NT"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("cadastro/", views.cadastro_visitante, name="cadastro_visitante"),
+    path("conta/aceite/", views.aceite_acesso, name="aceite_acesso"),
 
     # Artigos
     path("artigos/", views.listar_artigos, name="listar_artigos"),

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Estudo - {{ sermao.titulo_exibicao|default:sermao.titulo }}{% endblock %}
+
+{% block content %}
+<section class="artefato-page">
+  {% include 'Partials/editorial_nav.html' %}
+
+  <header class="artifact-hero study-hero">
+    <div class="artifact-copy">
+      <div class="hero-topline">
+        <span class="artifact-badge">Estudo</span>
+      </div>
+      <h1>{{ sermao.titulo_exibicao|default:sermao.titulo }}</h1>
+      <p class="lead">Material de apoio para aprofundamento bíblico, doutrinário e argumentativo do sermão.</p>
+      <div class="meta-line">
+        <span>Série: {{ sermao.serie }}</span>
+        <span>Posição na série: {{ sermao.ordem }} de {{ serie_ctx.total }}</span>
+      </div>
+      <div class="journey-nav">
+        {% if artigo_relacionado %}<a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo_relacionado.slug %}">Artigo</a>{% endif %}
+        <a href="{% url 'sermoes:detalhe' sermao.slug %}">Sermão</a>
+        <a href="{% url 'sermoes:arquivo' sermao.slug 'relatorio-tecnico' %}">PDF do estudo</a>
+        <a href="/sermoes/?serie={{ serie_ctx.anchor }}">Série</a>
+      </div>
+    </div>
+    <div class="artifact-media">
+      {% if imagem_editorial %}
+        <img src="{{ imagem_editorial.url }}" alt="Capa de {{ sermao.titulo_exibicao|default:sermao.titulo }}">
+      {% endif %}
+    </div>
+  </header>
+
+  {% if conteudo_relatorio_html %}
+    <article class="report-reading-card">
+      {{ conteudo_relatorio_html|safe }}
+    </article>
+  {% else %}
+    <section class="report-card">
+      <h2>Estudo indisponível</h2>
+      <p class="muted">O HTML do estudo ainda não foi localizado na pasta formatada.</p>
+    </section>
+  {% endif %}
+</section>
+
+<style>
+  .artefato-page { display:grid; gap:1rem; }
+  .artifact-hero, .report-card, .report-reading-card {
+    background:#fffef8; border:1px solid #d6dde5; border-radius:20px; box-shadow:0 10px 24px rgba(25,42,70,.06);
+  }
+  .artifact-hero {
+    display:grid; grid-template-columns:1.45fr .85fr; gap:1.25rem; padding:1.15rem 1.2rem; background:linear-gradient(180deg, #143f74 0%, #123a69 100%);
+    border:1px solid rgba(201,162,39,.55); box-shadow:0 14px 28px rgba(18,58,105,.16); align-items:center;
+  }
+  .artifact-badge { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:#f8fbff; color:#1d334a; border:1px solid rgba(255,255,255,.28); padding:.28rem .74rem; font-size:.8rem; font-weight:700; }
+  .artifact-copy h1 { margin:.05rem 0 0; font-size:1.7rem; color:#fff; }
+  .lead { color:#e6eff7; margin:.75rem 0 0; max-width:58ch; }
+  .meta-line { display:flex; gap:1rem; flex-wrap:wrap; margin-top:.9rem; color:#dbe8f5; font-size:.92rem; }
+  .journey-nav { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem; }
+  .journey-nav a { text-decoration:none; background:rgba(255,255,255,.1); color:#f8fbff; border:1px solid rgba(255,255,255,.18); border-radius:999px; padding:.42rem .75rem; font-weight:600; font-size:.9rem; }
+  .artifact-media { display:flex; justify-content:flex-end; }
+  .artifact-media img { width:100%; border-radius:16px; object-fit:cover; max-height:320px; border:1px solid rgba(201,162,39,.7); box-shadow:0 10px 22px rgba(0,0,0,.14); }
+  .report-card { padding:1.25rem 1.35rem; background:linear-gradient(180deg, #fffef8 0%, #ffffff 100%); }
+  .report-card h2 { color:#1d334a; margin-bottom:.7rem; }
+  .report-reading-card { padding:1.2rem; line-height:1.8; background:#fffdfa; }
+  .report-reading-card .page-shell, .report-reading-card .reading-surface { max-width:none; margin:0; background:transparent; border:none; box-shadow:none; padding:0; }
+  .report-reading-card .reading-body, .report-reading-card .page-shell, .report-reading-card .page-frame { color:#223446; }
+  .report-reading-card h1, .report-reading-card h2, .report-reading-card h3, .report-reading-card h4, .report-reading-card h5, .report-reading-card h6 {
+    color:#1d334a; line-height:1.35; font-size:1.12rem !important;
+  }
+  .report-reading-card h1 { font-size:1.3rem !important; }
+  .report-reading-card p, .report-reading-card li, .report-reading-card div, .report-reading-card span, .report-reading-card strong, .report-reading-card em, .report-reading-card b { font-size:inherit !important; line-height:inherit !important; }
+  .report-reading-card p, .report-reading-card li { font-size:1rem; line-height:1.72; }
+  .report-reading-card ul, .report-reading-card ol { padding-left:1.35rem; margin:.45rem 0 1rem; }
+  .muted { color:#607080; margin:0; }
+  @media (max-width: 860px) { .artifact-hero { grid-template-columns:1fr; } }
+</style>
+{% endblock %}

@@ -23,7 +23,9 @@ if env_file.exists():
 # =========================================================
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes")
-LOGIN_REDIRECT_URL = "/admin/"
+LOGIN_URL = "/conta/entrar/"
+LOGIN_REDIRECT_URL = "/conta/aceite/"
+LOGOUT_REDIRECT_URL = "/"
 
 RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "").strip()
 USE_RAILWAY_DOMAIN = os.getenv("USE_RAILWAY_DOMAIN", "0").strip().lower() in ("1", "true", "yes")
@@ -138,7 +140,7 @@ INSTALLED_APPS = [
     
     "A_Lei_no_NT",
     "pralbinomarks",
-    #"sermoes",
+    "sermoes",
 
 
     # útil em dev para WhiteNoise assumir o controle

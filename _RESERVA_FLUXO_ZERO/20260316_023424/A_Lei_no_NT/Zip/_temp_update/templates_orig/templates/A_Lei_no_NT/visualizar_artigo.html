@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ artigo.titulo }}{% endblock %}
+
+{% block content %}
+<div id="bloco-texto">
+
+  <article class="artigo">
+
+    <!-- Imagem de capa -->
+    {% if artigo.imagem_capa %}
+      <img src="{{ artigo.imagem_capa.url }}" alt="Imagem do artigo" class="imagem-artigo-topo">
+    {% else %}
+      {% with indice=artigo.id|add:"-1"|divisibleby:"6"|yesno:"6,5,4,3,2,1" %}
+        <img src="{% static 'imagens/artigos/imagem_padrao_' %}{{ indice }}.jpg" alt="Imagem padrão" class="imagem-artigo-topo">
+      {% endwith %}
+    {% endif %}
+
+    <!-- Título -->
+    <h2 class="my-3">{{ artigo.titulo }}</h2>
+
+    <!-- Autor e mídia -->
+    {% if artigo.autor %}
+      <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
+    {% endif %}
+
+    {% if artigo.midia %}
+      <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>
+    {% endif %}
+
+    <!-- Conteúdo formatado -->
+    <div id="conteudo-artigo" class="conteudo-artigo text-primary">
+      {{ artigo.conteudo_html|safe }}
+    </div>
+
+    <!-- Botões de ação -->
+    <div class="d-flex justify-content-center my-4 gap-3">
+      {% if artigo.arquivo_pdf %}
+          <a class="btn ghost" href="{% url 'A_Lei_no_NT:artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
+      {% endif %}
+
+      <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
+        ⬅️ Voltar para Home
+      </a>
+      <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-secondary">
+        ← Voltar para a lista
+      </a>
+    </div>
+
+  </article>
+</div>
+{% endblock %}

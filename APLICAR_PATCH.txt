@@ -1,0 +1,5 @@
+Extraia este ZIP na raiz do projeto e substitua os arquivos.
+
+Alterações:
+- Menu principal: "Artigos" + "Sermoes" -> "Acervo"
+- Botão Admin exibido apenas para usuário staff

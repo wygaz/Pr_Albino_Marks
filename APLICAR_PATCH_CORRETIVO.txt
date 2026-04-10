@@ -1,0 +1,1 @@
+Extraia este ZIP na raiz do projeto e substitua sermoes/views.py. Ele corrige o SyntaxError no regex de extração do fragmento HTML.

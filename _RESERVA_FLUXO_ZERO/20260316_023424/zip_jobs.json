@@ -1,0 +1,37 @@
+﻿{
+    "ignore_dirs":  [
+                        ".git",
+                        "venv",
+                        ".venv",
+                        "__pycache__",
+                        "node_modules",
+                        "Apenas_Local"
+                    ],
+    "jobs":  [
+                 {
+                     "zip":  "A_Lei_no_NT\\Zip\\pralbinomarks_erm_11-02-2026.zip",
+                     "sources":  [
+                                     "pralbinomarks"
+                                 ],
+                     "name":  "pralbinomarks",
+                     "output_prefix":  "pralbinomarks_em_"
+                 },
+                 {
+                     "zip":  "A_Lei_no_NT\\Zip\\Raiz_e_arqs_do_Projeto_em_11-02-2026.zip",
+                     "sources":  [
+                                     "."
+                                 ],
+                     "name":  "raiz+app",
+                     "output_prefix":  "Raiz_e_arqs_do_Projeto_em_"
+                 },
+                 {
+                     "zip":  "A_Lei_no_NT\\Zip\\templates_Pr_Albino_em_11-02-2026.zip",
+                     "sources":  [
+                                     "pralbinomarks",
+                                     "A_Lei_no_NT"
+                                 ],
+                     "name":  "templates",
+                     "output_prefix":  "templates_Pr_Albino_em_"
+                 }
+             ]
+}

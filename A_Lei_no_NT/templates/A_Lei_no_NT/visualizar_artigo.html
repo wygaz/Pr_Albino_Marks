@@ -1,53 +1,67 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ artigo.titulo }}{% endblock %}
+{% block title %}{{ artigo.titulo_exibicao|default:artigo.titulo }}{% endblock %}
 
 {% block content %}
-<div id="bloco-texto">
+<section class="artefato-page">
+  {% include 'Partials/editorial_nav.html' %}
 
-  <article class="artigo">
-
-    <!-- Imagem de capa -->
-    {% if artigo.imagem_capa %}
-      <img src="{{ artigo.imagem_capa.url }}" alt="Imagem do artigo" class="imagem-artigo-topo">
-    {% else %}
-      {% with indice=artigo.id|add:"-1"|divisibleby:"6"|yesno:"6,5,4,3,2,1" %}
-        <img src="{% static 'imagens/artigos/imagem_padrao_' %}{{ indice }}.jpg" alt="Imagem padrão" class="imagem-artigo-topo">
-      {% endwith %}
-    {% endif %}
-
-    <!-- Título -->
-    <h2 class="my-3">{{ artigo.titulo }}</h2>
-
-    <!-- Autor e mídia -->
-    {% if artigo.autor %}
-      <p class="autor"><strong>Autor:</strong> {{ artigo.autor.nome }}</p>
-    {% endif %}
-
-    {% if artigo.midia %}
-      <p><strong>Mídia:</strong> <a href="{{ artigo.midia.arquivo.url }}">{{ artigo.midia.titulo }}</a></p>
-    {% endif %}
-
-    <!-- Conteúdo formatado -->
-    <div id="conteudo-artigo" class="conteudo-artigo text-primary">
-      {{ artigo.conteudo_html|safe }}
-    </div>
-
-    <!-- Botões de ação -->
-    <div class="d-flex justify-content-center my-4 gap-3">
-      {% if artigo.arquivo_pdf %}
-          <a class="btn ghost" href="{% url 'A_Lei_no_NT:artigo_pdf_download' artigo.slug %}">📥 Baixar PDF</a>
+  <header class="artifact-hero article-hero">
+    <div class="artifact-copy">
+      <div class="hero-topline">
+        <span class="artifact-badge">Artigo</span>
+      </div>
+      <h1>{{ artigo.titulo_exibicao|default:artigo.titulo }}</h1>
+      {% if subtitulo_artefato %}
+        <p class="lead">{{ subtitulo_artefato }}</p>
       {% endif %}
-
-      <a href="{% url 'A_Lei_no_NT:home' %}" class="btn btn-outline-secondary">
-        ⬅️ Voltar para Home
-      </a>
-      <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-secondary">
-        ← Voltar para a lista
-      </a>
+      <div class="meta-line">
+        {% if artigo.autor %}<span>Autor: {{ artigo.autor.nome }}</span>{% endif %}
+        {% if artigo.publicado_em %}<span>Publicado em {{ artigo.publicado_em|date:"d/m/Y" }}</span>{% endif %}
+        {% if artigo.area %}<span>Série: {{ artigo.area.nome }}</span>{% endif %}
+      </div>
+      <div class="journey-nav">
+        <a href="{% url 'sermoes:lista' %}?serie={{ artigo.area.nome|slugify }}">Acervo</a>
+        {% if sermoes_relacionados %}<a href="{% url 'sermoes:detalhe' sermoes_relacionados.0.slug %}">Sermão</a>{% endif %}
+        {% if dossies_relacionados %}<a href="{% url 'sermoes:relatorio' dossies_relacionados.0.slug %}">Estudo</a>{% endif %}
+        {% if artigo.arquivo_pdf %}<a href="{% url 'A_Lei_no_NT:artigo_pdf_download' artigo.slug %}">Baixar PDF</a>{% endif %}
+      </div>
     </div>
+    <div class="artifact-media">
+      {% if imagem_editorial %}
+        <img src="{{ imagem_editorial.url }}" alt="Imagem do artigo">
+      {% else %}
+        <img src="{% static 'Imagens/Capa_do_Projeto_Pr_Albino_1.png' %}" alt="Imagem padrão do projeto">
+      {% endif %}
+    </div>
+  </header>
 
+  <article id="conteudo-artigo" class="conteudo-artigo">
+    {{ artigo.conteudo_html|safe }}
   </article>
-</div>
+</section>
+
+<style>
+  .artefato-page { display:grid; gap:1rem; }
+  .artifact-hero, .conteudo-artigo {
+    background:#fffef8; border:1px solid #d6dde5; border-radius:20px; box-shadow:0 10px 24px rgba(25,42,70,.06);
+  }
+  .artifact-hero {
+    display:grid; grid-template-columns:1.45fr .85fr; gap:1.25rem; padding:1.15rem 1.2rem; background:linear-gradient(180deg, #143f74 0%, #123a69 100%);
+    border:1px solid rgba(201,162,39,.55); box-shadow:0 14px 28px rgba(18,58,105,.16); align-items:center;
+  }
+  .artifact-badge { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:#f8fbff; color:#1d334a; border:1px solid rgba(255,255,255,.28); padding:.28rem .74rem; font-size:.8rem; font-weight:700; }
+  .artifact-copy h1 { margin:.05rem 0 .45rem; font-size:1.8rem; line-height:1.2; color:#ffffff; }
+  .lead { margin:0; color:#e5eef7; max-width:42ch; line-height:1.6; }
+  .meta-line { display:flex; gap:1rem; flex-wrap:wrap; margin-top:.9rem; color:#dbe8f5; font-size:.92rem; }
+  .journey-nav { display:flex; gap:.55rem; flex-wrap:wrap; margin-top:.9rem; }
+  .journey-nav a { text-decoration:none; background:rgba(255,255,255,.1); color:#f8fbff; border:1px solid rgba(255,255,255,.18); border-radius:999px; padding:.42rem .75rem; font-weight:600; font-size:.9rem; }
+  .artifact-media img { width:100%; border-radius:18px; object-fit:cover; max-height:340px; border:1px solid rgba(201,162,39,.7); background:#fff; }
+  .conteudo-artigo { background:#fff; border:1px solid #e4e8ef; padding:1.35rem; line-height:1.8; color:#223446; }
+  .conteudo-artigo h1, .conteudo-artigo h2, .conteudo-artigo h3, .conteudo-artigo h4, .conteudo-artigo h5, .conteudo-artigo h6 { color:#1d334a; line-height:1.35; }
+  .conteudo-artigo p, .conteudo-artigo li { font-size:1rem; line-height:1.72; }
+  .conteudo-artigo ul, .conteudo-artigo ol { padding-left:1.35rem; }
+  @media (max-width: 860px) { .artifact-hero { grid-template-columns:1fr; } }
+</style>
 {% endblock %}

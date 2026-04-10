@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Entrar - Projeto Pr. Albino Marks{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+  <div class="auth-card">
+    <p class="eyebrow">Area restrita</p>
+    <h1>Entrar</h1>
+    <p class="lead">Acesso a sermoes e relatorios tecnicos exige autenticacao e aceite de Termos e LGPD.</p>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="alert alert-danger">Usuario ou senha invalidos.</div>
+      {% endif %}
+      <div class="mb-3">
+        <label class="form-label" for="id_username">Usuario</label>
+        <input class="form-control" id="id_username" name="username" type="text" autofocus required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="id_password">Senha</label>
+        <input class="form-control" id="id_password" name="password" type="password" required>
+      </div>
+      {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+      {% endif %}
+      <div class="auth-actions">
+        <button class="btn btn-primary" type="submit">Entrar</button>
+        <a class="btn btn-outline-secondary" href="{% url 'A_Lei_no_NT:cadastro_visitante' %}">Criar conta</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .auth-shell { display:flex; justify-content:center; }
+  .auth-card {
+    width:min(100%, 640px);
+    background:#fffef8;
+    border:1px solid #d5d9e1;
+    border-radius:18px;
+    padding:2rem;
+    box-shadow:0 10px 30px rgba(25,42,70,.08);
+  }
+  .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin-bottom:.5rem; }
+  .lead { color:#52606d; margin-bottom:1.4rem; }
+  .auth-actions { display:flex; gap:.75rem; flex-wrap:wrap; }
+</style>
+{% endblock %}

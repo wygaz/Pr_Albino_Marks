@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Artigos — Projeto Pr. Albino Marks{% endblock %}
+
+{% block content %}
+<div class="wrap artigos-page" data-theme="verde" data-size="normal">
+  <div class="page-head">
+    <div>
+      <h1>Áreas de estudo</h1>
+      <div class="sub">Escolha um tema para ver os artigos correspondentes</div>
+    </div>
+  </div>
+
+  <ul class="article-table">
+    {% for area in areas %}
+      <li class="article-row">
+        <div class="col-title">
+          <a href="{% url 'A_Lei_no_NT:listar_artigos_por_area' area.slug %}"
+             class="article-link">
+            {{ area.nome }}
+          </a>
+          {% if area.descricao %}
+            <div class="article-meta">
+              {{ area.descricao }}
+            </div>
+          {% endif %}
+        </div>
+      </li>
+    {% empty %}
+      <li> Nenhuma área cadastrada. </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<style>
+  .prefs-toolbar{display:none!important}
+  .artigos-page{--brand:#2b6f3e;--brand-2:#3c8a52;--ink:#123;--muted:#6b7280;--paper:#fff;--edge:#e7ecef;--link:#1f4e8c}
+  .artigos-page[data-theme="verde"]{--brand:#2b6f3e;--brand-2:#3c8a52;--link:#2b6f3e}
+  .artigos-page .article-table{list-style:none;margin:8px 0 24px;padding:0}
+  .artigos-page .article-row{
+    display:grid;grid-template-columns:1fr;gap:8px;align-items:center;
+    background:var(--paper);border:1px solid var(--edge);
+    border-left:5px solid rgba(43,111,62,.18);
+    border-radius:14px;padding:12px 16px;margin-bottom:10px;
+    box-shadow:0 1px 2px rgba(16,24,40,.04)
+  }
+  .artigos-page .article-row:hover{
+    border-left-color:var(--brand);
+    box-shadow:0 6px 18px rgba(16,24,40,.08)
+  }
+  .artigos-page .article-link{color:var(--link);text-decoration:none;font-weight:600}
+  .artigos-page .article-link:hover{text-decoration:underline}
+  .artigos-page .article-meta{color:var(--muted);font-size:.95rem;margin-top:2px}
+</style>
+{% endblock %}

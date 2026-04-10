@@ -1,0 +1,153 @@
+diff -ruN a/scripts/artigos_sermoes/exportar_formatos_sermao_md.py b/scripts/artigos_sermoes/exportar_formatos_sermao_md.py
+--- a/scripts/artigos_sermoes/exportar_formatos_sermao_md.py	2026-04-06 20:32:49.004819429 +0000
++++ b/scripts/artigos_sermoes/exportar_formatos_sermao_md.py	2026-04-06 20:32:50.709615951 +0000
+@@ -1,4 +1,4 @@
+-﻿import argparse
++import argparse
+ import html
+ import re
+ import unicodedata
+@@ -383,13 +383,13 @@
+       <div class="masthead-top">
+         <div>
+           <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+-            <div class="artifact-chip">Sermao</div>
++            <div class="artifact-chip">Sermão</div>
+             <div class="mode-chip">{page_mode.upper()}</div>
+           </div>
+           <h1>{title}</h1>
+-          <div class="masthead-sub">Sermao diagramado para leitura, estudo e distribuicao editorial, em continuidade visual com o acervo do projeto.</div>
++          <div class="masthead-sub">Sermão diagramado para leitura, estudo e distribuição editorial, em continuidade visual com o acervo do projeto.</div>
+         </div>
+-        <div class="brand">Sermao: Pr. Albino Marks</div>
++        <div class="brand">Sermão: Pr. Albino Marks</div>
+       </div>
+       <div class="action-row">
+         <span class="action-pill ghost">{current_mode_label}</span>
+@@ -398,7 +398,7 @@
+     </header>
+     <section class="key-panel">
+       <p><strong>Texto-chave:</strong> {verse}</p>
+-      <p><strong>Texto biblico central:</strong> {leitura}</p>
++      <p><strong>Texto bíblico central:</strong> {leitura}</p>
+     </section>
+     <article class="reading-surface">
+       <div class="reading-body">
+@@ -504,7 +504,7 @@
+     for label, value in [
+         ("Verso-chave", data["verso_chave"]),
+         ("Sugestão breve de oração", data["oracao"]),
+-        ("Texto bÃ­blico central", data["leitura"]),
++        ("Texto bíblico central", data["leitura"]),
+     ]:
+         table = doc.add_table(rows=1, cols=1)
+         table.autofit = True
+@@ -586,4 +586,4 @@
+ 
+ if __name__ == "__main__":
+     main()
+-
++
+diff -ruN a/sermoes/templates/sermoes/detalhe.html b/sermoes/templates/sermoes/detalhe.html
+--- a/sermoes/templates/sermoes/detalhe.html	2026-04-06 20:32:48.989750648 +0000
++++ b/sermoes/templates/sermoes/detalhe.html	2026-04-06 20:33:09.605691612 +0000
+@@ -26,7 +26,7 @@
+           <a href="{% url 'A_Lei_no_NT:visualizar_artigo' artigo_relacionado.slug %}">Artigo</a>
+         {% endif %}
+         {% if sermao.relatorio_tecnico_pdf %}
+-          <a href="{% url 'sermoes:relatorio' sermao.slug %}">Dossie</a>
++          <a href="{% url 'sermoes:relatorio' sermao.slug %}">Estudo</a>
+         {% endif %}
+         {% if serie_ctx.anterior %}
+           <a href="{% url 'sermoes:detalhe' serie_ctx.anterior.slug %}">Sermao anterior</a>
+@@ -76,18 +76,18 @@
+     </div>
+ 
+       <div class="format-card">
+-        <h2>Dossie de Estudo</h2>
++        <h2>Estudo</h2>
+         {% if sermao.relatorio_tecnico_pdf %}
+-          <a class="format-link secondary" href="{% url 'sermoes:arquivo' sermao.slug 'relatorio-tecnico' %}">Abrir PDF do dossie</a>
+-          <a class="format-link secondary" href="{% url 'sermoes:relatorio' sermao.slug %}">Pagina do dossie</a>
++          <a class="format-link secondary" href="{% url 'sermoes:arquivo' sermao.slug 'relatorio-tecnico' %}">Abrir PDF do estudo</a>
++          <a class="format-link secondary" href="{% url 'sermoes:relatorio' sermao.slug %}">Página do estudo</a>
+         {% else %}
+-          <p class="muted">Dossie de estudo ainda nao associado a este sermao.</p>
++          <p class="muted">Estudo ainda nao associado a este sermão.</p>
+         {% endif %}
+       </div>
+   </section>
+ 
+   <article id="leitura" class="reading-card">
+-    {{ sermao.conteudo_html|safe }}
++    {{ conteudo_sermao_html|default:sermao.conteudo_html|safe }}
+   </article>
+ 
+   {% if relacionados %}
+diff -ruN a/sermoes/views.py b/sermoes/views.py
+--- a/sermoes/views.py	2026-04-06 20:32:48.973145242 +0000
++++ b/sermoes/views.py	2026-04-06 20:34:38.895270721 +0000
+@@ -83,6 +83,55 @@
+     return sermao
+ 
+ 
++def _normalizar_html_legado(html: str) -> str:
++    if not html:
++        return ""
++    if any(marca in html for marca in ("Ã", "â€", "â€“", "â€”", "Â")):
++        try:
++            html = html.encode("latin1").decode("utf-8")
++        except (UnicodeEncodeError, UnicodeDecodeError):
++            pass
++    return html
++
++
++def _extrair_miolo_leitura(html: str) -> str:
++    html = _normalizar_html_legado(html)
++    reading_match = re.search(
++        r"<div\b[^>]*class=[\"'][^\"']*\breading-body\b[^\"']*[\"'][^>]*>(.*?)</div>",
++        html,
++        flags=re.IGNORECASE | re.DOTALL,
++    )
++    if reading_match:
++        return reading_match.group(1).strip()
++    surface_match = re.search(
++        r"<article\b[^>]*class=[\"'][^\"']*\breading-surface\b[^\"']*[\"'][^>]*>(.*?)</article>",
++        html,
++        flags=re.IGNORECASE | re.DOTALL,
++    )
++    if surface_match:
++        return surface_match.group(1).strip()
++    main_match = re.search(
++        r"<main\b[^>]*class=[\"'][^\"']*\breading-surface\b[^\"']*[\"'][^>]*>(.*?)</main>",
++        html,
++        flags=re.IGNORECASE | re.DOTALL,
++    )
++    if main_match:
++        return main_match.group(1).strip()
++    lower_html = html.lower()
++    body_start = lower_html.find("<body")
++    if body_start >= 0:
++        body_tag_end = html.find(">", body_start)
++        body_end = lower_html.rfind("</body>")
++        if body_tag_end >= 0 and body_end > body_tag_end:
++            return html[body_tag_end + 1:body_end].strip()
++    return html.strip()
++
++
++def _conteudo_html_sermao(sermao):
++    html = getattr(sermao, "conteudo_html", "") or ""
++    return _extrair_miolo_leitura(html)
++
++
+ def _conteudo_html_dossie(sermao):
+     field_name = getattr(getattr(sermao, "relatorio_tecnico_pdf", None), "name", "") or ""
+     if not field_name:
+@@ -235,6 +284,7 @@
+         "sermoes/detalhe.html",
+         {
+             "sermao": sermao,
++            "conteudo_sermao_html": _conteudo_html_sermao(sermao),
+             "arquivos": arquivos,
+             "artigo_relacionado": artigo_relacionado,
+             "formatos": _formatos_disponiveis(sermao),

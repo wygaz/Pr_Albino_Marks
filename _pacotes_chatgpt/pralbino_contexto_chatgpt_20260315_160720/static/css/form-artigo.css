@@ -1,0 +1,29 @@
+:root{
+  --bg:#f7f9fb; --card:#fff; --text:#1f2937; --muted:#6b7280;
+  --line:#e5e7eb; --accent:#0ea5a0; --accent-strong:#0b807d; --save:#16a34a;
+}
+.page-wrap{ background:var(--bg); padding: 12px 0 36px; }
+.form-card{ background:var(--card); border:1px solid var(--line); border-radius:16px;
+  padding:24px; max-width:780px; margin:0 auto; box-shadow:0 6px 24px rgba(17,24,39,.06);}
+.form-title{ font-size:1.4rem; font-weight:600; color:var(--text); margin:0 0 18px; }
+#artigo-form{ display:grid; grid-template-columns:1fr 1fr; gap:18px 20px; }
+#artigo-form .full{ grid-column:1 / -1; }
+.form-row{ display:flex; flex-direction:column; }
+.form-row label{ font-size:.92rem; color:var(--muted); margin-bottom:6px; }
+#artigo-form input[type="text"], #artigo-form input[type="datetime-local"],
+#artigo-form input[type="number"], #artigo-form input[type="file"],
+#artigo-form select, #artigo-form textarea{
+  padding:10px 12px; border:1px solid var(--line); border-radius:12px;
+  background:#f9fafb; color:var(--text); transition:box-shadow .15s, border-color .15s, background .15s;
+}
+#artigo-form input[type="file"]{ padding:10px; background:#f3f4f6; }
+#artigo-form input:focus, #artigo-form select:focus, #artigo-form textarea:focus{
+  outline:none; border-color:var(--accent); box-shadow:0 0 0 4px rgba(14,165,160,.15); background:#fff;
+}
+.help{ font-size:.8rem; color:var(--muted); margin-top:6px; }
+.actions{ display:flex; gap:10px; margin-top:6px; }
+.btn{ border:1px solid var(--line); border-radius:12px; padding:10px 14px; background:#fff; cursor:pointer; font-weight:500; }
+.btn-save{ background:var(--save); color:#fff; border-color:transparent; }
+.btn-save:hover{ filter:brightness(.95); }
+.btn-cancel:hover{ border-color:var(--accent); color:var(--accent-strong); }
+@media (max-width:900px){ #artigo-form{ grid-template-columns:1fr; } }

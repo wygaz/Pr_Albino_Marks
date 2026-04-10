@@ -1,0 +1,39 @@
+<section class="editorial-nav">
+  <nav class="editorial-breadcrumbs">
+    {% for item in editorial_nav.breadcrumbs %}
+      {% if item.url %}
+        <a href="{{ item.url }}">{{ item.label }}</a>
+      {% else %}
+        <span>{{ item.label }}</span>
+      {% endif %}
+      {% if not forloop.last %}
+        <span class="sep">/</span>
+      {% endif %}
+    {% endfor %}
+  </nav>
+</section>
+
+<style>
+  .editorial-nav {
+    display:grid;
+    gap:.55rem;
+    background:#fffef8;
+    border:1px solid #d6dde5;
+    border-radius:18px;
+    padding:.8rem 1rem;
+    box-shadow:0 10px 24px rgba(25,42,70,.05);
+  }
+  .editorial-breadcrumbs {
+    display:flex;
+    gap:.45rem;
+    flex-wrap:wrap;
+    color:#6a7b8c;
+    font-size:.92rem;
+  }
+  .editorial-breadcrumbs a {
+    color:#2b5b96;
+    text-decoration:none;
+  }
+  .editorial-breadcrumbs a:hover { text-decoration:underline; }
+  .editorial-breadcrumbs .sep { color:#95a1ad; }
+</style>

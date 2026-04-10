@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Aceite de Termos - Projeto Pr. Albino Marks{% endblock %}
+
+{% block content %}
+<section class="aceite-shell">
+  <div class="aceite-card">
+    <p class="eyebrow">Onboarding de acesso</p>
+    <h1>Concluir aceite para liberar o acesso</h1>
+    <p class="lead">Seu cadastro ja existe. Falta registrar o aceite funcional de Termos de Uso e LGPD para habilitar a area de sermoes e relatorios tecnicos.</p>
+
+    <div class="aceite-grid">
+      <article class="texto-legal">
+        <h2>Termos de Uso <span>({{ termos_versao }})</span></h2>
+        <p>Texto provisório para validacao juridica posterior. Esta area e destinada a estudo pessoal, apoio teologico e leitura privada no contexto do projeto.</p>
+        <p>O acesso nao autoriza redistribuicao automatica, espelhamento integral nem uso indevido dos arquivos disponibilizados.</p>
+      </article>
+
+      <article class="texto-legal">
+        <h2>LGPD e consentimento <span>({{ lgpd_versao }})</span></h2>
+        <p>Texto provisório para validacao juridica posterior. O sistema registra dados minimos de conta e o estado de aceite para controle de acesso e trilha operacional.</p>
+        <p>O usuario podera solicitar revisao/ajuste dos dados cadastrais em etapa posterior do projeto.</p>
+      </article>
+    </div>
+
+    <form method="post" class="aceite-form">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next_url }}">
+      {% for field in form %}
+        <label class="check-line">
+          {{ field }}
+          <span>{{ field.label }}</span>
+        </label>
+        {% for error in field.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      {% endfor %}
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Aceitar e liberar acesso</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .aceite-shell { display:flex; justify-content:center; }
+  .aceite-card {
+    width:min(100%, 860px);
+    background:#fffef8;
+    border:1px solid #d5d9e1;
+    border-radius:20px;
+    padding:2rem;
+    box-shadow:0 12px 28px rgba(25,42,70,.08);
+  }
+  .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin-bottom:.5rem; }
+  .lead { color:#52606d; margin-bottom:1.4rem; }
+  .aceite-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:1rem;
+    margin-bottom:1.4rem;
+  }
+  .texto-legal {
+    background:#fff;
+    border:1px solid #d6dde5;
+    border-radius:16px;
+    padding:1.1rem 1.15rem;
+  }
+  .texto-legal h2 { font-size:1.1rem; margin-bottom:.7rem; }
+  .texto-legal h2 span { font-size:.85rem; color:#607080; }
+  .check-line {
+    display:flex;
+    gap:.75rem;
+    align-items:flex-start;
+    background:#fff;
+    border:1px solid #d6dde5;
+    border-radius:14px;
+    padding:.9rem 1rem;
+    margin-bottom:.85rem;
+  }
+  .actions { margin-top:1rem; }
+  @media (max-width: 760px) {
+    .aceite-grid { grid-template-columns:1fr; }
+  }
+</style>
+{% endblock %}

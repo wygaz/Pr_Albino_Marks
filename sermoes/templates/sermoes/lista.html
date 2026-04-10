@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block title %}Acervo Editorial do Pr. Albino Marks{% endblock %}
+
+{% block content %}
+<section class="sermoes-index">
+  <header class="sermoes-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Acervo editorial</p>
+      <h1>Acervo Editorial</h1>
+      <p class="sub">Escolha uma série para visualizar apenas os artigos, sermões e estudos daquela trilha editorial.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span>Séries ativas</span>
+        <strong>{{ total_series }}</strong>
+      </div>
+      <div class="stat-card">
+        <span>Artefatos disponíveis</span>
+        <strong>{{ total_sermoes }}</strong>
+      </div>
+    </div>
+  </header>
+
+  <section class="series-selector-card">
+    <div class="selector-head">
+      <div>
+        <p class="selector-kicker">Séries</p>
+        <h2>Selecione uma série</h2>
+      </div>
+    </div>
+    <div class="series-grid">
+      {% for bloco in series %}
+        <a href="?serie={{ bloco.anchor }}" class="series-pill {% if selected_serie and selected_serie.anchor == bloco.anchor %}is-active{% endif %}">
+          <span class="pill-title">{{ bloco.nome }}</span>
+          <span class="pill-meta">{{ bloco.total }} itens</span>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if selected_serie %}
+    <article class="serie-card" id="{{ selected_serie.anchor }}">
+      <div class="serie-head">
+        <div>
+          <p class="serie-kicker">Série selecionada</p>
+          <h2>{{ selected_serie.nome }}</h2>
+          <p class="serie-sub">{{ selected_serie.total }} itens editoriais | {{ selected_serie.com_relatorio }} com estudo associado</p>
+        </div>
+      </div>
+
+      <ul class="sermoes-list">
+        {% for sermao in selected_serie.sermoes %}
+          <li class="sermao-row">
+            <div class="sermao-main">
+              <span class="ordem">{{ sermao.ordem }}</span>
+              <div class="sermao-copy">
+                <a href="{% url 'sermoes:detalhe' sermao.slug %}" class="titulo">{{ sermao.titulo_exibicao|default:sermao.titulo }}</a>
+                {% if sermao.resumo %}
+                  <p class="resumo">{{ sermao.resumo|truncatechars:170 }}</p>
+                {% endif %}
+                <div class="micro-meta">
+                  <span>Série: {{ selected_serie.nome }}</span>
+                  {% if sermao.pdf_a4 %}<span>PDF A4</span>{% endif %}
+                  {% if sermao.docx_a4 %}<span>DOCX</span>{% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="row-actions">
+              <a class="btn-ghost" href="{% url 'A_Lei_no_NT:visualizar_artigo' sermao.slug %}">Artigo</a>
+              <a class="btn-abrir" href="{% url 'sermoes:detalhe' sermao.slug %}">Sermão</a>
+              {% if sermao.relatorio_tecnico_pdf %}
+                <a class="btn-study" href="{% url 'sermoes:relatorio' sermao.slug %}">Estudo</a>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </article>
+  {% else %}
+    <div class="empty-card">Nenhuma série disponível no momento.</div>
+  {% endif %}
+</section>
+
+<style>
+  .sermoes-index { display:grid; gap:1.1rem; }
+  .sermoes-hero {
+    display:grid;
+    grid-template-columns:1.5fr .9fr;
+    gap:1rem;
+    background:linear-gradient(135deg, #fffef8 0%, #fff7df 100%);
+    border:1px solid #d6dde5;
+    border-radius:22px;
+    padding:1.25rem;
+    box-shadow:0 14px 28px rgba(25,42,70,.08);
+  }
+  .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin:0 0 .45rem; }
+  .sermoes-hero h1 { margin:0; font-size:2.15rem; }
+  .sub { color:#607080; max-width:56ch; margin:.5rem 0 0; }
+  .hero-stats { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:.8rem; align-self:stretch; }
+  .stat-card {
+    background:#fff;
+    border:1px solid #dbe3ea;
+    border-radius:18px;
+    padding:1rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    min-height:110px;
+  }
+  .stat-card strong { font-size:2rem; line-height:1; color:#2f4f4f; }
+  .stat-card span { color:#607080; margin-top:.35rem; }
+  .series-selector-card,
+  .serie-card {
+    background:#fffef8;
+    border:1px solid #d6dde5;
+    border-radius:20px;
+    padding:1.2rem 1.3rem;
+    box-shadow:0 10px 24px rgba(25,42,70,.06);
+  }
+  .selector-head,
+  .serie-head {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:1rem;
+    margin-bottom:1rem;
+  }
+  .selector-kicker,
+  .serie-kicker { margin:0; color:#607080; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; }
+  .selector-head h2,
+  .serie-head h2 { margin:.2rem 0 .25rem; font-size:1.3rem; }
+  .serie-sub { margin:0; color:#607080; }
+  .series-grid {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:.75rem;
+  }
+  .series-pill {
+    text-decoration:none;
+    background:#1f4f8b;
+    color:#fff;
+    border:2px solid #1f4f8b;
+    border-radius:14px;
+    padding:.85rem 1rem;
+    display:grid;
+    gap:.28rem;
+    text-align:center;
+    min-height:82px;
+    align-content:center;
+    box-shadow:0 6px 14px rgba(31,79,139,.12);
+  }
+  .series-pill:hover {
+    transform:translateY(-1px);
+    box-shadow:0 8px 18px rgba(31,79,139,.16);
+  }
+  .series-pill.is-active {
+    background:#173c69;
+    border-color:#173c69;
+    color:#fff;
+    box-shadow:0 10px 22px rgba(23,60,105,.24);
+  }
+  .pill-title {
+    font-weight:800;
+    line-height:1.18;
+    text-transform:uppercase;
+  }
+  .pill-meta {
+    font-size:.78rem;
+    opacity:.82;
+    font-weight:600;
+  }
+  .sermoes-list { list-style:none; padding:0; margin:0; display:grid; gap:.8rem; }
+  .sermao-row {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:1rem;
+    align-items:center;
+    background:#fff;
+    border:1px solid #e4e8ef;
+    border-left:5px solid rgba(47,79,79,.22);
+    border-radius:16px;
+    padding:1rem;
+  }
+  .sermao-row:hover { border-left-color:#3cb371; }
+  .sermao-main { display:flex; gap:.95rem; align-items:flex-start; }
+  .ordem {
+    min-width:2.35rem;
+    height:2.35rem;
+    border-radius:999px;
+    background:#2f4f4f;
+    color:#ffff77;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:.95rem;
+  }
+  .titulo { font-weight:700; color:#244d84; text-decoration:none; font-size:1.03rem; }
+  .titulo:hover { text-decoration:underline; }
+  .resumo { margin:.35rem 0 .45rem; color:#607080; font-size:.95rem; }
+  .micro-meta { display:flex; gap:.45rem; flex-wrap:wrap; }
+  .micro-meta span {
+    background:#eef5f1;
+    color:#365467;
+    border:1px solid #d6dde5;
+    border-radius:999px;
+    padding:.22rem .55rem;
+    font-size:.78rem;
+    font-weight:600;
+  }
+  .row-actions{display:flex;gap:.55rem;flex-wrap:wrap;justify-content:flex-end}
+  .btn-ghost,
+  .btn-abrir,
+  .btn-study {
+    min-width:88px;
+    text-align:center;
+    white-space:nowrap;
+    text-decoration:none;
+    padding:.65rem 1rem;
+    border-radius:999px;
+    font-weight:700;
+    border:1px solid transparent;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .btn-ghost{ background:#eef4fb; color:#244d84; border-color:#c9d7e8; }
+  .btn-abrir { background:#e8f3ec; color:#1f6b46; border-color:#c5ddcf; }
+  .btn-study{ background:#f8f3e8; color:#7b5b21; border-color:#e5dac1; }
+  .empty-card { background:#fff; border:1px solid #d6dde5; border-radius:16px; padding:1.2rem; }
+  @media (max-width: 860px) {
+    .sermoes-hero { grid-template-columns:1fr; }
+  }
+  @media (max-width: 720px) {
+    .series-grid { grid-template-columns:1fr; }
+    .sermao-row { grid-template-columns:1fr; }
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,77 @@
+﻿INVENTARIO DE ALVOS PARA RESERVA
+Gerado em: 2026-03-16 02:34:24
+Root: C:\Users\Wanderley\Apps\Pr_Albino_Marks_restaurado
+
+[DIRETORIOS]
+Apenas_Local
+scripts
+tools\Scripts
+tools\pralbino_pipeline
+tools\pralbino_sermoes
+A_Lei_no_NT\Zip
+
+[ARQUIVOS SOLTOS NA RAIZ]
+.git-redactions.txt
+Ativarvenv.ps1
+atualizar_zips_generico.ps1
+atualizar_zips_Pr_Albino.ps1
+backup_artigos_antes_limpeza.json
+baixar_anexos_pralbino_esbocos.py
+baixar_referenciados_s3.ps1
+baixar_restantes_fallback.ps1
+classificar_em_4_series.py
+coletar_contexto_pralbino_para_chatgpt.ps1
+coletar_contexto_pralbino_para_chatgpt_v2.ps1
+comparar_db_vs_s3.py
+comparar_modelos_sermoes_pralbino.py
+db.json
+delete_old_iam_user.ps1
+estimativa_custos_sermoes_pralbino.xlsx
+exportar_formatos_sermao_md.py
+exportar_refs_arquivos.py
+filtrar_refs_uploads_artigos.py
+gerar_pdfs.py
+gerar_pdfs_banco.py
+gerar_relatorio_tecnico_de_docx.py
+gerar_sermao_de_relatorio.py
+Guia_Projeto_PrAlbinoMarks.txt
+inventariar_classificar_scripts_ecossistema.py
+inventariar_duplicatas_controlado.py
+normalizar_s3_listagem.py
+PLANO_saneamento_scriptal_fase1_v2.md
+PLANO_saneamento_scriptal_fase1_v3.md
+pyrightconfig.json
+rastrear_saneiar_segredos_scripts.py
+rastrear_saneiar_segredos_scripts_v2.py
+README.md
+README_ETAPA2_ORQUESTRADOR (1).md
+README_ETAPA2_ORQUESTRADOR (2).md
+README_ETAPA2_ORQUESTRADOR (3).md
+README_ETAPA2_ORQUESTRADOR (4).md
+README_ETAPA2_ORQUESTRADOR (5).md
+README_ETAPA2_ORQUESTRADOR (6).md
+README_ETAPA2_ORQUESTRADOR.md
+README_inventariar_duplicatas_controlado.md
+README_rastrear_saneiar_segredos_scripts.md
+README_rastrear_saneiar_segredos_scripts_v2.md
+README_reservar_e_recriar_fluxo_zero_pralbino_v2.md
+README_reservar_e_recriar_fluxo_zero_pralbino_v3.md
+README_reservar_e_recriar_fluxo_zero_pralbino_v4.md
+refs_uploads_artigos_unicos.txt
+reservar_e_recriar_fluxo_zero_pralbino.ps1
+reservar_e_recriar_fluxo_zero_pralbino_v2.ps1
+reservar_e_recriar_fluxo_zero_pralbino_v3.ps1
+rodar_remoto.ps1
+roteiro_testes_PrAlbinoMarks.md
+run.ps1
+run_pipeline_sermao_completo (1).ps1
+run_pipeline_sermao_completo.ps1
+sanear_workspace_pralbino_fase1_v2.ps1
+sanear_workspace_pralbino_fase1_v3.ps1
+selecionados_atual.json
+teste_db_conn.ps1
+teste_db_diag.ps1
+teste_estruturado.py
+teste_minimo.py
+zip_jobs.json
+zip_repo_sanitizado.ps1

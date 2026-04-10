@@ -1,0 +1,1 @@
+Extraia na raiz do projeto e substitua sermoes/views.py. Esta versao corrige todas as regex com aspas internas que estavam causando SyntaxError. Reinicie o servidor Django depois.

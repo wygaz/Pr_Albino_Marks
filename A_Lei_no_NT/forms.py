@@ -1,5 +1,7 @@
 # A_Lei_no_NT/forms.py
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from .models import Artigo, Autor
@@ -129,3 +131,37 @@ class ArtigoForm(forms.ModelForm):
                 pass
 
         return instance
+
+
+class CadastroVisitanteForm(UserCreationForm):
+    email = forms.EmailField(required=True, label="E-mail")
+    first_name = forms.CharField(required=False, max_length=150, label="Nome")
+    last_name = forms.CharField(required=False, max_length=150, label="Sobrenome")
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
+        labels = {
+            "username": "Usuario",
+            "password1": "Senha",
+            "password2": "Confirmacao da senha",
+        }
+
+    def clean_email(self):
+        email = (self.cleaned_data.get("email") or "").strip().lower()
+        if not email:
+            raise ValidationError("Informe um e-mail valido.")
+        if User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("Ja existe uma conta com este e-mail.")
+        return email
+
+
+class AceiteAcessoForm(forms.Form):
+    aceitar_termos = forms.BooleanField(
+        required=True,
+        label="Li e concordo com os Termos de Uso provisórios desta área restrita.",
+    )
+    aceitar_lgpd = forms.BooleanField(
+        required=True,
+        label="Li e concordo com a política provisória de tratamento de dados pessoais.",
+    )

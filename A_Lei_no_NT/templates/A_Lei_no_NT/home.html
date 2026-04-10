@@ -2,29 +2,126 @@
 {% load static %}
 
 {% block content %}
-  <div id="bloco-texto">
-    <div class="pagina-centralizada my-5">
-      <img src="{% static 'Imagens/Capa_do_Projeto_Pr_Albino_1.png' %}" 
-          class="img-fluid rounded shadow-sm mb-4 mx-auto d-block"
-          alt="Imagem de capa do Projeto Pr. Albino Marks">
+  <section class="home-shell">
+    <div class="hero-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Projeto Pr. Albino Marks</p>
+        <h1>Artigos, sermoes e trilhas de estudo em uma unica casa editorial.</h1>
+        <p class="lead">
+          Este projeto preserva e divulga estudos, reflexoes e materiais de apoio do Pr. Albino Marks.
+          Os artigos permanecem publicos; a area de sermoes e relatorios tecnicos segue acesso controlado por cadastro e aceite.
+        </p>
+        <div class="home-actions">
+          <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn-main">Ver artigos</a>
+          <a href="{% url 'sermoes:lista' %}" class="btn-dark">Entrar na area de sermoes</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="{% static 'Imagens/Capa_do_Projeto_Pr_Albino_1.png' %}" class="img-fluid rounded shadow-sm" alt="Imagem de capa do Projeto Pr. Albino Marks">
+      </div>
+    </div>
 
-      <p class="mb-2">
-        Este projeto visa preservar e divulgar os estudos, reflexões e escritos do Pr. Albino Marks.
-      </p>
-      <p class="mb-4">
-        Um acervo de sabedoria, fé e dedicação, reunido para edificação espiritual e crescimento pessoal.
-      </p>
+    <section class="feature-grid">
+      <article class="feature-card">
+        <p class="eyebrow">Acervo publico</p>
+        <h2>Artigos</h2>
+        <p>Leitura aberta, organizada por area, com PDF e integracao editorial progressiva com os sermoes.</p>
+        <a class="feature-link" href="{% url 'A_Lei_no_NT:listar_artigos' %}">Abrir artigos</a>
+      </article>
+      <article class="feature-card">
+        <p class="eyebrow">Acesso habilitado</p>
+        <h2>Sermoes</h2>
+        <p>Mensagens organizadas por serie, com leitura principal, downloads e navegacao contextual entre artigo, sermao e relatorio.</p>
+        <a class="feature-link" href="{% url 'sermoes:lista' %}">Abrir area de sermoes</a>
+      </article>
+      <article class="feature-card">
+        <p class="eyebrow">Apoio ao estudo</p>
+        <h2>Relatorios tecnicos</h2>
+        <p>Material reservado para aprofundamento doutrinario, hermeneutico e de preparacao ministerial.</p>
+        <a class="feature-link" href="https://www.albinomarks.com.br" target="_blank" rel="noopener noreferrer">Site institucional</a>
+      </article>
+    </section>
+
+    <div class="access-note">
+      <strong>Acesso a area restrita:</strong>
+      visitantes e cadastrados sem aceite nao acessam sermoes e relatorios tecnicos. O desbloqueio ocorre apos login e aceite de Termos e LGPD.
     </div>
-    <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn btn-outline-primary">
-          📄 Ver Artigos
-        </a>
-        <a href="{% url 'A_Lei_no_NT:biografia' %}" class="btn btn-outline-dark">
-          👤 Conhecer o Autor
-        </a>
-        <a href="{% url 'A_Lei_no_NT:motivacao_publicacao' %}" class="btn btn-outline-info">
-          📘 Entender o Projeto
-        </a>
+    <div class="site-note">
+      Endereco do projeto: <a href="https://www.albinomarks.com.br" target="_blank" rel="noopener noreferrer">www.albinomarks.com.br</a>
     </div>
-  </div>
+  </section>
+
+<style>
+  .home-shell { display:grid; gap:1.1rem; }
+  .hero-card {
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:1.2rem;
+    background:#fffef8;
+    border:1px solid #d6dde5;
+    border-radius:22px;
+    padding:1.4rem;
+    box-shadow:0 12px 24px rgba(25,42,70,.06);
+  }
+  .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:#567; margin:0 0 .45rem; }
+  .hero-card h1 { margin:0; font-size:2.15rem; color:#1d334a; }
+  .lead { color:#58697b; margin:.85rem 0 0; max-width:60ch; }
+  .home-actions { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1.2rem; }
+  .btn-main, .btn-dark {
+    text-decoration:none;
+    padding:.75rem 1rem;
+    border-radius:999px;
+    font-weight:700;
+  }
+  .btn-main { background:#3cb371; color:#fff; }
+  .btn-dark { background:#2f4f4f; color:#ffff77; }
+  .feature-grid {
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:1rem;
+  }
+  .feature-card {
+    background:#fffef8;
+    border:1px solid #d6dde5;
+    border-radius:18px;
+    padding:1.15rem;
+    box-shadow:0 10px 24px rgba(25,42,70,.05);
+    display:grid;
+    gap:.8rem;
+  }
+  .feature-card h2 { margin:.15rem 0 .45rem; color:#1d334a; font-size:1.2rem; }
+  .feature-card p { margin:0; color:#607080; }
+  .feature-link {
+    justify-self:start;
+    text-decoration:none;
+    background:#eef5f1;
+    color:#244d84;
+    border:1px solid #d6dde5;
+    border-radius:999px;
+    padding:.48rem .8rem;
+    font-weight:600;
+  }
+  .feature-link:hover { text-decoration:underline; }
+  .access-note {
+    background:#fff;
+    border:1px solid #d6dde5;
+    border-left:5px solid #c9a227;
+    border-radius:16px;
+    padding:1rem 1.1rem;
+    color:#495a6c;
+  }
+  .site-note {
+    color:#58697b;
+    font-size:.95rem;
+  }
+  .site-note a {
+    color:#244d84;
+    font-weight:600;
+    text-decoration:none;
+  }
+  .site-note a:hover { text-decoration:underline; }
+  @media (max-width: 860px) {
+    .hero-card, .feature-grid { grid-template-columns:1fr; }
+  }
+</style>
 {% endblock %}
