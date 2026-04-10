@@ -25,5 +25,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn pralbinomarks.wsgi:application --bind 0.0.0.0:${PORT}"]
-
+CMD ["sh", "-c", "gunicorn pralbinomarks.wsgi:application --bind 0.0.0.0:${PORT}"]
