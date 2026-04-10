@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.conf import settings
 from django.views.generic import RedirectView
+from django.http import HttpResponse
 
 # 1) Para montar URL estática (favicon)
 from django.templatetags.static import static as static_url
@@ -12,6 +13,7 @@ from django.conf.urls.static import static as serve_media
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('healthz/', lambda request: HttpResponse('ok', content_type='text/plain'), name='healthz'),
     path(
         'conta/entrar/',
         auth_views.LoginView.as_view(template_name='registration/login.html', redirect_authenticated_user=True),
