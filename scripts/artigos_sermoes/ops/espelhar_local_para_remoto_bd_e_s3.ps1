@@ -7,6 +7,11 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+# Observacao operacional:
+# neste ambiente o AWS CLI pode exigir --ca-bundle apontando para
+# .\venv\Lib\site-packages\certifi\cacert.pem, como ja ocorre no script
+# de backup remoto. Se o sync com S3 falhar por SSL, reutilize esse bundle.
+
 function Get-ProjectRoot([string]$StartDir) {
     $cur = [System.IO.Path]::GetFullPath($StartDir)
     for ($i = 0; $i -lt 12; $i++) {
