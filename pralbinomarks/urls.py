@@ -6,9 +6,7 @@ from django.conf import settings
 from django.views.generic import RedirectView
 from django.http import HttpResponse
 
-# 1) Para montar URL estática (favicon)
-from django.templatetags.static import static as static_url
-# 2) Para servir MEDIA em dev
+# Para servir MEDIA em dev
 from django.conf.urls.static import static as serve_media
 
 urlpatterns = [
@@ -24,9 +22,9 @@ urlpatterns = [
     path('', include(('A_Lei_no_NT.urls', 'A_Lei_no_NT'), namespace='A_Lei_no_NT')),
 
 
-    # Opcional: atender /favicon.ico
+    # Evita depender do manifest de staticfiles durante o import das URLs.
     path('favicon.ico', RedirectView.as_view(
-        url=static_url('favicon.ico'),
+        url='/static/favicon.ico',
         permanent=False,  # evita cache 301 duro
     )),
 ]
