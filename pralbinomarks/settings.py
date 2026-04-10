@@ -255,6 +255,7 @@ if USE_S3:
 # ========= Default Auto Field =========
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 # ========= Pastas de PDF =========
 PDF_OUTPUT_DIR  = BASE_DIR / "media" / "pdfs"
 PDF_ARTIGOS_DIR = PDF_OUTPUT_DIR / "artigos"
@@ -269,7 +270,6 @@ LOGGING = {
         "django.contrib.auth": {"handlers": ["console"], "level": "DEBUG"},
     },
 }
-
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 
