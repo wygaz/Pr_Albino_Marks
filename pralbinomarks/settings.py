@@ -145,7 +145,6 @@ INSTALLED_APPS = [
     "pralbinomarks",
     "sermoes",
 
-
     # útil em dev para WhiteNoise assumir o controle
     "whitenoise.runserver_nostatic",
 ]
