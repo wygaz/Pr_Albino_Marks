@@ -82,7 +82,8 @@ def perguntar_periodo(data_ini_arg: str | None = None, data_fim_arg: str | None 
     if data_ini_arg:
         data_ini = parse_data(data_ini_arg)
     else:
-        data_ini = datetime.date(2024, 9, 20)
+#        data_ini = datetime.date(2024, 9, 20)
+         data_ini = datetime.date(2026, 4, 25)
 
     if data_fim_arg:
         data_fim = parse_data(data_fim_arg)

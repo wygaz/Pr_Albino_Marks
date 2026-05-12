@@ -1,4 +1,6 @@
-param()
+param(
+    [string]$PublishTarget = ""
+)
 
 $ErrorActionPreference = "Stop"
 
@@ -18,6 +20,22 @@ function Get-ProjectRoot([string]$StartDir) {
 }
 
 $Root = Get-ProjectRoot $PSScriptRoot
+
+if (-not $PublishTarget) {
+    $answer = Read-Host "Publicar em qual ambiente? [Remoto/Local] (padrao: Remoto)"
+    $PublishTarget = $answer
+}
+
+$normalizedTarget = ($PublishTarget | ForEach-Object { "$_".Trim().ToLowerInvariant() })
+if ([string]::IsNullOrWhiteSpace($normalizedTarget)) {
+    $normalizedTarget = "remoto"
+}
+switch ($normalizedTarget) {
+    "remoto" { $env:ENV_NAME = "remoto" }
+    "remote" { $env:ENV_NAME = "remoto" }
+    "local" { $env:ENV_NAME = "local" }
+    default { throw "Valor invalido para ambiente. Use Remoto ou Local." }
+}
 
 $Python = $null
 try {
@@ -72,4 +90,5 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $BrowseUrl = "http://127.0.0.1:$HelperPort/browse"
+Write-Host "[OK] Alvo ativo do Browse: $env:ENV_NAME"
 Start-Process $BrowseUrl

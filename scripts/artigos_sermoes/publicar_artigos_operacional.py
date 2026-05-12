@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
+from datetime import datetime, timezone as dt_timezone
 from pathlib import Path
 
 from django.core.files import File
+from django.core.files.storage import default_storage
 from django.utils import timezone
 
 from artigos_operacional_utils import article_entries, ascii_slug, clean_article_title, repo_root_from_here, safe_filename, serie_nome_from_dirname
@@ -88,6 +91,66 @@ def resolve_image_path(img_root: Path, entry) -> Path | None:
     return None
 
 
+def current_publish_target() -> str:
+    env_name = os.getenv("ENV_NAME", "local").strip().lower()
+    return "remote" if env_name not in {"", "local"} else "local"
+
+
+def prepare_remote_storage_for_canonical_save(artigo) -> None:
+    try:
+        setattr(default_storage, "file_overwrite", True)
+    except Exception:
+        pass
+    for field_name in ("arquivo_word", "arquivo_pdf", "imagem_capa"):
+        try:
+            storage = getattr(getattr(artigo, field_name), "storage", None)
+            if storage is not None:
+                setattr(storage, "file_overwrite", True)
+        except Exception:
+            pass
+
+
+def publication_status_path(root: Path) -> Path:
+    return root / "Apenas_Local" / "scripts" / "homologacao" / "publicacao_artigos_status.json"
+
+
+def load_publication_status(root: Path) -> dict:
+    path = publication_status_path(root)
+    if not path.exists():
+        return {"items": {}}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"items": {}}
+    if not isinstance(data, dict):
+        return {"items": {}}
+    items = data.get("items")
+    if not isinstance(items, dict):
+        data["items"] = {}
+    return data
+
+
+def save_publication_status(root: Path, data: dict) -> None:
+    path = publication_status_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data["_meta"] = {"updated_at": datetime.now(dt_timezone.utc).isoformat()}
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def update_publication_status(root: Path, slug: str, titulo: str, target: str, kinds: set[str]) -> None:
+    data = load_publication_status(root)
+    items = data.setdefault("items", {})
+    entry = items.setdefault(slug, {"slug": slug, "titulo": titulo, "targets": {}})
+    entry["titulo"] = titulo
+    targets = entry.setdefault("targets", {})
+    target_entry = targets.setdefault(target, {})
+    for kind in ["docx", "pdf", "img"]:
+        if kind in kinds:
+            target_entry[kind] = True
+    target_entry["updated_at"] = datetime.now(dt_timezone.utc).isoformat()
+    save_publication_status(root, data)
+
+
 def main() -> int:
     args = build_parser().parse_args()
     root = repo_root_from_here()
@@ -112,6 +175,7 @@ def main() -> int:
     fail = 0
     total = len(entries)
     publish_kinds = parse_publish_kinds(args.publish_kinds)
+    publish_target = current_publish_target()
 
     for idx, entry in enumerate(entries, start=1):
         pct = int((idx / total) * 100) if total else 100
@@ -133,6 +197,9 @@ def main() -> int:
 
             if not artigo.slug:
                 artigo.slug = gerar_slug(clean_article_title(entry.titulo))
+
+            if publish_target == "remote":
+                prepare_remote_storage_for_canonical_save(artigo)
 
             print("  [1/3] Convertendo DOCX para HTML...")
             html, *_ = docx_para_html(str(entry.docx_path))
@@ -176,6 +243,7 @@ def main() -> int:
             print("  [3/3] Salvando artigo...")
             artigo.save()
             ok += 1
+            update_publication_status(root, slug_final, entry.titulo, publish_target, publish_kinds)
             print(f"  [OK] {entry.titulo} -> {slug_final} | tipos={','.join(sorted(publish_kinds))}")
         except Exception as exc:  # noqa: BLE001
             fail += 1

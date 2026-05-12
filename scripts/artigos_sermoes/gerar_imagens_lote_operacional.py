@@ -83,9 +83,9 @@ def main() -> int:
     out_root.mkdir(parents=True, exist_ok=True)
 
     with prompts_csv.open("r", encoding="utf-8-sig", newline="") as handle:
-        sample = handle.read(4096)
+        header = handle.readline()
         handle.seek(0)
-        delimiter = ";" if sample.count(";") >= sample.count(",") else ","
+        delimiter = ";" if ";" in header else ","
         rows = list(csv.DictReader(handle, delimiter=delimiter))
     rows = normalized_rows(rows)
     if args.docx_path:

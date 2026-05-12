@@ -1,5 +1,7 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
 import re
 from typing import Any
@@ -10,6 +12,7 @@ from sermoes_django import normalize_lookup, setup_django
 
 ARTICLE_EXTS = {".docx", ".html", ".htm", ".pdf", ".md", ".txt"}
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
+PUBLICATION_STATUS_REL_PATH = Path("Apenas_Local") / "scripts" / "homologacao" / "publicacao_artigos_status.json"
 
 ARTICLE_ALIASES = {
     "origem-do-grande-conflito-cosmico-de-conceitos-espirituais": "a-origem-do-grande-conflito-de-conceitos-espirituais",
@@ -137,6 +140,32 @@ def _guess_image_for_docx(root: Path, docx_path: str) -> str:
     return ""
 
 
+def _guess_pdf_for_docx(root: Path, docx_path: str) -> str:
+    if not docx_path:
+        return ""
+    docx = Path(docx_path)
+    try:
+        series_root = root / "Apenas_Local" / "operacional" / "artigos" / "series"
+        rel = docx.relative_to(series_root)
+    except Exception:
+        return ""
+    pdf_dir = root / "Apenas_Local" / "operacional" / "artigos" / "pdfs" / rel.parent
+    if not pdf_dir.exists():
+        return ""
+    stems = []
+    raw_stem = docx.stem
+    clean_stem = _clean_workspace_stem(docx)
+    for item in [raw_stem, clean_stem, _alias_slug(clean_stem)]:
+        item = str(item or "").strip()
+        if item and item not in stems:
+            stems.append(item)
+    for stem in stems:
+        candidate = pdf_dir / f"{stem}.pdf"
+        if candidate.exists():
+            return str(candidate)
+    return ""
+
+
 def _field_exists(field: Any) -> bool:
     try:
         name = str(getattr(field, "name", "") or "").strip()
@@ -163,6 +192,72 @@ def _published_kinds(artigo: Any | None) -> tuple[bool, bool, bool]:
     )
 
 
+def _current_publish_target() -> str:
+    env_name = os.getenv("ENV_NAME", "local").strip().lower()
+    return "remote" if env_name not in {"", "local"} else "local"
+
+
+def _load_publication_status(root: Path) -> dict[str, Any]:
+    path = root / PUBLICATION_STATUS_REL_PATH
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    items = payload.get("items")
+    return items if isinstance(items, dict) else {}
+
+
+def _publication_status_for(
+    publication_status: dict[str, Any],
+    slug: str,
+    workspace: dict[str, Any] | None,
+    artigo: Any | None,
+) -> tuple[dict[str, bool], dict[str, bool]]:
+    candidates: list[str] = []
+    for value in [
+        slug,
+        str((workspace or {}).get("lookup_key", "") or "").replace("_", "-"),
+        getattr(artigo, "slug", "") if artigo is not None else "",
+    ]:
+        value = str(value or "").strip()
+        for candidate in _candidate_slug_keys(value):
+            if candidate and candidate not in candidates:
+                candidates.append(candidate)
+
+    item = {}
+    for candidate in candidates:
+        item = publication_status.get(candidate) or {}
+        if item:
+            break
+    targets = item.get("targets") if isinstance(item, dict) else {}
+    if not isinstance(targets, dict):
+        targets = {}
+
+    current_docx, current_pdf, current_img = _published_kinds(artigo)
+    current_target = _current_publish_target()
+    current_map = {"docx": current_docx, "pdf": current_pdf, "img": current_img}
+
+    local = {"docx": False, "pdf": False, "img": False}
+    remote = {"docx": False, "pdf": False, "img": False}
+    local.update({k: bool(v) for k, v in (targets.get("local") or {}).items() if k in local})
+    remote.update({k: bool(v) for k, v in (targets.get("remote") or {}).items() if k in remote})
+    if current_target == "local":
+        local = {k: bool(local.get(k)) or bool(current_map.get(k)) for k in local}
+    else:
+        remote = {k: bool(remote.get(k)) or bool(current_map.get(k)) for k in remote}
+    return local, remote
+
+
+def _publication_state_label(publicado_local: bool, publicado_remoto: bool) -> str:
+    if publicado_remoto:
+        return "remoto"
+    if publicado_local:
+        return "local"
+    return "nao"
+
+
 def _recommended_publish_kind(pub_docx: bool, pub_pdf: bool, pub_img: bool) -> str:
     missing = []
     if not pub_docx:
@@ -184,7 +279,7 @@ def scan_article_workspace(root: Path, input_dir: Path | None) -> tuple[dict[str
         return {}, info
     input_dir = Path(input_dir)
     if not input_dir.exists():
-        info["warnings"].append(f"InputDirArtigos não encontrado: {input_dir}")
+        info["warnings"].append(f"InputDirArtigos nÃ£o encontrado: {input_dir}")
         return {}, info
 
     info["enabled"] = True
@@ -232,6 +327,8 @@ def scan_article_workspace(root: Path, input_dir: Path | None) -> tuple[dict[str
 
     for entry in groups.values():
         entry["image_path"] = _guess_image_for_docx(root, entry.get("docx_path", ""))
+        if not entry.get("pdf_path"):
+            entry["pdf_path"] = _guess_pdf_for_docx(root, entry.get("docx_path", ""))
 
     info["groups"] = len(groups)
     return groups, info
@@ -293,11 +390,19 @@ def _stage_from_workspace(workspace: dict[str, Any] | None, artigo: Any | None, 
     return "SEM_INSUMOS_LOCAIS", plan.steps, plan.normalized, completed, completed_text
 
 
-def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | None, root: Path, input_dir_artigos: Path | None = None) -> dict[str, Any]:
+def build_article_pending_row(
+    artigo: Any | None,
+    workspace: dict[str, Any] | None,
+    root: Path,
+    input_dir_artigos: Path | None = None,
+    publication_status: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     titulo_workspace = _workspace_display_title(workspace).strip()
     titulo_bd = str(getattr(artigo, "titulo", "") or "").strip() if artigo is not None else ""
     titulo = (titulo_workspace or titulo_bd).strip()
-    slug = (str(getattr(artigo, "slug", "") or "") if artigo is not None else normalize_lookup(titulo).replace("_", "-")).strip()
+    workspace_slug = str((workspace or {}).get("lookup_key", "") or "").strip().replace("_", "-")
+    inferred_slug = normalize_lookup(titulo).replace("_", "-")
+    slug = (str(getattr(artigo, "slug", "") or "") if artigo is not None else (workspace_slug or inferred_slug)).strip()
     area_obj = getattr(artigo, "area", None) if artigo is not None else None
     autor_obj = getattr(artigo, "autor", None) if artigo is not None else None
     serie = str(getattr(area_obj, "nome", "") or "").strip()
@@ -306,9 +411,16 @@ def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | No
     source_types = ", ".join(sorted((workspace or {}).get("source_types", [])))
     rel_paths = ", ".join((workspace or {}).get("paths_rel", [])[:3])
     lookup_key = normalize_lookup(slug or titulo)
-    publicado_docx, publicado_pdf, publicado_img = _published_kinds(artigo)
-    publicado = publicado_docx and publicado_pdf and publicado_img
+    local_status, remote_status = _publication_status_for(publication_status or {}, slug, workspace, artigo)
+    publicado_local = local_status["docx"] and local_status["pdf"] and local_status["img"]
+    publicado_remoto = remote_status["docx"] and remote_status["pdf"] and remote_status["img"]
+    publicado_docx = remote_status["docx"]
+    publicado_pdf = remote_status["pdf"]
+    publicado_img = remote_status["img"]
+    publicado = publicado_remoto
     publish_kind_recomendado = _recommended_publish_kind(publicado_docx, publicado_pdf, publicado_img)
+    status_manifest = "PUBLICADO_ARTIGO" if publicado_remoto else ("PUBLICADO_LOCAL_PENDENTE_REMOTO" if publicado_local else "PENDENTE_PUBLICACAO_ARTIGO")
+    ultimo_status_execucao = "PUBLICADO" if publicado_remoto else ("PUBLICADO_LOCAL" if publicado_local else "PENDENTE_GERACAO")
     return {
         "context": "artigos_sem_sermao",
         "id_base": f"artigo__{getattr(artigo, 'id', lookup_key or 'arquivo')}",
@@ -321,11 +433,7 @@ def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | No
         "pasta_relativa": rel_paths,
         "destino_media_rel": f"media/artigos/{slug}" if slug else "",
         "nome_arquivo_canonico": f"{slug}.docx" if slug else "",
-        "fonte_titulo": (
-            "workspace:docx"
-            if titulo_workspace
-            else ("bd:titulo" if artigo is not None else "workspace:arquivo")
-        ),
+        "fonte_titulo": "workspace:docx" if titulo_workspace else ("bd:titulo" if artigo is not None else "workspace:arquivo"),
         "fonte_serie": "bd:area" if serie else "",
         "fonte_autor": "bd:autor" if autor else "",
         "artigo_id": str(getattr(artigo, "id", "") or ""),
@@ -342,6 +450,9 @@ def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | No
         "publicado_docx": publicado_docx,
         "publicado_pdf": publicado_pdf,
         "publicado_img": publicado_img,
+        "publicado_bd_local": publicado_local,
+        "publicado_bd_remoto": publicado_remoto,
+        "publicado_em_alvo": _publication_state_label(publicado_local, publicado_remoto),
         "publish_kind_recomendado": publish_kind_recomendado,
         "html_a4_path": "",
         "html_a5_path": "",
@@ -358,13 +469,13 @@ def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | No
         "pdf_a5_ok": False,
         "pdf_tablet_ok": False,
         "completo_ok": False,
-        "status_manifest": "PUBLICADO_ARTIGO" if publicado else "PENDENTE_PUBLICACAO_ARTIGO",
+        "status_manifest": status_manifest,
         "duplicado_detectado": False,
         "registro_existe": artigo is not None and bool(getattr(artigo, "pk", None)),
         "publicado": publicado,
         "sermao_id": "",
         "slug_atual": slug,
-        "ultimo_status_execucao": "PUBLICADO" if publicado else "PENDENTE_GERACAO",
+        "ultimo_status_execucao": ultimo_status_execucao,
         "ultima_execucao_em": "",
         "mensagem_execucao": "",
         "assinatura_entrada": "",
@@ -380,13 +491,13 @@ def build_article_pending_row(artigo: Any | None, workspace: dict[str, Any] | No
         "ultima_operacao_solicitada": "",
         "historico_operacoes": "",
         "observacoes": (
-            f"Pendência pronta para geração/publicação em lote. Fontes locais: {source_types or 'nenhuma'}. "
-            f"Etapas concluídas (inferidas): {etapas_concluidas_texto or 'nenhuma'}. "
-            f"Publicação BD: docx={'sim' if publicado_docx else 'não'}, pdf={'sim' if publicado_pdf else 'não'}, img={'sim' if publicado_img else 'não'}. "
-            f"Execute operações {operacao_spec or '1-6'} conforme necessário."
+            f"Pendente para geracao/publicacao em lote. Fontes locais: {source_types or 'nenhuma'}. "
+            f"Etapas concluidas (inferidas): {etapas_concluidas_texto or 'nenhuma'}. "
+            f"BD local={'sim' if publicado_local else 'nao'}, BD remoto={'sim' if publicado_remoto else 'nao'}. "
+            f"Arquivos remotos: docx={'sim' if publicado_docx else 'nao'}, pdf={'sim' if publicado_pdf else 'nao'}, img={'sim' if publicado_img else 'nao'}. "
+            f"Execute operacoes {operacao_spec or '1-6'} conforme necessario."
         ),
     }
-
 
 def fetch_articles_without_sermon(
     root: Path,
@@ -407,6 +518,7 @@ def fetch_articles_without_sermon(
 
     workspace_base = workspace_artigos or input_dir_artigos
     workspace_groups, workspace_info = scan_article_workspace(root, workspace_base)
+    publication_status = _load_publication_status(root)
     info["workspace_enabled"] = workspace_info.get("enabled", False)
     info["workspace_groups"] = workspace_info.get("groups", 0)
     info["warnings"].extend(workspace_info.get("warnings", []))
@@ -417,9 +529,9 @@ def fetch_articles_without_sermon(
         info["enabled"] = True
         info["settings_module"] = module
     except Exception as exc:  # noqa: BLE001
-        info["warnings"].append(f"BD indisponível para artigos: {exc}")
+        info["warnings"].append(f"BD indisponÃ­vel para artigos: {exc}")
         pending_rows = [
-            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos)
+            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos, publication_status=publication_status)
             for ws in workspace_groups.values()
         ]
         info["pending"] = len(pending_rows)
@@ -428,9 +540,9 @@ def fetch_articles_without_sermon(
     try:
         from A_Lei_no_NT.models import Artigo
     except Exception as exc:  # noqa: BLE001
-        info["warnings"].append(f"Não foi possível importar Artigo: {exc}")
+        info["warnings"].append(f"NÃ£o foi possÃ­vel importar Artigo: {exc}")
         pending_rows = [
-            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos)
+            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos, publication_status=publication_status)
             for ws in workspace_groups.values()
         ]
         info["pending"] = len(pending_rows)
@@ -441,7 +553,7 @@ def fetch_articles_without_sermon(
     except Exception as exc:  # noqa: BLE001
         info["warnings"].append(f"Falha ao ler Artigo do BD: {exc}")
         pending_rows = [
-            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos)
+            build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos, publication_status=publication_status)
             for ws in workspace_groups.values()
         ]
         info["pending"] = len(pending_rows)
@@ -464,6 +576,8 @@ def fetch_articles_without_sermon(
             covered = True
         elif title_key and title_key in covered_titles:
             covered = True
+        local_status, remote_status = _publication_status_for(publication_status, slug, None, artigo)
+        remotely_published = remote_status["docx"] and remote_status["pdf"] and remote_status["img"]
         if covered:
             continue
 
@@ -473,12 +587,39 @@ def fetch_articles_without_sermon(
         if ws["lookup_key"] in matched_workspace_keys:
             continue
         matched_workspace_keys.add(ws["lookup_key"])
-        pending_rows.append(build_article_pending_row(artigo, ws, root=root, input_dir_artigos=input_dir_artigos))
+        pending_rows.append(
+            build_article_pending_row(
+                artigo,
+                ws,
+                root=root,
+                input_dir_artigos=input_dir_artigos,
+                publication_status=publication_status,
+            )
+        )
 
     for key, ws in workspace_groups.items():
+        local_status, remote_status = _publication_status_for(publication_status, key, ws, None)
+        remotely_published = remote_status["docx"] and remote_status["pdf"] and remote_status["img"]
+        if key in covered_slugs or key in covered_titles:
+            continue
+        covered_alias = False
+        for candidate in _candidate_slug_keys(key):
+            if candidate in covered_slugs or candidate in covered_titles:
+                covered_alias = True
+                break
+        if covered_alias:
+            continue
         if any(candidate in matched_workspace_keys for candidate in _candidate_slug_keys(key)):
             continue
-        pending_rows.append(build_article_pending_row(None, ws, root=root, input_dir_artigos=input_dir_artigos))
+        pending_rows.append(
+            build_article_pending_row(
+                None,
+                ws,
+                root=root,
+                input_dir_artigos=input_dir_artigos,
+                publication_status=publication_status,
+            )
+        )
 
     info["pending"] = len(pending_rows)
     return pending_rows, info

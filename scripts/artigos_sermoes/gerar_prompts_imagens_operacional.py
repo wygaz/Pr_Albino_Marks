@@ -42,8 +42,6 @@ def main() -> int:
             f"Contexto: {resumo}. "
             "Estilo: pintura digital semi-realista, cinematografica, reverente, biblica, historica, alta qualidade."
         )
-        serie_dir = out_root / entry.serie_dir.name
-        serie_dir.mkdir(parents=True, exist_ok=True)
         rows.append(
             {
                 "serie_dir": entry.serie_dir.name,
@@ -55,6 +53,13 @@ def main() -> int:
                 "prompt": prompt,
             }
         )
+
+    for child in out_root.iterdir():
+        if child.is_dir():
+            try:
+                next(child.iterdir())
+            except StopIteration:
+                child.rmdir()
 
     csv_path = out_root / "prompts_imagens_operacional.csv"
     txt_path = out_root / "prompts_imagens_operacional.txt"

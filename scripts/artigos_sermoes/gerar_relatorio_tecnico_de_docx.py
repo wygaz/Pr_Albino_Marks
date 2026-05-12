@@ -47,7 +47,10 @@ def repo_root_from_here() -> Path:
 
 def default_esboco_path() -> Path:
     root = repo_root_from_here()
-    return root / "Apenas_Local" / "anexos_filtrados" / "Docs" / "ESBOCO_Geral_Series_1_a_4.docx"
+    docs_dir = root / "Apenas_Local" / "anexos_filtrados" / "Docs"
+    preferred = docs_dir / "ESBOCO_Geral.docx"
+    legacy = docs_dir / "ESBOCO_Geral_Series_1_a_4.docx"
+    return preferred if preferred.exists() else legacy
 
 
 def resolve_series_outdir(docx: Path, requested_outdir: Path, esboco: Path) -> Path:

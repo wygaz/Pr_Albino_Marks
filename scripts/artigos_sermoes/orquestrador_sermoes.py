@@ -25,6 +25,13 @@ from sermoes_inventory import (
 from sermoes_runner import execute_rows, filter_rows
 
 
+def default_esboco_path(root: Path) -> Path:
+    docs_dir = root / 'Apenas_Local' / 'anexos_filtrados' / 'Docs'
+    preferred = docs_dir / 'ESBOCO_Geral.docx'
+    legacy = docs_dir / 'ESBOCO_Geral_Series_1_a_4.docx'
+    return preferred if preferred.exists() else legacy
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='Orquestrador de sermÃµes â€” Etapa 2')
     parser.add_argument('--root', default='.')
@@ -82,7 +89,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--extract-fim-complementar')
     parser.add_argument('--baixar-esbocos', action='store_true')
     parser.add_argument('--artigos-lote', help='Default: lote mais recente em Apenas_Local/anexos_filtrados')
-    parser.add_argument('--esboco-path', help='Default: Apenas_Local/anexos_filtrados/Docs/ESBOCO_Geral_Series_1_a_4.docx')
+    parser.add_argument('--esboco-path', help='Default: Apenas_Local/anexos_filtrados/Docs/ESBOCO_Geral.docx')
     parser.add_argument('--artigos-workspace-input', help='Default: Apenas_Local/anexos_filtrados/<lote>/_entrada_preparacao')
     parser.add_argument('--operacional-output', help='Default: Apenas_Local/anexos_filtrados/<lote>/ambiente_operacional')
     parser.add_argument('--series-root', help='Default: Apenas_Local/operacional/artigos/series')
@@ -279,6 +286,7 @@ def refresh_manifests_and_browse(
         'input_dir_sermoes': str(input_dir),
         'input_dir_artigos': str(input_dir_artigos or ''),
         'workspace_artigos': str(workspace_artigos or ''),
+        'publish_target': 'remoto' if os.getenv('ENV_NAME', 'local').strip().lower() not in {'', 'local'} else 'local',
     }
     generate_browse_html(sermon_rows_dict, browse_html, article_rows=article_rows, browse_meta=browse_meta)
     return {
@@ -322,7 +330,7 @@ def main() -> int:
     args.export_script = args.export_script or str(scripts_dir / 'exportar_formatos_sermao_md.py')
     args.publish_sermon_script = args.publish_sermon_script or str(scripts_dir / 'pipeline_publicar_sermao.py')
     args.pipeline_script = args.pipeline_script or str(scripts_dir / 'run_pipeline_sermao_completo.ps1')
-    args.esboco_path = args.esboco_path or str(root / 'Apenas_Local' / 'anexos_filtrados' / 'Docs' / 'ESBOCO_Geral_Series_1_a_4.docx')
+    args.esboco_path = args.esboco_path or str(default_esboco_path(root))
     args.artigos_workspace_input = args.artigos_workspace_input or str(lote_dir / '_entrada_preparacao')
     args.operacional_output = args.operacional_output or str(lote_dir / 'ambiente_operacional')
     args.series_root = args.series_root or str(root / 'Apenas_Local' / 'operacional' / 'artigos' / 'series')

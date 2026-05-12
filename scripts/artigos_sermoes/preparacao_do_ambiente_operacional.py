@@ -147,48 +147,109 @@ def extract_series_from_outline(esboco_path: Path) -> dict[int, dict]:
     doc = Document(str(esboco_path))
     paras = [p.text.strip() for p in doc.paragraphs if p.text and p.text.strip()]
 
-    def find_idx(*terms: str, start: int = 0) -> int:
-        targets = [normalize(t) for t in terms]
-        for idx in range(start, len(paras)):
-            current = normalize(paras[idx])
-            if all(term in current for term in targets):
-                return idx
-        raise ValueError(f"Cabecalho nao encontrado: {terms}")
+    def is_outline_marker(text: str) -> bool:
+        return normalize(text) == "ESBOCO"
 
-    idx1 = find_idx("grande conflito", "cristo", "satanas")
-    idx2 = find_idx("apocalipse 17", "principio do simbolismo")
-    idx3 = find_idx("torah", "nomos", "mandamentos", "ordenancas", "graca")
-    idx4_all = [
-        i for i, text in enumerate(paras)
-        if "BIBLIA" in normalize(text) and "HISTORIA DA HUMANIDADE" in normalize(text)
-    ]
-    if len(idx4_all) < 2:
-        raise ValueError("Nao foi possivel localizar a Serie 4 no esboco.")
-    idx4_first = idx4_all[0]
-    idx4_second = idx4_all[1]
+    def is_series_header_start(lines: list[str], idx: int) -> bool:
+        if idx + 1 >= len(lines):
+            return False
+        current = normalize(lines[idx])
+        nxt = normalize(lines[idx + 1])
+        if not current or not nxt:
+            return False
+        if current == "ESBOCO" or nxt == "ESBOCO":
+            return False
+        return current == nxt
 
-    blocks = {
-        1: paras[idx1 : idx2],
-        2: paras[idx2 : idx3],
-        3: paras[idx3:idx4_first],
-        4: paras[idx4_second:],
-    }
+    def strip_outline_number(text: str) -> str:
+        value = re.sub(r"^\s*\d{1,4}\s*[-–—]\s*", "", text or "").strip()
+        return value
+
+    def is_numbered_outline_line(text: str) -> bool:
+        return bool(re.match(r"^\s*\d{1,4}\s*[-–—]\s*", text or ""))
+
+    def is_explicit_series_header(text: str) -> bool:
+        return normalize(text) in {
+            "TEMAS DIVERSOS",
+        }
+
+    starts: list[int] = []
+    idx = 0
+    while idx < len(paras) - 1:
+        if is_outline_marker(paras[idx]):
+            idx += 1
+            continue
+        if is_series_header_start(paras, idx):
+            starts.append(idx)
+            idx += 2
+            continue
+        idx += 1
+
+    if not starts:
+        raise ValueError("Nao foi possivel localizar series no esboco.")
+
+    raw_blocks: list[list[str]] = []
+    for serie_id, start_idx in enumerate(starts, start=1):
+        end_idx = starts[serie_id] if serie_id < len(starts) else len(paras)
+        lines = [line for line in paras[start_idx:end_idx] if not is_outline_marker(line)]
+        raw_blocks.append(lines)
 
     series: dict[int, dict] = {}
-    for serie_id, lines in blocks.items():
-        lines = [line for line in lines if normalize(line) != "ESBOCO"]
+    next_serie_id = 1
+    for lines in raw_blocks:
         if not lines:
-            raise ValueError(f"Serie {serie_id} vazia no esboco.")
-        serie_title = sanitize_piece(lines[0])
-        titles = list(lines)
-        if len(titles) >= 2 and normalize(titles[0]) == normalize(titles[1]):
-            titles = [titles[0]] + titles[2:]
-        series[serie_id] = {
-            "serie_id": serie_id,
-            "dir_name": f"Serie_{serie_id}__{ascii_slug(serie_title)}",
-            "first_title": serie_title,
-            "titles": titles,
-        }
+            raise ValueError(f"Serie {next_serie_id} vazia no esboco.")
+
+        split_idx = next(
+            (
+                i
+                for i in range(1, len(lines) - 1)
+                if not is_numbered_outline_line(lines[i]) and is_numbered_outline_line(lines[i + 1])
+            ),
+            None,
+        )
+
+        if split_idx is None:
+            split_idx = next(
+                (
+                    i
+                    for i in range(1, len(lines) - 1)
+                    if is_explicit_series_header(lines[i])
+                ),
+                None,
+            )
+
+        derived_blocks: list[tuple[str, list[str], bool]] = []
+        if split_idx is not None:
+            leading = lines[:split_idx]
+            trailing_header = lines[split_idx]
+            trailing_titles = [
+                strip_outline_number(line)
+                for line in lines[split_idx + 1 :]
+                if strip_outline_number(line)
+            ]
+            if leading:
+                derived_blocks.append((leading[0], list(leading), False))
+            if trailing_titles:
+                derived_blocks.append((trailing_header, trailing_titles, True))
+        else:
+            derived_blocks.append((lines[0], list(lines), False))
+
+        for serie_title_raw, titles_raw, header_only in derived_blocks:
+            if not titles_raw:
+                continue
+            serie_title = sanitize_piece(serie_title_raw)
+            titles = list(titles_raw)
+            if not header_only and len(titles) >= 2 and normalize(titles[0]) == normalize(titles[1]):
+                titles = [titles[0]] + titles[2:]
+            series[next_serie_id] = {
+                "serie_id": next_serie_id,
+                "dir_name": f"Serie_{next_serie_id}__{ascii_slug(serie_title)}",
+                "first_title": serie_title,
+                "titles": titles,
+                "header_only": header_only,
+            }
+            next_serie_id += 1
     return series
 
 
@@ -371,6 +432,30 @@ def scripts_dir_from_here() -> Path:
     return Path(__file__).resolve().parent
 
 
+def repo_root_from_here() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+def existing_operational_slots(series: dict[int, dict]) -> set[tuple[int, int]]:
+    series_root = repo_root_from_here() / "Apenas_Local" / "operacional" / "artigos" / "series"
+    if not series_root.exists():
+        return set()
+
+    slots: set[tuple[int, int]] = set()
+    for serie_id, data in series.items():
+        serie_dir = series_root / data["dir_name"]
+        if not serie_dir.exists():
+            continue
+        for ordem, titulo in enumerate(data["titles"], start=1):
+            technical = technical_name(ordem, titulo)
+            if (serie_dir / f"{technical}.docx").exists():
+                slots.add((serie_id, ordem))
+                continue
+            if list(serie_dir.glob(f"{ordem:02d}__*.docx")):
+                slots.add((serie_id, ordem))
+    return slots
+
+
 def run_organizar_lote(args: argparse.Namespace) -> int:
     source_dir = Path(args.artigos_dir).resolve()
     outline = Path(args.esboco).resolve()
@@ -520,22 +605,27 @@ def run_organizar_lote(args: argparse.Namespace) -> int:
             }
         )
 
+    operational_slots = existing_operational_slots(series)
     missing_rows: list[dict] = []
+    promoted_rows: list[dict] = []
     for serie_id, data in series.items():
         for ordem, titulo in enumerate(data["titles"], start=1):
             if (serie_id, ordem) not in slot_owners:
-                missing_rows.append(
-                    {
-                        "serie_id": serie_id,
-                        "ordem": ordem,
-                        "titulo_canonico": canonical_display_piece(titulo),
-                        "nome_tecnico": technical_name(ordem, titulo),
-                    }
-                )
+                row = {
+                    "serie_id": serie_id,
+                    "ordem": ordem,
+                    "titulo_canonico": canonical_display_piece(titulo),
+                    "nome_tecnico": technical_name(ordem, titulo),
+                }
+                if (serie_id, ordem) in operational_slots:
+                    promoted_rows.append(row)
+                else:
+                    missing_rows.append(row)
 
     csv_path = report_dir / "preparacao_lote.csv"
     json_path = report_dir / "preparacao_lote.json"
     faltantes_path = report_dir / "faltantes.csv"
+    promovidos_path = report_dir / "ja_promovidos_operacional.csv"
     alertas_path = report_dir / "alertas_titulo.csv"
 
     with csv_path.open("w", newline="", encoding="utf-8-sig") as handle:
@@ -562,6 +652,11 @@ def run_organizar_lote(args: argparse.Namespace) -> int:
         writer = csv.DictWriter(handle, fieldnames=["serie_id", "ordem", "titulo_canonico", "nome_tecnico"])
         writer.writeheader()
         writer.writerows(missing_rows)
+
+    with promovidos_path.open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["serie_id", "ordem", "titulo_canonico", "nome_tecnico"])
+        writer.writeheader()
+        writer.writerows(promoted_rows)
 
     alertas_rows = []
     for (serie_id, ordem), owner in sorted(slot_owners.items()):
@@ -603,9 +698,11 @@ def run_organizar_lote(args: argparse.Namespace) -> int:
                 "count_duplicados_resolvidos": sum(1 for row in report_rows if row["status"] == "duplicado_resolvido_antigo"),
                 "count_nao_classificados": sum(1 for row in report_rows if row["status"] == "nao_classificado"),
                 "count_faltantes": len(missing_rows),
+                "count_ja_promovidos_operacional": len(promoted_rows),
                 "count_alertas_titulo": sum(1 for row in report_rows if row.get("alerta_titulo")),
                 "rows": report_rows,
                 "faltantes": missing_rows,
+                "ja_promovidos_operacional": promoted_rows,
             },
             ensure_ascii=False,
             indent=2,
@@ -626,9 +723,11 @@ def run_organizar_lote(args: argparse.Namespace) -> int:
     print(f"Nao classificados : {count_nao_classificados}")
     print(f"Alertas titulo    : {count_alertas_titulo}")
     print(f"Faltantes         : {len(missing_rows)}")
+    print(f"Ja promovidos     : {len(promoted_rows)}")
     print(f"Relatorio CSV     : {csv_path}")
     print(f"Relatorio JSON    : {json_path}")
     print(f"Faltantes CSV     : {faltantes_path}")
+    print(f"Promovidos CSV    : {promovidos_path}")
     print(f"Alertas CSV       : {alertas_path}")
     if archived_output:
         print(f"Saida anterior    : {archived_output}")
