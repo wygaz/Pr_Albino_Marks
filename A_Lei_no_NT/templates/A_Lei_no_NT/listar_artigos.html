@@ -10,28 +10,37 @@
     <div class="head-copy">
       <p class="eyebrow">Acervo editorial</p>
       <h1>Artigos</h1>
-      <p class="sub">Estudos organizados por serie, com acesso aos sermoes e dossies relacionados.</p>
+      <p class="sub">Estudos organizados por série, com acesso aos sermões e dossiês relacionados.</p>
       <div class="head-links">
-        <a href="{% url 'sermoes:lista' %}" class="btn ghost">Ir para Sermoes</a>
-        <a href="{% url 'A_Lei_no_NT:artigos_pdf' %}" class="btn ghost">Gerar lista em PDF</a>
+        <a href="{% url 'sermoes:lista' %}" class="btn btn-sermoes">Entrar no acervo de sermões</a>
+        <a href="{% url 'A_Lei_no_NT:artigos_pdf' %}" class="btn btn-pdf-list">Gerar lista em PDF</a>
       </div>
     </div>
     <div class="head-note">
       <span>Fonte-base do acervo</span>
       <strong>{{ artigos|length }}</strong>
-      <small>itens visiveis nesta pagina</small>
+      <small>itens visíveis nesta página</small>
     </div>
+  </div>
+
+  <div class="sermoes-callout">
+    <div class="callout-copy">
+      <p class="callout-eyebrow">Destaque do acervo</p>
+      <h2>Sermões ganharam papel central neste ambiente</h2>
+      <p>Além dos artigos públicos, o site agora reúne séries de sermões, materiais correlatos e navegação cruzada para aprofundar o estudo.</p>
+    </div>
+    <a href="{% url 'sermoes:lista' %}" class="callout-action">Ver sermões agora</a>
   </div>
 
   {% if areas %}
   <div class="filters-card">
     <div class="filters-header">
-      <span class="filters-title">Filtrar por serie</span>
+      <span class="filters-title">Filtrar por série</span>
     </div>
 
-    <div class="area-tabs" aria-label="Series de estudo">
+    <div class="area-tabs" aria-label="Séries de estudo">
       <button type="button" class="chip-area" data-area-key="all">
-        Todas as series
+        Todas as séries
       </button>
       {% for area in areas %}
         <button type="button"
@@ -43,9 +52,9 @@
     </div>
 
     <div class="area-current">
-      <span class="label">Serie selecionada:</span>
+      <span class="label">Série selecionada:</span>
       <span id="area-current-label">
-        {% if areas %}{{ areas.0.nome }}{% else %}Todas as series{% endif %}
+        {% if areas %}{{ areas.0.nome }}{% else %}Todas as séries{% endif %}
       </span>
     </div>
   </div>
@@ -73,7 +82,7 @@
           {% if artigo.publicado_em %}
             <span class="meta-label">Publicado em {{ artigo.publicado_em|date:"d/m/Y" }}</span>
           {% else %}
-            <span class="meta-label">Data nao informada</span>
+            <span class="meta-label">Data não informada</span>
           {% endif %}
         </div>
       </div>
@@ -92,7 +101,7 @@
 
   {% if page_obj %}
   <div class="mt-4 text-center text-muted">
-    <small>Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</small>
+    <small>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</small>
   </div>
   {% endif %}
 </div>
@@ -144,6 +153,35 @@
     flex-wrap:wrap;
     margin-top:.45rem;
   }
+  .artigos-page .btn-sermoes,
+  .artigos-page .btn-pdf-list{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:46px;
+    border-radius:999px;
+    padding:.82rem 1.15rem;
+    font-weight:800;
+    text-decoration:none;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .artigos-page .btn-sermoes{
+    background:linear-gradient(135deg,#244d84 0%,#17354d 100%);
+    border:1px solid #17354d;
+    color:#fff3c4;
+    box-shadow:0 14px 28px rgba(23,53,77,.16);
+  }
+  .artigos-page .btn-pdf-list{
+    background:#fff;
+    border:1px solid #d6dde5;
+    color:#244d84;
+    box-shadow:0 10px 22px rgba(25,42,70,.06);
+  }
+  .artigos-page .btn-sermoes:hover,
+  .artigos-page .btn-pdf-list:hover{
+    text-decoration:none;
+    transform:translateY(-2px);
+  }
   .artigos-page .head-note{
     background:#fff;
     border:1px solid var(--edge);
@@ -158,12 +196,62 @@
   .artigos-page .head-note span,
   .artigos-page .head-note small{color:var(--muted)}
   .artigos-page .head-note strong{font-size:2rem;color:var(--link)}
+  .sermoes-callout{
+    display:grid;
+    grid-template-columns:1.3fr auto;
+    gap:1rem;
+    align-items:center;
+    margin:0 0 16px;
+    padding:1rem 1.15rem;
+    border:1px solid #cfd9e6;
+    border-radius:18px;
+    background:linear-gradient(135deg,#eff5fb 0%,#f7fbff 100%);
+    box-shadow:0 10px 22px rgba(25,42,70,.05);
+  }
+  .callout-copy{
+    display:grid;
+    gap:.28rem;
+  }
+  .callout-eyebrow{
+    margin:0;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.72rem;
+    color:#5b6f83;
+  }
+  .sermoes-callout h2{
+    margin:0;
+    font-size:1.28rem;
+    color:#183553;
+  }
+  .sermoes-callout p{
+    margin:0;
+    color:#5c6d7d;
+    max-width:64ch;
+  }
+  .callout-action{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:.9rem 1.25rem;
+    border-radius:999px;
+    background:#d38a18;
+    color:#fff;
+    text-decoration:none;
+    font-weight:800;
+    box-shadow:0 12px 22px rgba(211,138,24,.18);
+  }
+  .callout-action:hover{
+    text-decoration:none;
+    background:#bc7810;
+  }
   .filters-card{
     margin:6px 0 16px;
     padding:10px 14px 12px;
     border-radius:14px;
     border:1px solid var(--edge);
-    background:#f9fafb;
+    background:#f7faf8;
   }
   .filters-header{
     display:flex;
@@ -185,17 +273,24 @@
   .chip-area{
     border:1px solid var(--edge);
     background:#ffffff;
-    color:var(--ink);
-    padding:4px 10px;
+    color:#35516d;
+    padding:6px 12px;
     border-radius:999px;
     font-size:.82rem;
+    font-weight:700;
     cursor:pointer;
+    transition:background .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
   }
-  .chip-area:hover{background:#7ff2af}
+  .chip-area:hover{
+    background:#e4f0fb;
+    border-color:#b8d0e8;
+    color:#1f4e8c;
+    transform:translateY(-1px);
+  }
   .chip-area.active{
-    background:var(--brand);
-    border-color:var(--brand);
-    color:#F0E68C;
+    background:linear-gradient(135deg,#2f8a59 0%,#256c46 100%);
+    border-color:#256c46;
+    color:#fff8d6;
   }
   .area-current{
     margin-top:4px;
@@ -282,6 +377,7 @@
   .artigos-page .btn-pdf:hover{background:var(--brand-2)}
   @media (max-width:900px){
     .artigos-page .editorial-head{grid-template-columns:1fr}
+    .sermoes-callout{grid-template-columns:1fr}
     .artigos-page .article-row{grid-template-columns:72px 1fr 150px}
   }
   @media (max-width:720px){
@@ -326,7 +422,7 @@
 
     if (currentLbl){
       const active = Array.from(areaButtons).find(btn => btn.classList.contains('active'));
-      currentLbl.textContent = active ? active.textContent.trim() : 'Todas as series';
+      currentLbl.textContent = active ? active.textContent.trim() : 'Todas as séries';
     }
   }
 

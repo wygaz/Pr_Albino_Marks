@@ -6,14 +6,15 @@
     <div class="hero-card">
       <div class="hero-copy">
         <p class="eyebrow">Projeto Pr. Albino Marks</p>
-        <h1>Artigos, sermoes e trilhas de estudo em uma unica casa editorial.</h1>
+        <h1>Artigos, sermões e trilhas de estudo em uma única casa editorial.</h1>
         <p class="lead">
-          Este projeto preserva e divulga estudos, reflexoes e materiais de apoio do Pr. Albino Marks.
-          Os artigos permanecem publicos; a area de sermoes e relatorios tecnicos segue acesso controlado por cadastro e aceite.
+          Este projeto preserva e divulga estudos, reflexões e materiais de apoio do Pr. Albino Marks.
+          Os artigos permanecem públicos; a área de sermões e relatórios técnicos segue com acesso
+          controlado por cadastro e aceite.
         </p>
         <div class="home-actions">
           <a href="{% url 'A_Lei_no_NT:listar_artigos' %}" class="btn-main">Ver artigos</a>
-          <a href="{% url 'sermoes:lista' %}" class="btn-dark">Entrar na area de sermoes</a>
+          <a href="{% url 'sermoes:lista' %}" class="btn-dark">Acessar área de sermões</a>
         </div>
       </div>
       <div class="hero-media">
@@ -23,31 +24,34 @@
 
     <section class="feature-grid">
       <article class="feature-card">
-        <p class="eyebrow">Acervo publico</p>
+        <p class="eyebrow">Acervo público</p>
         <h2>Artigos</h2>
-        <p>Leitura aberta, organizada por area, com PDF e integracao editorial progressiva com os sermoes.</p>
+        <p>Leitura aberta, organizada por área, com PDF e integração editorial progressiva com os sermões.</p>
         <a class="feature-link" href="{% url 'A_Lei_no_NT:listar_artigos' %}">Abrir artigos</a>
       </article>
-      <article class="feature-card">
+      <article class="feature-card feature-sermoes">
         <p class="eyebrow">Acesso habilitado</p>
-        <h2>Sermoes</h2>
-        <p>Mensagens organizadas por serie, com leitura principal, downloads e navegacao contextual entre artigo, sermao e relatorio.</p>
-        <a class="feature-link" href="{% url 'sermoes:lista' %}">Abrir area de sermoes</a>
+        <h2>Sermões</h2>
+        <p>Mensagens organizadas por série, com leitura principal, downloads e navegação contextual entre artigo, sermão e relatório.</p>
+        <a class="feature-link feature-link-sermoes" href="{% url 'sermoes:lista' %}">Abrir área de sermões</a>
       </article>
       <article class="feature-card">
         <p class="eyebrow">Apoio ao estudo</p>
-        <h2>Relatorios tecnicos</h2>
-        <p>Material reservado para aprofundamento doutrinario, hermeneutico e de preparacao ministerial.</p>
+        <h2>Relatórios técnicos</h2>
+        <p>Material reservado para aprofundamento doutrinário, hermenêutico e de preparação ministerial.</p>
         <a class="feature-link" href="https://www.albinomarks.com.br" target="_blank" rel="noopener noreferrer">Site institucional</a>
       </article>
     </section>
 
     <div class="access-note">
-      <strong>Acesso a area restrita:</strong>
-      visitantes e cadastrados sem aceite nao acessam sermoes e relatorios tecnicos. O desbloqueio ocorre apos login e aceite de Termos e LGPD.
+      <div class="access-copy">
+        <strong>Crie sua conta gratuita</strong>
+        <p>Tenha acesso ao acervo completo, inclusive sermões e planos de estudo dos temas apresentados.</p>
+      </div>
+      <a href="{% url 'A_Lei_no_NT:cadastro_visitante' %}" class="btn-signup">Cadastre-se</a>
     </div>
     <div class="site-note">
-      Endereco do projeto: <a href="https://www.albinomarks.com.br" target="_blank" rel="noopener noreferrer">www.albinomarks.com.br</a>
+      Endereço do projeto: <a href="https://www.albinomarks.com.br" target="_blank" rel="noopener noreferrer">www.albinomarks.com.br</a>
     </div>
   </section>
 
@@ -69,12 +73,21 @@
   .home-actions { display:flex; gap:.8rem; flex-wrap:wrap; margin-top:1.2rem; }
   .btn-main, .btn-dark {
     text-decoration:none;
-    padding:.75rem 1rem;
+    padding:1.05rem 1.55rem;
     border-radius:999px;
-    font-weight:700;
+    font-weight:800;
+    font-size:1.02rem;
+    letter-spacing:.01em;
+    box-shadow:0 14px 28px rgba(25,42,70,.16);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
   }
-  .btn-main { background:#3cb371; color:#fff; }
-  .btn-dark { background:#2f4f4f; color:#ffff77; }
+  .btn-main { background:linear-gradient(135deg,#3cb371 0%,#2d8f59 100%); color:#fff; }
+  .btn-dark { background:linear-gradient(135deg,#244d84 0%,#183553 100%); color:#fff4c2; border:1px solid rgba(255,244,194,.22); }
+  .btn-main:hover, .btn-dark:hover {
+    text-decoration:none;
+    transform:translateY(-2px);
+    box-shadow:0 18px 34px rgba(25,42,70,.22);
+  }
   .feature-grid {
     display:grid;
     grid-template-columns:repeat(3, minmax(0,1fr));
@@ -91,6 +104,14 @@
   }
   .feature-card h2 { margin:.15rem 0 .45rem; color:#1d334a; font-size:1.2rem; }
   .feature-card p { margin:0; color:#607080; }
+  .feature-sermoes {
+    background:linear-gradient(160deg,#214a62 0%,#1b3850 100%);
+    border-color:#214a62;
+    color:#f5f9ff;
+  }
+  .feature-sermoes .eyebrow,
+  .feature-sermoes p { color:#d8e7f6; }
+  .feature-sermoes h2 { color:#ffffff; }
   .feature-link {
     justify-self:start;
     text-decoration:none;
@@ -102,6 +123,16 @@
     font-weight:600;
   }
   .feature-link:hover { text-decoration:underline; }
+  .feature-link-sermoes {
+    background:#f2c94c;
+    border-color:#f2c94c;
+    color:#17354d;
+    font-weight:800;
+  }
+  .feature-link-sermoes:hover {
+    background:#ffd96a;
+    text-decoration:none;
+  }
   .access-note {
     background:#fff;
     border:1px solid #d6dde5;
@@ -109,6 +140,31 @@
     border-radius:16px;
     padding:1rem 1.1rem;
     color:#495a6c;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .access-copy {
+    display:grid;
+    gap:.3rem;
+  }
+  .access-copy p {
+    margin:0;
+  }
+  .btn-signup {
+    text-decoration:none;
+    white-space:nowrap;
+    background:#c97b18;
+    color:#fff;
+    border-radius:999px;
+    padding:.82rem 1.2rem;
+    font-weight:800;
+    box-shadow:0 10px 18px rgba(201,123,24,.22);
+  }
+  .btn-signup:hover {
+    text-decoration:none;
+    background:#b96d0d;
   }
   .site-note {
     color:#58697b;
@@ -122,6 +178,8 @@
   .site-note a:hover { text-decoration:underline; }
   @media (max-width: 860px) {
     .hero-card, .feature-grid { grid-template-columns:1fr; }
+    .access-note { flex-direction:column; align-items:flex-start; }
+    .btn-signup { width:100%; text-align:center; }
   }
 </style>
 {% endblock %}
